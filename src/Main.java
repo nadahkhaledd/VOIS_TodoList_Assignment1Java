@@ -22,12 +22,28 @@ public class Main {
     public static void main(String[] args) {
         showMenu();
     }
-
+ private static String validateGetStringInput(String message){// used to make sure that user input(string) is not empty or not only just ' ' character
+     Scanner data = new Scanner(System.in);
+    // System.out.println("Hello, what is your name?");
+     String userInput = data.nextLine();
+     while(userInput.matches(" +")|| userInput
+             .isEmpty()){
+         System.out.println(message);
+         userInput=data.nextLine();
+     }
+     return userInput;
+ }
     public static void showMenu(){
         Scanner input = new Scanner(System.in);
 
         System.out.println("Hello, what is your name?");
-        String name = input.nextLine();
+
+        String name = validateGetStringInput("write a valid name");
+        /*input.nextLine();
+        while(name.matches(" +")|| name.isEmpty()){
+            System.out.println("write a valid name");
+            name=input.nextLine();
+        }*/
         currentUser = new User(name);
         while(true)
         {
@@ -82,15 +98,15 @@ public class Main {
         System.out.println("Enter new data...");
         Scanner data = new Scanner(System.in);
         System.out.println("Enter title:");
-        String title = data.nextLine();
+        String title = validateGetStringInput("enter a valid title");//data.nextLine();
 
         System.out.println("Enter description:");
-        String description = data.nextLine();
+        String description = validateGetStringInput("enter a valid description");//data.nextLine();
 
         System.out.println("Choose priority for the item (1.Low, 2.Medium, 3.High):");
         int userPriorityChoice = data.nextInt();
-        while (userPriorityChoice != 1 && userPriorityChoice != 2 && userPriorityChoice != 3){
-            System.out.println("invalid input.\nChoose priority for the item (1.Low, 2.Medium, 3.High):");
+        while (userPriorityChoice < 1 || userPriorityChoice > 3){
+            System.out.println("invalid choice.\nChoose priority for the item (1.Low, 2.Medium, 3.High):");
             userPriorityChoice = data.nextInt();
         }
         Priority priority = (userPriorityChoice == 1)? Priority.Low :
@@ -165,7 +181,7 @@ public class Main {
             if(endDate.compareTo(startDate) != -1)
                 return true;
             else{
-                System.out.println("end date is incorrect.");
+                System.out.println("End date must be after start date.");
                 return false;
             }
         }
