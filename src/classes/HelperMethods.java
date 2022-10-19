@@ -26,6 +26,7 @@ public class HelperMethods {
             return false;
         }
     }
+
     public static boolean isValidEndDate(Date startDate, String dateString){
         if(isValidDate(dateString)){
             Date endDate = convertStringToDate(dateString);
@@ -38,6 +39,7 @@ public class HelperMethods {
         }
         return false;
     }
+    
     public static Date convertStringToDate(String dateString){
         try {
             Date date = new SimpleDateFormat("dd-MM-yyyy").parse(dateString);
@@ -46,6 +48,7 @@ public class HelperMethods {
             throw new RuntimeException(e);
         }
     }
+    
     public static String validateGetStringInput(String message){// used to make sure that user input(string) is not empty or not only just ' ' character
         Scanner data = new Scanner(System.in);
         // System.out.println("Hello, what is your name?");

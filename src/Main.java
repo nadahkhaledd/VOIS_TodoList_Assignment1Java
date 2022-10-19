@@ -3,9 +3,8 @@ import classes.TodoItem;
 import classes.User;
 import enums.Category;
 import enums.Priority;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import enums.SearchKey;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -68,6 +67,60 @@ public class Main {
                     currentUser.showTop5ItemsByDate();
                     break;
 
+                case 6:
+                    boolean isSearchKeyValid = false;
+                    while (!isSearchKeyValid){
+                        System.out.println("choose filter for search (1.title, 2.start date, 3.end date, 4.priority)");
+                        int searchOption = input.nextInt();
+                        switch (searchOption){
+                            case 1:
+                                System.out.print("Enter title of an item: ");
+                                String searchTitle = input.next();
+                                currentUser.searchShowItemsBySearchKey(SearchKey.Title, searchTitle);
+                                isSearchKeyValid = true;
+                                break;
+
+                            case 2:
+                                System.out.print("Enter start date of an item: ");
+                                String searchStartDate = input.next();
+                                while(!HelperMethods.isValidDate(searchStartDate)){
+                                    System.out.print("Enter start date of an item: ");
+                                    searchStartDate = input.next();
+                                }
+                                currentUser.searchShowItemsBySearchKey(SearchKey.StartDate, searchStartDate);
+                                isSearchKeyValid = true;
+                                break;
+
+                            case 3:
+                                System.out.print("Enter end date of an item: ");
+                                String searchEndDate = input.next();
+                                while(!HelperMethods.isValidDate(searchEndDate)){
+                                    System.out.print("Enter end date of an item: ");
+                                    searchEndDate = input.next();
+                                }
+                                currentUser.searchShowItemsBySearchKey(SearchKey.EndDate, searchEndDate);
+                                isSearchKeyValid = true;
+                                break;
+
+                            case 4:
+                                System.out.print("Choose priority of an item (1.Low, 2.Medium, 3.High): ");
+                                int searchPriority = input.nextInt();
+                                if(searchPriority < 1 || searchPriority > 3){
+                                    System.out.println("Invalid option, try again.");
+                                    System.out.print("Choose priority of an item (1.Low, 2.Medium, 3.High): ");
+                                    searchPriority = input.nextInt();
+                                }
+                                String priorityValue = (searchPriority == 1) ? "Low" : ((searchPriority == 2) ? "Medium" : "High");
+                                currentUser.searchShowItemsBySearchKey(SearchKey.Priority, priorityValue);
+                                isSearchKeyValid = true;
+                                break;
+
+                            default:
+                                System.out.println("Invalid input.");
+                                break;
+                        }
+                    }
+                    
                 case 7:
                     addItemToCategoryFromUser();
                     break;
