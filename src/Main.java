@@ -193,7 +193,7 @@ public class Main {
         Category category = categories.get(userCategoryChoice-1);
 
         data.nextLine();
-        System.out.println("Enter start date of the item (e.g. dd-mm-yyyy)");
+        System.out.println("Enter start date of the item (e.g. dd-MM-yyyy)");
         String startDateString = data.nextLine();
         while(!HelperMethods.isValidDate(startDateString)){
             System.out.println("Enter start date of the item (e.g. dd-mm-yyyy)");
@@ -201,7 +201,7 @@ public class Main {
         }
         Date startDate = HelperMethods.convertStringToDate(startDateString);
 
-        System.out.println("Enter end date of the item (e.g. dd-mm-yyyy)");
+        System.out.println("Enter end date of the item (e.g. dd-MM-yyyy)");
         String endDateString = data.nextLine();
         while(!HelperMethods.isValidEndDate(startDate, endDateString)){
             System.out.println("Enter end date of the item (e.g. dd-mm-yyyy)");
