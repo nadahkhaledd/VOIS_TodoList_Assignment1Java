@@ -188,7 +188,7 @@ public class User implements Serializable {
         }
 
         if (returnedItems.isEmpty()) {
-            System.out.println("No values found.");
+            System.out.println("No values found for the input you entered.");
         }
         else {
             for(TodoItem item: returnedItems){

@@ -1,10 +1,10 @@
+import classes.HelperMethods;
 import classes.TodoItem;
 import classes.User;
 import enums.Category;
 import enums.Priority;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import enums.SearchKey;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -59,6 +59,39 @@ public class Main {
                     currentUser.showTop5ItemsByDate();
                     break;
 
+                case 6:
+                    System.out.println("choose filter for search (1.title, 2.start date, 3.end date, 4.priority)");
+                    int searchOption = input.nextInt();
+                    switch (searchOption){
+                        case 1:
+                            System.out.print("Enter title of an item:");
+                            String searchTitle = input.next();
+                            currentUser.searchShowItemsBySearchKey(SearchKey.Title, searchTitle);
+                            break;
+
+                        case 2:
+                            System.out.print("Enter start date of an item:");
+                            String searchStartDate = input.next();
+                            while(!HelperMethods.isValidDate(searchStartDate)){
+                                System.out.print("Enter start date of an item:");
+                                searchStartDate = input.next();
+                            }
+                            currentUser.searchShowItemsBySearchKey(SearchKey.StartDate, searchStartDate);
+                            break;
+
+                        case 3:
+                            System.out.print("Enter end date of an item:");
+                            String searchEndDate = input.next();
+                            while(!HelperMethods.isValidDate(searchEndDate)){
+                                System.out.print("Enter end date of an item:");
+                                searchEndDate = input.next();
+                            }
+                            currentUser.searchShowItemsBySearchKey(SearchKey.EndDate, searchEndDate);
+                            break;
+
+
+                    }
+
                 case 8:
                     input.nextLine();
                     System.out.println("Enter title of item to be added to favorite:");
@@ -109,19 +142,19 @@ public class Main {
         data.nextLine();
         System.out.println("Enter start date of the item (e.g. dd-mm-yyyy)");
         String startDateString = data.nextLine();
-        while(!isValidDate(startDateString)){
+        while(!HelperMethods.isValidDate(startDateString)){
             System.out.println("Enter start date of the item (e.g. dd-mm-yyyy)");
             startDateString = data.nextLine();
         }
-        Date startDate = convertStringToDate(startDateString);
+        Date startDate = HelperMethods.convertStringToDate(startDateString);
 
         System.out.println("Enter end date of the item (e.g. dd-mm-yyyy)");
         String endDateString = data.nextLine();
-        while(!isValidEndDate(startDate, endDateString)){
+        while(!HelperMethods.isValidEndDate(startDate, endDateString)){
             System.out.println("Enter end date of the item (e.g. dd-mm-yyyy)");
             endDateString = data.nextLine();
         }
-        Date endDate = convertStringToDate(endDateString);
+        Date endDate = HelperMethods.convertStringToDate(endDateString);
 
         TodoItem item = new TodoItem(title, description, priority, category, startDate, endDate);
         return item;
@@ -146,38 +179,7 @@ public class Main {
         currentUser.deleteTodoItem(title);
     }
     
-    private static boolean isValidDate(String dateValue){
-        try{
-            DateFormat date = new SimpleDateFormat("dd-MM-yyyy");
-            date.setLenient(false);
-            date.parse(dateValue);
-            return true;
-        }
-        catch (ParseException e){
-            System.out.println("invalid date format");
-            return false;
-        }
-    }
 
-    private static boolean isValidEndDate(Date startDate, String dateString){
-        if(isValidDate(dateString)){
-            Date endDate = convertStringToDate(dateString);
-            if(endDate.compareTo(startDate) != -1)
-                return true;
-            else{
-                System.out.println("end date is incorrect.");
-                return false;
-            }
-        }
-        return false;
-    }
     
-    private static Date convertStringToDate(String dateString){
-        try {
-            Date date = new SimpleDateFormat("dd-MM-yyyy").parse(dateString);
-            return date;
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 }
