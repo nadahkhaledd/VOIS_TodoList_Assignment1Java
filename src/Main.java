@@ -5,14 +5,11 @@ import enums.Category;
 import enums.Priority;
 import enums.SearchKey;
 import storage.FileStorage;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Scanner;
-import java.time.LocalDateTime;
 
 public class Main {
     static User currentUser;
@@ -25,7 +22,8 @@ public class Main {
             Category.People, Category.Learning, Category.Other, Category.None));
 
     public static void main(String[] args) {
-        if(!isUserExist()) getUserName();
+        if(!doesUserExist())
+            getUserName();
         showMenu();
     }
 
@@ -43,7 +41,7 @@ public class Main {
         currentUser = new User(name);
     }
 
-    public static boolean isUserExist() {
+    public static boolean doesUserExist() {
         currentUser = fileStorage.loadData();
         if(currentUser != null) {
             return true;
@@ -53,7 +51,6 @@ public class Main {
 
     public static void showMenu(){
         Scanner input = new Scanner(System.in);
-
         while(true)
         {
             System.out.println("\nWelcome " + currentUser.getName());
@@ -79,7 +76,6 @@ public class Main {
                     break;
 
                 case 4:
-                    // print to be modified
                     currentUser.showAllTodoItems();
                     break;
 
@@ -156,8 +152,8 @@ public class Main {
 
                 case 9:
                     currentUser.printFavorites();
-                    saveFile();
                     break;
+
                 case 10:
                 default:
                     saveFile();
@@ -213,8 +209,7 @@ public class Main {
         }
         Date endDate = HelperMethods.convertStringToDate(endDateString);
 
-        TodoItem item = new TodoItem(title, description, priority, category, startDate, endDate);
-        return item;
+        return new TodoItem(title, description, priority, category, startDate, endDate);
     }
 
     private static void updateItemFromUser(){

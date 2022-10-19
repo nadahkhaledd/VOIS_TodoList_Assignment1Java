@@ -87,11 +87,10 @@ public class TodoItem implements Serializable {
     {
         SimpleDateFormat formatter=new SimpleDateFormat("dd-MM-yyyy");
         return "--------------------------------------------------------------------------\n" +
-                " title: " + title +"     "+ " , priority: " + priority+ " ,  category: " + category+
-                " \n startDate: " + formatter.format(startDate) +
-                "          , endDate: " + formatter.format(endDate) +
-                "\n description: " + description + "\n" +
-
+                " Title: " + title +"\t\tPriority: " + priority+ "\t\tCategory: " + category+
+                " \n Start Date: " + formatter.format(startDate) +
+                "\t\t\t End Date: " + formatter.format(endDate) +
+                "\n Description: " + description + "\n" +
                 "-------------------------------------------------------------------------\n";
     }
 }
