@@ -3,6 +3,7 @@ package classes;
 import enums.Category;
 import enums.Priority;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class TodoItem {
@@ -81,14 +82,15 @@ public class TodoItem {
     }
 
     @Override
-    public String toString() {
-        return "TodoItem{" +
-                "title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", priority=" + priority +
-                ", category=" + category +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                '}';
+    public String toString()
+    {
+        SimpleDateFormat formatter=new SimpleDateFormat("dd-MM-yyyy");
+        return "--------------------------------------------------------------------------\n" +
+                " title: " + title +"     "+ " , priority: " + priority+ " ,  category: " + category+
+                " \n startDate: " + formatter.format(startDate) +
+                "          , endDate: " + formatter.format(endDate) +
+                "\n description: " + description + "\n" +
+
+                "-------------------------------------------------------------------------\n";
     }
 }

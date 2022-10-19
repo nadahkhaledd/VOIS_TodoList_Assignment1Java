@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Scanner;
+import java.time.LocalDateTime;
 
 public class Main {
     static User currentUser;
@@ -26,8 +27,15 @@ public class Main {
     public static void showMenu(){
         Scanner input = new Scanner(System.in);
 
+
         System.out.println("Hello, what is your name?");
-        String name = input.nextLine();
+
+        String name = HelperMethods.validateGetStringInput("write a valid name");
+        /*input.nextLine();
+        while(name.matches(" +")|| name.isEmpty()){
+            System.out.println("write a valid name");
+            name=input.nextLine();
+        }*/
         currentUser = new User(name);
         while(true)
         {
@@ -112,6 +120,9 @@ public class Main {
                                 break;
                         }
                     }
+                    
+                case 7:
+                    addItemToCategoryFromUser();
                     break;
 
                 case 8:
@@ -138,15 +149,15 @@ public class Main {
         System.out.println("Enter new data...");
         Scanner data = new Scanner(System.in);
         System.out.println("Enter title:");
-        String title = data.nextLine();
+        String title = HelperMethods.validateGetStringInput("enter a valid title");//data.nextLine();
 
         System.out.println("Enter description:");
-        String description = data.nextLine();
+        String description = HelperMethods.validateGetStringInput("enter a valid description");//data.nextLine();
 
         System.out.println("Choose priority for the item (1.Low, 2.Medium, 3.High):");
         int userPriorityChoice = data.nextInt();
-        while (userPriorityChoice != 1 && userPriorityChoice != 2 && userPriorityChoice != 3){
-            System.out.println("invalid input.\nChoose priority for the item (1.Low, 2.Medium, 3.High):");
+        while (userPriorityChoice < 1 || userPriorityChoice > 3){
+            System.out.println("invalid choice.\nChoose priority for the item (1.Low, 2.Medium, 3.High):");
             userPriorityChoice = data.nextInt();
         }
         Priority priority = (userPriorityChoice == 1)? Priority.Low :
@@ -201,8 +212,24 @@ public class Main {
         String title = input.nextLine();
         currentUser.deleteTodoItem(title);
     }
-    
 
-    
+    private static void addItemToCategoryFromUser(){
+        Scanner input = new Scanner(System.in);
 
+        System.out.println("Enter title of item to be added to Category");
+        String title = input.nextLine();
+
+        System.out.println("Choose category for the item " +
+                "(1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)");
+        int userCategoryChoice = input.nextInt();
+        while (userCategoryChoice<1 || userCategoryChoice>6){
+            System.out.println("invalid input.\nChoose category for the item " +
+                    "(1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)");
+            userCategoryChoice =input.nextInt();
+        }
+        input.nextLine();
+        Category category = categories.get(userCategoryChoice-1);
+
+        currentUser.addItemToCategory(title,category);
+    }
 }
