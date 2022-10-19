@@ -1,5 +1,6 @@
 package classes;
 
+import enums.Category;
 import enums.Priority;
 import enums.SearchKey;
 
@@ -212,4 +213,15 @@ public class User implements Serializable {
         searchShowItemsBySearchKey(SearchKey.Favorite, "true");
     }
 
+
+    public boolean addItemToCategory(String title, Category category){
+        int itemIndex = getItemByTitle(title);
+        if(itemIndex != -1){
+            items.get(itemIndex).setCategory(category);
+            System.out.println("Item added to category " + category);
+            return true;
+        }
+        System.out.println("Item couldn't be found.");
+        return false;
+    }
 }

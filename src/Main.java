@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Scanner;
+import java.time.LocalDateTime;
 
 public class Main {
     static User currentUser;
@@ -25,6 +26,7 @@ public class Main {
 
     public static void showMenu(){
         Scanner input = new Scanner(System.in);
+
 
         System.out.println("Hello, what is your name?");
         String name = input.nextLine();
@@ -57,6 +59,13 @@ public class Main {
 
                 case 5:
                     currentUser.showTop5ItemsByDate();
+                    break;
+
+
+
+
+                case 7:
+                    addItemToCategoryFromUser();
                     break;
 
                 case 8:
@@ -151,7 +160,14 @@ public class Main {
             DateFormat date = new SimpleDateFormat("dd-MM-yyyy");
             date.setLenient(false);
             date.parse(dateValue);
-            return true;
+            Date dateAfterParsing = convertStringToDate(dateValue);
+            Date now = new java.util.Date();
+            if(dateAfterParsing.compareTo(now)!= -1)
+                return true;
+            else {
+                System.out.println("The start date already passed");
+                return false;
+            }
         }
         catch (ParseException e){
             System.out.println("invalid date format");
@@ -179,5 +195,24 @@ public class Main {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+    }
+    private static void addItemToCategoryFromUser(){
+        Scanner input = new Scanner(System.in);
+
+        System.out.println("Enter title of item to be added to Category");
+        String title = input.nextLine();
+
+        System.out.println("Choose category for the item " +
+                "(1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)");
+        int userCategoryChoice = input.nextInt();
+        while (userCategoryChoice<1 || userCategoryChoice>6){
+            System.out.println("invalid input.\nChoose category for the item " +
+                    "(1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)");
+            userCategoryChoice =input.nextInt();
+        }
+        input.nextLine();
+        Category category = categories.get(userCategoryChoice-1);
+
+        currentUser.addItemToCategory(title,category);
     }
 }
