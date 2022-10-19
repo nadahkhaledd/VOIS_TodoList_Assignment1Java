@@ -3,9 +3,10 @@ package classes;
 import enums.Category;
 import enums.Priority;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class TodoItem {
+public class TodoItem implements Serializable {
     private String title;
     private String description;
     private Priority priority;
