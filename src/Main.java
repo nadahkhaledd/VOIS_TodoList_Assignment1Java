@@ -4,7 +4,10 @@ import classes.User;
 import enums.Category;
 import enums.Priority;
 import enums.SearchKey;
-
+import storage.FileStorage;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -13,6 +16,7 @@ import java.time.LocalDateTime;
 
 public class Main {
     static User currentUser;
+    static FileStorage fileStorage = new FileStorage();
     static ArrayList<String> menuOptions = new ArrayList<>(
             Arrays.asList("1- Add item ", "2- Update item ", "3- Delete item", "4- Show All items",
                     "5- Show top 5 nearest by date", "6- Search by title, date (start & End), or priority",
@@ -21,11 +25,13 @@ public class Main {
             Category.People, Category.Learning, Category.Other, Category.None));
 
     public static void main(String[] args) {
+        if(!isUserExist()) getUserName();
         showMenu();
     }
 
-    public static void showMenu(){
+    public static void getUserName() {
         Scanner input = new Scanner(System.in);
+
         System.out.println("Hello, what is your name?");
 
         String name = HelperMethods.validateGetStringInput("write a valid name");
@@ -35,9 +41,22 @@ public class Main {
             name=input.nextLine();
         }*/
         currentUser = new User(name);
+    }
+
+    public static boolean isUserExist() {
+        currentUser = fileStorage.loadData();
+        if(currentUser != null) {
+            return true;
+        }
+        return false;
+    }
+
+    public static void showMenu(){
+        Scanner input = new Scanner(System.in);
+
         while(true)
         {
-            System.out.println("\nWelcome " + name);
+            System.out.println("\nWelcome " + currentUser.getName());
             for(String option : menuOptions)
                 System.out.println(option);
             int option = input.nextInt();
@@ -46,14 +65,17 @@ public class Main {
                     TodoItem item = takeItemFromUser();
                     currentUser.addTodoItem(item);
                     currentUser.showAllTodoItems();
+                    saveFile();
                     break;
 
                 case 2:
                     updateItemFromUser();
+                    saveFile();
                     break;
 
                 case 3:
                     deleteItemByUser();
+                    saveFile();
                     break;
 
                 case 4:
@@ -118,9 +140,10 @@ public class Main {
                                 break;
                         }
                     }
-                    
+
                 case 7:
                     addItemToCategoryFromUser();
+                    saveFile();
                     break;
 
                 case 8:
@@ -128,14 +151,16 @@ public class Main {
                     System.out.println("Enter title of item to be added to favorite:");
                     String title = input.nextLine();
                     currentUser.addItemToFavorite(title);
+                    saveFile();
                     break;
 
                 case 9:
                     currentUser.printFavorites();
+                    saveFile();
                     break;
-
                 case 10:
                 default:
+                    saveFile();
                     System.exit(0);
                     break;
             }
@@ -230,4 +255,9 @@ public class Main {
 
         currentUser.addItemToCategory(title,category);
     }
+
+    private static void saveFile() {
+        fileStorage.saveData(currentUser);
+    }
+
 }
