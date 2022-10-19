@@ -1,3 +1,4 @@
+import classes.HelperMethods;
 import classes.TodoItem;
 import classes.User;
 import enums.Category;
@@ -23,24 +24,14 @@ public class Main {
     public static void main(String[] args) {
         showMenu();
     }
- private static String validateGetStringInput(String message){// used to make sure that user input(string) is not empty or not only just ' ' character
-     Scanner data = new Scanner(System.in);
-    // System.out.println("Hello, what is your name?");
-     String userInput = data.nextLine();
-     while(userInput.matches(" +")|| userInput
-             .isEmpty()){
-         System.out.println(message);
-         userInput=data.nextLine();
-     }
-     return userInput;
- }
+
     public static void showMenu(){
         Scanner input = new Scanner(System.in);
 
 
         System.out.println("Hello, what is your name?");
 
-        String name = validateGetStringInput("write a valid name");
+        String name = HelperMethods.validateGetStringInput("write a valid name");
         /*input.nextLine();
         while(name.matches(" +")|| name.isEmpty()){
             System.out.println("write a valid name");
@@ -77,9 +68,6 @@ public class Main {
                     currentUser.showTop5ItemsByDate();
                     break;
 
-
-
-
                 case 7:
                     addItemToCategoryFromUser();
                     break;
@@ -94,6 +82,7 @@ public class Main {
                 case 9:
                     currentUser.printFavorites();
                     break;
+
                 case 10:
                 default:
                     System.exit(0);
@@ -107,10 +96,10 @@ public class Main {
         System.out.println("Enter new data...");
         Scanner data = new Scanner(System.in);
         System.out.println("Enter title:");
-        String title = validateGetStringInput("enter a valid title");//data.nextLine();
+        String title = HelperMethods.validateGetStringInput("enter a valid title");//data.nextLine();
 
         System.out.println("Enter description:");
-        String description = validateGetStringInput("enter a valid description");//data.nextLine();
+        String description = HelperMethods.validateGetStringInput("enter a valid description");//data.nextLine();
 
         System.out.println("Choose priority for the item (1.Low, 2.Medium, 3.High):");
         int userPriorityChoice = data.nextInt();
@@ -134,19 +123,19 @@ public class Main {
         data.nextLine();
         System.out.println("Enter start date of the item (e.g. dd-mm-yyyy)");
         String startDateString = data.nextLine();
-        while(!isValidDate(startDateString)){
+        while(!HelperMethods.isValidDate(startDateString)){
             System.out.println("Enter start date of the item (e.g. dd-mm-yyyy)");
             startDateString = data.nextLine();
         }
-        Date startDate = convertStringToDate(startDateString);
+        Date startDate = HelperMethods.convertStringToDate(startDateString);
 
         System.out.println("Enter end date of the item (e.g. dd-mm-yyyy)");
         String endDateString = data.nextLine();
-        while(!isValidEndDate(startDate, endDateString)){
+        while(!HelperMethods.isValidEndDate(startDate, endDateString)){
             System.out.println("Enter end date of the item (e.g. dd-mm-yyyy)");
             endDateString = data.nextLine();
         }
-        Date endDate = convertStringToDate(endDateString);
+        Date endDate = HelperMethods.convertStringToDate(endDateString);
 
         TodoItem item = new TodoItem(title, description, priority, category, startDate, endDate);
         return item;
@@ -170,48 +159,7 @@ public class Main {
         String title = input.nextLine();
         currentUser.deleteTodoItem(title);
     }
-    
-    private static boolean isValidDate(String dateValue){
-        try{
-            DateFormat date = new SimpleDateFormat("dd-MM-yyyy");
-            date.setLenient(false);
-            date.parse(dateValue);
-            Date dateAfterParsing = convertStringToDate(dateValue);
-            Date now = new java.util.Date();
-            if(dateAfterParsing.compareTo(now)!= -1)
-                return true;
-            else {
-                System.out.println("The start date already passed");
-                return false;
-            }
-        }
-        catch (ParseException e){
-            System.out.println("invalid date format");
-            return false;
-        }
-    }
 
-    private static boolean isValidEndDate(Date startDate, String dateString){
-        if(isValidDate(dateString)){
-            Date endDate = convertStringToDate(dateString);
-            if(endDate.compareTo(startDate) != -1)
-                return true;
-            else{
-                System.out.println("End date must be after start date.");
-                return false;
-            }
-        }
-        return false;
-    }
-    
-    private static Date convertStringToDate(String dateString){
-        try {
-            Date date = new SimpleDateFormat("dd-MM-yyyy").parse(dateString);
-            return date;
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-    }
     private static void addItemToCategoryFromUser(){
         Scanner input = new Scanner(System.in);
 
