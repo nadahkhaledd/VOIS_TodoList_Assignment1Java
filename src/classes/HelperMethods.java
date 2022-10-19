@@ -52,8 +52,7 @@ public class HelperMethods {
         Scanner data = new Scanner(System.in);
         // System.out.println("Hello, what is your name?");
         String userInput = data.nextLine();
-        while(userInput.matches(" +")|| userInput
-                .isEmpty()){
+        while(userInput.matches(" +")|| userInput.isEmpty()){
             System.out.println(message);
             userInput=data.nextLine();
         }
