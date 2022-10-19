@@ -42,8 +42,7 @@ public class HelperMethods {
     
     public static Date convertStringToDate(String dateString){
         try {
-            Date date = new SimpleDateFormat("dd-MM-yyyy").parse(dateString);
-            return date;
+            return new SimpleDateFormat("dd-MM-yyyy").parse(dateString);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }

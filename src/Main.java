@@ -26,8 +26,6 @@ public class Main {
 
     public static void showMenu(){
         Scanner input = new Scanner(System.in);
-
-
         System.out.println("Hello, what is your name?");
 
         String name = HelperMethods.validateGetStringInput("write a valid name");
