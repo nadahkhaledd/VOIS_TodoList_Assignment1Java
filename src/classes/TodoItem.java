@@ -86,11 +86,13 @@ public class TodoItem implements Serializable {
     public String toString()
     {
         SimpleDateFormat formatter=new SimpleDateFormat("dd-MM-yyyy");
-        return "--------------------------------------------------------------------------\n" +
-                " Title: " + title +"\t\tPriority: " + priority+ "\t\tCategory: " + category+
-                " \n Start Date: " + formatter.format(startDate) +
-                "\t\t\t End Date: " + formatter.format(endDate) +
-                "\n Description: " + description + "\n" +
-                "-------------------------------------------------------------------------\n";
+        return ConsoleOptions.ANSI_BLUE + "--------------------------------------------------------------------------\n" + ConsoleOptions.ANSI_RESET +
+                ConsoleOptions.SET_BOLD_TEXT +ConsoleOptions.ANSI_BLUE + title + ConsoleOptions.SET_PLAIN_TEXT +  ConsoleOptions.ANSI_RESET +
+                ConsoleOptions.SET_BOLD_TEXT +"\t\tPriority: " + ConsoleOptions.SET_PLAIN_TEXT + priority+
+                ConsoleOptions.SET_BOLD_TEXT + "\t\tCategory: " + ConsoleOptions.SET_PLAIN_TEXT + category+
+                ConsoleOptions.SET_BOLD_TEXT +" \n Start Date: " + ConsoleOptions.SET_PLAIN_TEXT + formatter.format(startDate) +
+                ConsoleOptions.SET_BOLD_TEXT +"\t\t\t End Date: "+ ConsoleOptions.SET_PLAIN_TEXT + formatter.format(endDate) +
+                ConsoleOptions.SET_BOLD_TEXT +"\n Description: "+ ConsoleOptions.SET_PLAIN_TEXT + description + "\n" +
+                ConsoleOptions.ANSI_BLUE + "--------------------------------------------------------------------------\n" + ConsoleOptions.ANSI_RESET;
     }
 }

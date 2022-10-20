@@ -17,12 +17,12 @@ public class HelperMethods {
             if(dateAfterParsing.compareTo(now)!= -1)
                 return true;
             else {
-                System.out.println("The start date already passed");
+                System.out.println(ConsoleOptions.ANSI_RED + "The start date already passed" + ConsoleOptions.ANSI_RESET);
                 return false;
             }
         }
         catch (ParseException e){
-            System.out.println("invalid date format");
+            System.out.println(ConsoleOptions.ANSI_RED +"invalid date format"+ConsoleOptions.ANSI_RESET);
             return false;
         }
     }
@@ -33,7 +33,7 @@ public class HelperMethods {
             if(endDate.compareTo(startDate) != -1)
                 return true;
             else{
-                System.out.println("End date must be after start date.");
+                System.out.println(ConsoleOptions.ANSI_RED +"End date must be after start date."+ConsoleOptions.ANSI_RESET);
                 return false;
             }
         }
@@ -54,7 +54,7 @@ public class HelperMethods {
         // System.out.println("Hello, what is your name?");
         String userInput = data.nextLine();
         while(userInput.matches(" +")|| userInput.isEmpty()){
-            System.out.println(message);
+            System.out.println(ConsoleOptions.ANSI_RED + message + ConsoleOptions.ANSI_RESET);
             userInput=data.nextLine();
         }
         return userInput;
@@ -66,7 +66,7 @@ public class HelperMethods {
         while(!userInput.matches("\\d+")
                 || Integer.parseInt(userInput) < startLimit
                 || Integer.parseInt(userInput) > endLimit) {
-            System.out.println(message);
+            System.out.println(ConsoleOptions.ANSI_RED +message+ConsoleOptions.ANSI_RESET);
             userInput = data.nextLine();
         }
         return Integer.parseInt(userInput);

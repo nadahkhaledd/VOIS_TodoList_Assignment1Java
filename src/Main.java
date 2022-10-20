@@ -1,3 +1,4 @@
+import classes.ConsoleOptions;
 import classes.HelperMethods;
 import classes.TodoItem;
 import classes.User;
@@ -48,7 +49,7 @@ public class Main {
         Scanner input = new Scanner(System.in);
         while(true)
         {
-            System.out.println("\nWelcome " + currentUser.getName());
+            System.out.println(ConsoleOptions.ANSI_YELLOW + "\nWelcome " + currentUser.getName() + ConsoleOptions.ANSI_RESET);
             for(String option : menuOptions)
                 System.out.println(option);
             int option = HelperMethods.validateGetIntegerInput("Invalid input", 1, 10);
@@ -118,7 +119,7 @@ public class Main {
                                 System.out.print("Choose priority of an item (1.Low, 2.Medium, 3.High): ");
                                 int searchPriority = input.nextInt();
                                 if(searchPriority < 1 || searchPriority > 3){
-                                    System.out.println("Invalid option, try again.");
+                                    System.out.println(ConsoleOptions.ANSI_RED +"Invalid option, try again."+ConsoleOptions.ANSI_RESET);
                                     System.out.print("Choose priority of an item (1.Low, 2.Medium, 3.High): ");
                                     searchPriority = input.nextInt();
                                 }
