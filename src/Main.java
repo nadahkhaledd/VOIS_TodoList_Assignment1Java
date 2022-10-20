@@ -33,11 +33,6 @@ public class Main {
         System.out.println("Hello, what is your name?");
 
         String name = HelperMethods.validateGetStringInput("write a valid name");
-        /*input.nextLine();
-        while(name.matches(" +")|| name.isEmpty()){
-            System.out.println("write a valid name");
-            name=input.nextLine();
-        }*/
         currentUser = new User(name);
     }
 
@@ -56,7 +51,7 @@ public class Main {
             System.out.println("\nWelcome " + currentUser.getName());
             for(String option : menuOptions)
                 System.out.println(option);
-            int option = input.nextInt();
+            int option = HelperMethods.validateGetIntegerInput("Invalid input", 1, 10);
             switch (option){
                 case 1:
                     TodoItem item = takeItemFromUser();
@@ -144,7 +139,6 @@ public class Main {
                     break;
 
                 case 8:
-                    //input.nextLine();
                     System.out.println("Enter title of item to be added to favorite:");
                     String title = HelperMethods.validateGetStringInput("Enter a valid title");
                     currentUser.addItemToFavorite(title);
@@ -178,10 +172,6 @@ public class Main {
         int userPriorityChoice = HelperMethods.validateGetIntegerInput(
                 "invalid choice.\nChoose priority for the item (1.Low, 2.Medium, 3.High):", 1, 3
         );
-        /*while (userPriorityChoice < 1 || userPriorityChoice > 3){
-            System.out.println("invalid choice.\nChoose priority for the item (1.Low, 2.Medium, 3.High):");
-            userPriorityChoice = data.nextInt();
-        }*/
         Priority priority = (userPriorityChoice == 1)? Priority.Low :
                 ((userPriorityChoice == 2)?Priority.Medium : Priority.High);
 
@@ -189,14 +179,8 @@ public class Main {
                 "(1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)");
         int userCategoryChoice = HelperMethods.validateGetIntegerInput("invalid input.\nChoose category for the item " +
         "(1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)", 1, 6);
-        /*while (userCategoryChoice<1 || userCategoryChoice>6){
-            System.out.println("invalid input.\nChoose category for the item " +
-                    "(1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)");
-            userCategoryChoice = data.nextInt();
-        }*/
         Category category = categories.get(userCategoryChoice-1);
 
-        //data.nextLine();
         System.out.println("Enter start date of the item (e.g. dd-MM-yyyy)");
         String startDateString = data.nextLine();
         while(!HelperMethods.isValidDate(startDateString)){
@@ -234,8 +218,6 @@ public class Main {
     }
 
     private static void addItemToCategoryFromUser(){
-        //Scanner input = new Scanner(System.in);
-
         System.out.println("Enter title of item to be added to Category");
         String title = HelperMethods.validateGetStringInput("Enter a valid title");
 
@@ -243,12 +225,6 @@ public class Main {
                 "(1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)");
         int userCategoryChoice = HelperMethods.validateGetIntegerInput("invalid input.\nChoose category for the item " +
                 "(1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)", 1, 6);
-        /*while (userCategoryChoice<1 || userCategoryChoice>6){
-            System.out.println("invalid input.\nChoose category for the item " +
-                    "(1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)");
-            userCategoryChoice =input.nextInt();
-        }
-        input.nextLine();*/
         Category category = categories.get(userCategoryChoice-1);
 
         currentUser.addItemToCategory(title,category);
