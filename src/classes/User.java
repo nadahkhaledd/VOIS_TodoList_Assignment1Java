@@ -87,27 +87,16 @@ public class User implements Serializable {
             return true;
         }
         else {
-            System.out.println("items with this title already exists.");
+            System.out.println(ConsoleOptions.ANSI_RED + "items with this title already exists." + ConsoleOptions.ANSI_RESET);
             return false;
         }
     }
 
-    public boolean updateTodoItem(TodoItem item, String oldTitle){
+    public void updateTodoItem(TodoItem item, String oldTitle){
         int oldItemIndex = getItemByTitle(oldTitle);
-        boolean newTitleExists = getItemByTitle(item.getTitle()) != -1;
-        if(oldItemIndex != -1){
-            if(!newTitleExists || item.getTitle().equalsIgnoreCase(oldTitle)){
-                this.items.set(oldItemIndex, item);
-                System.out.println("item updated successfully");
-                return true;
-            }
-            else {
-                System.out.println("title already exists, choose a new one.");
-                return false;
-            }
-        }
-        System.out.println("the item you want to change doesn't exist.");
-        return false;
+        this.items.set(oldItemIndex, item);
+        System.out.println("item updated successfully");
+
     }
 
     public boolean deleteTodoItem(String title){
@@ -117,7 +106,7 @@ public class User implements Serializable {
             System.out.println("Item deleted successfully.");
             return true;
         }
-        System.out.println("Item couldn't be deleted");
+        System.out.println(ConsoleOptions.ANSI_RED + "Item couldn't be deleted" + ConsoleOptions.ANSI_RESET);
         return false;
     }
 
@@ -145,7 +134,7 @@ public class User implements Serializable {
 
     public void showTop5ItemsByDate(){
         if(items.isEmpty())
-            System.out.println("sorry, no items available.");
+            System.out.println( ConsoleOptions.ANSI_RED + "sorry, no items available." + ConsoleOptions.ANSI_RESET);
         else{
             int lastIndex = (items.size() >= 5) ? 5: items.size();
             sortTodoItemsByDate();
@@ -172,7 +161,7 @@ public class User implements Serializable {
                     returnedItems = getItemsByStartDate(startDate);
                 }
                 catch (ParseException e){
-                    System.out.println("invalid date format");
+                    System.out.println(ConsoleOptions.ANSI_RED + "invalid date format" + ConsoleOptions.ANSI_RESET);
                 }
                 break;
 
@@ -182,7 +171,7 @@ public class User implements Serializable {
                     returnedItems = getItemsByEndDate(endDate);
                 }
                 catch (ParseException e){
-                    System.out.println("invalid date format");
+                    System.out.println(ConsoleOptions.ANSI_RED + "invalid date format" + ConsoleOptions.ANSI_RESET);
                 }
                 break;
 
@@ -192,7 +181,7 @@ public class User implements Serializable {
         }
 
         if (returnedItems.isEmpty()) {
-            System.out.println("No results found.");
+            System.out.println(ConsoleOptions.ANSI_RED + "No results found." + ConsoleOptions.ANSI_RESET);
         }
         else {
             for(TodoItem item: returnedItems){
@@ -208,7 +197,7 @@ public class User implements Serializable {
             System.out.println("Item added to favorites.");
             return true;
         }
-        System.out.println("Item couldn't be found.");
+        System.out.println(ConsoleOptions.ANSI_RED + "Item couldn't be found." + ConsoleOptions.ANSI_RESET);
         return false;
     }
 
@@ -224,7 +213,7 @@ public class User implements Serializable {
             System.out.println("Item added to category " + category);
             return true;
         }
-        System.out.println("Item couldn't be found.");
+        System.out.println(ConsoleOptions.ANSI_RED + "Item couldn't be found." + ConsoleOptions.ANSI_RESET);
         return false;
     }
 }
