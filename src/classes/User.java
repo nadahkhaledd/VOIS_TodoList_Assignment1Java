@@ -27,7 +27,7 @@ public class User implements Serializable {
         this.name = name;
     }
 
-    private int getItemByTitle(String title){
+    public int getItemByTitle(String title){
         for(int i=0; i<this.items.size(); i++) {
             if(this.items.get(i).getTitle().equalsIgnoreCase(title)){
                 return i;

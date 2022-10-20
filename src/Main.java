@@ -33,11 +33,6 @@ public class Main {
         System.out.println("Hello, what is your name?");
 
         String name = HelperMethods.validateGetStringInput("write a valid name");
-        /*input.nextLine();
-        while(name.matches(" +")|| name.isEmpty()){
-            System.out.println("write a valid name");
-            name=input.nextLine();
-        }*/
         currentUser = new User(name);
     }
 
@@ -56,10 +51,10 @@ public class Main {
             System.out.println("\nWelcome " + currentUser.getName());
             for(String option : menuOptions)
                 System.out.println(option);
-            int option = input.nextInt();
+            int option = HelperMethods.validateGetIntegerInput("Invalid input", 1, 10);
             switch (option){
                 case 1:
-                    TodoItem item = takeItemFromUser();
+                    TodoItem item = takeCreateItemFromUser();
                     currentUser.addTodoItem(item);
                     currentUser.showAllTodoItems();
                     saveFile();
@@ -91,7 +86,7 @@ public class Main {
                         switch (searchOption){
                             case 1:
                                 System.out.print("Enter title of an item: ");
-                                String searchTitle = input.next();
+                                String searchTitle = HelperMethods.validateGetStringInput("invalid title");
                                 currentUser.searchShowItemsBySearchKey(SearchKey.Title, searchTitle);
                                 isSearchKeyValid = true;
                                 break;
@@ -144,9 +139,8 @@ public class Main {
                     break;
 
                 case 8:
-                    //input.nextLine();
                     System.out.println("Enter title of item to be added to favorite:");
-                    String title = HelperMethods.validateGetStringInput("Enter a valid title");
+                    String title = validateGetTitle();
                     currentUser.addItemToFavorite(title);
                     saveFile();
                     break;
@@ -164,12 +158,12 @@ public class Main {
         }
 
     }
-
-    private static TodoItem takeItemFromUser(){
+    private static TodoItem takeUpdateItemFromUser(){
         System.out.println("Enter new data...");
         Scanner data = new Scanner(System.in);
         System.out.println("Enter title:");
-        String title = HelperMethods.validateGetStringInput("enter a valid title");//data.nextLine();
+
+        String title = validateGetTitle();//data.nextLine();
 
         System.out.println("Enter description:");
         String description = HelperMethods.validateGetStringInput("enter a valid description");//data.nextLine();
@@ -178,10 +172,45 @@ public class Main {
         int userPriorityChoice = HelperMethods.validateGetIntegerInput(
                 "invalid choice.\nChoose priority for the item (1.Low, 2.Medium, 3.High):", 1, 3
         );
-        /*while (userPriorityChoice < 1 || userPriorityChoice > 3){
-            System.out.println("invalid choice.\nChoose priority for the item (1.Low, 2.Medium, 3.High):");
-            userPriorityChoice = data.nextInt();
-        }*/
+        Priority priority = (userPriorityChoice == 1)? Priority.Low :
+                ((userPriorityChoice == 2)?Priority.Medium : Priority.High);
+
+        System.out.println("Choose category for the item " +
+                "(1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)");
+        int userCategoryChoice = HelperMethods.validateGetIntegerInput("invalid input.\nChoose category for the item " +
+                "(1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)", 1, 6);
+        Category category = categories.get(userCategoryChoice-1);
+
+        System.out.println("Enter start date of the item (e.g. dd-MM-yyyy)");
+        String startDateString = data.nextLine();
+        while(!HelperMethods.isValidDate(startDateString)){
+            System.out.println("Enter start date of the item (e.g. dd-mm-yyyy)");
+            startDateString = data.nextLine();
+        }
+        Date startDate = HelperMethods.convertStringToDate(startDateString);
+
+        System.out.println("Enter end date of the item (e.g. dd-MM-yyyy)");
+        String endDateString = data.nextLine();
+        while(!HelperMethods.isValidEndDate(startDate, endDateString)){
+            System.out.println("Enter end date of the item (e.g. dd-mm-yyyy)");
+            endDateString = data.nextLine();
+        }
+        Date endDate = HelperMethods.convertStringToDate(endDateString);
+
+        return new TodoItem(title, description, priority, category, startDate, endDate);}
+    private static TodoItem takeCreateItemFromUser(){
+        System.out.println("Enter new data...");
+        Scanner data = new Scanner(System.in);
+        System.out.println("Enter title:");
+        String title = validateGetTitle();//data.nextLine();
+
+        System.out.println("Enter description:");
+        String description = HelperMethods.validateGetStringInput("enter a valid description");//data.nextLine();
+
+        System.out.println("Choose priority for the item (1.Low, 2.Medium, 3.High):");
+        int userPriorityChoice = HelperMethods.validateGetIntegerInput(
+                "invalid choice.\nChoose priority for the item (1.Low, 2.Medium, 3.High):", 1, 3
+        );
         Priority priority = (userPriorityChoice == 1)? Priority.Low :
                 ((userPriorityChoice == 2)?Priority.Medium : Priority.High);
 
@@ -189,14 +218,8 @@ public class Main {
                 "(1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)");
         int userCategoryChoice = HelperMethods.validateGetIntegerInput("invalid input.\nChoose category for the item " +
         "(1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)", 1, 6);
-        /*while (userCategoryChoice<1 || userCategoryChoice>6){
-            System.out.println("invalid input.\nChoose category for the item " +
-                    "(1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)");
-            userCategoryChoice = data.nextInt();
-        }*/
         Category category = categories.get(userCategoryChoice-1);
 
-        //data.nextLine();
         System.out.println("Enter start date of the item (e.g. dd-MM-yyyy)");
         String startDateString = data.nextLine();
         while(!HelperMethods.isValidDate(startDateString)){
@@ -219,36 +242,41 @@ public class Main {
     private static void updateItemFromUser(){
         System.out.println("Enter title of item to be updated:");
         String oldTitle = HelperMethods.validateGetStringInput("Enter a valid title");
-        TodoItem newItem = takeItemFromUser();
+        TodoItem newItem = takeCreateItemFromUser();
         while (!currentUser.updateTodoItem(newItem, oldTitle)){
             System.out.println("Enter title of item to be updated:");
-            oldTitle = HelperMethods.validateGetStringInput("Enter a valid title");
-            newItem = takeItemFromUser();
+            oldTitle = HelperMethods.validateGetStringInput("invalid title");
+            newItem = takeCreateItemFromUser();
         }
     }
-
+    public static String validateGetTitle(){// used to make sure that user input(string) is not empty or not only just ' ' character
+        Scanner data = new Scanner(System.in);
+        String title = data.nextLine();
+        boolean titleAlreadyExists=(currentUser.getItemByTitle(title)==-1);
+        while(title .matches(" +")|| title .isEmpty() || titleAlreadyExists){// used to make sure that user input(string) is not empty or not only just ' ' character and title doesn't exist
+               if(titleAlreadyExists)
+                   System.out.println(" title already exists ");
+               else if(title .matches(" +")|| title .isEmpty())
+                   System.out.println("invalid title");
+               title=data.nextLine();
+               titleAlreadyExists=(currentUser.getItemByTitle(title)==-1);
+        }
+        return title;
+    }
     private static void deleteItemByUser(){
         System.out.println("Enter title of item to be deleted:");
-        String title = HelperMethods.validateGetStringInput("Enter a valid title");
+        String title = validateGetTitle();
         currentUser.deleteTodoItem(title);
     }
 
     private static void addItemToCategoryFromUser(){
-        //Scanner input = new Scanner(System.in);
-
         System.out.println("Enter title of item to be added to Category");
-        String title = HelperMethods.validateGetStringInput("Enter a valid title");
+        String title = validateGetTitle();
 
         System.out.println("Choose category for the item " +
                 "(1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)");
         int userCategoryChoice = HelperMethods.validateGetIntegerInput("invalid input.\nChoose category for the item " +
                 "(1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)", 1, 6);
-        /*while (userCategoryChoice<1 || userCategoryChoice>6){
-            System.out.println("invalid input.\nChoose category for the item " +
-                    "(1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)");
-            userCategoryChoice =input.nextInt();
-        }
-        input.nextLine();*/
         Category category = categories.get(userCategoryChoice-1);
 
         currentUser.addItemToCategory(title,category);
