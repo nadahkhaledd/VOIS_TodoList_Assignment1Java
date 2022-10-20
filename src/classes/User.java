@@ -194,15 +194,15 @@ public class User implements Serializable {
         }
     }
 
-    public boolean addItemToFavorite(String title){
+    public void addItemToFavorite(String title){
         int itemIndex = getItemByTitle(title);
-        if(itemIndex != -1){
+      //  if(itemIndex != -1){
             items.get(itemIndex).setFavorite(true);
-            System.out.println("Item added to favorites.");
-            return true;
-        }
-        System.out.println(ConsoleOptions.ANSI_RED + "Item couldn't be found." + ConsoleOptions.ANSI_RESET);
-        return false;
+        //    System.out.println("Item added to favorites.");
+          //  return true;
+        //}
+        //System.out.println(ConsoleOptions.ANSI_RED + "Item couldn't be found." + ConsoleOptions.ANSI_RESET);
+        //return false;
     }
 
     public void printFavorites(){
@@ -210,14 +210,14 @@ public class User implements Serializable {
     }
 
 
-    public boolean addItemToCategory(String title, Category category){
+    public void addItemToCategory(String title, Category category){
         int itemIndex = getItemByTitle(title);
-        if(itemIndex != -1){
+      //  if(itemIndex != -1){
             items.get(itemIndex).setCategory(category);
             System.out.println("Item added to category " + category);
-            return true;
-        }
-        System.out.println(ConsoleOptions.ANSI_RED + "Item couldn't be found." + ConsoleOptions.ANSI_RESET);
-        return false;
+      //      return true;
+       // }
+       // System.out.println(ConsoleOptions.ANSI_RED + "Item couldn't be found." + ConsoleOptions.ANSI_RESET);
+      //  return false;
     }
 }

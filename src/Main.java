@@ -82,58 +82,7 @@ public class Main {
                     break;
 
                 case 6:
-                    boolean isSearchKeyValid = false;
-                    while (!isSearchKeyValid){
-                        System.out.println("choose filter for search (1.title, 2.start date, 3.end date, 4.priority)");
-                        int searchOption = input.nextInt();
-                        switch (searchOption){
-                            case 1:
-                                System.out.print("Enter title of an item: ");
-                                String searchTitle = HelperMethods.validateGetStringInput("invalid title");
-                                currentUser.searchShowItemsBySearchKey(SearchKey.Title, searchTitle);
-                                isSearchKeyValid = true;
-                                break;
-
-                            case 2:
-                                System.out.print("Enter start date of an item: ");
-                                String searchStartDate = input.next();
-                                while(!HelperMethods.isValidDate(searchStartDate)){
-                                    System.out.print("Enter start date of an item: ");
-                                    searchStartDate = input.next();
-                                }
-                                currentUser.searchShowItemsBySearchKey(SearchKey.StartDate, searchStartDate);
-                                isSearchKeyValid = true;
-                                break;
-
-                            case 3:
-                                System.out.print("Enter end date of an item: ");
-                                String searchEndDate = input.next();
-                                while(!HelperMethods.isValidDate(searchEndDate)){
-                                    System.out.print("Enter end date of an item: ");
-                                    searchEndDate = input.next();
-                                }
-                                currentUser.searchShowItemsBySearchKey(SearchKey.EndDate, searchEndDate);
-                                isSearchKeyValid = true;
-                                break;
-
-                            case 4:
-                                System.out.print("Choose priority of an item (1.Low, 2.Medium, 3.High): ");
-                                int searchPriority = input.nextInt();
-                                if(searchPriority < 1 || searchPriority > 3){
-                                    System.out.println(ConsoleOptions.ANSI_RED +"Invalid option, try again."+ConsoleOptions.ANSI_RESET);
-                                    System.out.print("Choose priority of an item (1.Low, 2.Medium, 3.High): ");
-                                    searchPriority = input.nextInt();
-                                }
-                                String priorityValue = (searchPriority == 1) ? "Low" : ((searchPriority == 2) ? "Medium" : "High");
-                                currentUser.searchShowItemsBySearchKey(SearchKey.Priority, priorityValue);
-                                isSearchKeyValid = true;
-                                break;
-
-                            default:
-                                System.out.println("Invalid input.");
-                                break;
-                        }
-                    }
+                    search();
                     break;
 
                 case 7:
@@ -142,8 +91,7 @@ public class Main {
                     break;
 
                 case 8:
-                    System.out.println("Enter title of item to be added to favorite:");
-                    String title = HelperMethods.validateGetStringInput("invalid title");
+                    String title = getExistingTitle("Favorites");
                     currentUser.addItemToFavorite(title);
                     saveFile();
                     break;
@@ -161,6 +109,7 @@ public class Main {
         }
 
     }
+
     private static String getOldTitleFromUser(){
         Scanner data = new Scanner(System.in);
         while(true){
@@ -271,15 +220,6 @@ public class Main {
     }
 
 
-
-
-
-
-
-
-
-
-
     private static TodoItem takeCreateItemFromUser(){
         System.out.println("Enter new data...");
         Scanner data = new Scanner(System.in);
@@ -334,14 +274,14 @@ public class Main {
     public static String validateGetTitle(String oldTitle){// used to make sure that user input(string) is not empty or not only just ' ' character
         Scanner data = new Scanner(System.in);
         String title = data.nextLine();
-        boolean titleAlreadyExists=(currentUser.getItemByTitle(title)!=-1 && !oldTitle.equalsIgnoreCase(title));
+        boolean titleAlreadyExists=(currentUser.getItemByTitle(title.trim())!=-1 && !oldTitle.equalsIgnoreCase(title.trim()));
         while(title .matches(" +")|| title .isEmpty() || titleAlreadyExists){// used to make sure that user input(string) is not empty or not only just ' ' character and title doesn't exist
                if(titleAlreadyExists)
                    System.out.println(" title already exists re-enter title");
                else if(title .matches(" +")|| title .isEmpty())
                    System.out.println("invalid title");
                title=data.nextLine();
-               titleAlreadyExists=(currentUser.getItemByTitle(title)!=-1 && oldTitle!=title);
+               titleAlreadyExists=(currentUser.getItemByTitle(title.trim())!=-1 && !oldTitle.equalsIgnoreCase(title.trim()));
         }
         return title;
     }
@@ -352,8 +292,7 @@ public class Main {
     }
 
     private static void addItemToCategoryFromUser(){
-        System.out.println("Enter title of item to be added to Category");
-        String title = HelperMethods.validateGetStringInput("invalid title");
+        String title = getExistingTitle("Category");
 
         System.out.println("Choose category for the item " +
                 "(1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)");
@@ -363,9 +302,74 @@ public class Main {
 
         currentUser.addItemToCategory(title,category);
     }
+    private static String getExistingTitle(String messageSpecifier){
+        String title = "";
+        while(true) {
+            System.out.println("Enter title of item to be added to "+messageSpecifier);
+            title = HelperMethods.validateGetStringInput("invalid title");
+            if(currentUser.itemExists(title)) break;
+            System.out.println("Item doesn't exist");
+        }
+        return title;
+    }
 
     private static void saveFile() {
         fileStorage.saveData(currentUser);
+    }
+    private static void search(){
+        Scanner input = new Scanner(System.in);
+        boolean isSearchKeyValid = false;
+        while (!isSearchKeyValid){
+            System.out.println("choose filter for search (1.title, 2.start date, 3.end date, 4.priority)");
+            int searchOption = input.nextInt();
+            switch (searchOption){
+                case 1:
+                    System.out.print("Enter title of an item: ");
+                    String searchTitle = HelperMethods.validateGetStringInput("invalid title");
+                    currentUser.searchShowItemsBySearchKey(SearchKey.Title, searchTitle);
+                    isSearchKeyValid = true;
+                    break;
+
+                case 2:
+                    System.out.print("Enter start date of an item: ");
+                    String searchStartDate = input.next();
+                    while(!HelperMethods.isValidDate(searchStartDate)){
+                        System.out.print("Enter start date of an item: ");
+                        searchStartDate = input.next();
+                    }
+                    currentUser.searchShowItemsBySearchKey(SearchKey.StartDate, searchStartDate);
+                    isSearchKeyValid = true;
+                    break;
+
+                case 3:
+                    System.out.print("Enter end date of an item: ");
+                    String searchEndDate = input.next();
+                    while(!HelperMethods.isValidDate(searchEndDate)){
+                        System.out.print("Enter end date of an item: ");
+                        searchEndDate = input.next();
+                    }
+                    currentUser.searchShowItemsBySearchKey(SearchKey.EndDate, searchEndDate);
+                    isSearchKeyValid = true;
+                    break;
+
+                case 4:
+                    System.out.print("Choose priority of an item (1.Low, 2.Medium, 3.High): ");
+                    int searchPriority = input.nextInt();
+                    if(searchPriority < 1 || searchPriority > 3){
+                        System.out.println(ConsoleOptions.ANSI_RED +"Invalid option, try again."+ConsoleOptions.ANSI_RESET);
+                        System.out.print("Choose priority of an item (1.Low, 2.Medium, 3.High): ");
+                        searchPriority = input.nextInt();
+                    }
+                    String priorityValue = (searchPriority == 1) ? "Low" : ((searchPriority == 2) ? "Medium" : "High");
+                    currentUser.searchShowItemsBySearchKey(SearchKey.Priority, priorityValue);
+                    isSearchKeyValid = true;
+                    break;
+
+                default:
+                    System.out.println("Invalid input.");
+                    break;
+            }
+        }
     }
 
 }

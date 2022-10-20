@@ -18,7 +18,7 @@ public class TodoItem implements Serializable {
 
     public TodoItem(String title, String description, Priority priority,
                     Category category, Date startDate, Date endDate) {
-        this.title = title;
+        this.title = title.trim();
         this.description = description;
         this.priority = priority;
         this.category = category;
@@ -31,7 +31,7 @@ public class TodoItem implements Serializable {
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        this.title = title.trim();
     }
 
     public String getDescription() {
@@ -86,13 +86,17 @@ public class TodoItem implements Serializable {
     public String toString()
     {
         SimpleDateFormat formatter=new SimpleDateFormat("dd-MM-yyyy");
-        return ConsoleOptions.ANSI_BLUE + "--------------------------------------------------------------------------\n" + ConsoleOptions.ANSI_RESET +
+        String result = ConsoleOptions.ANSI_BLUE + "--------------------------------------------------------------------------\n" + ConsoleOptions.ANSI_RESET +
                 ConsoleOptions.SET_BOLD_TEXT +ConsoleOptions.ANSI_BLUE + title + ConsoleOptions.SET_PLAIN_TEXT +  ConsoleOptions.ANSI_RESET +
                 ConsoleOptions.SET_BOLD_TEXT +"\t\tPriority: " + ConsoleOptions.SET_PLAIN_TEXT + priority+
                 ConsoleOptions.SET_BOLD_TEXT + "\t\tCategory: " + ConsoleOptions.SET_PLAIN_TEXT + category+
                 ConsoleOptions.SET_BOLD_TEXT +" \n Start Date: " + ConsoleOptions.SET_PLAIN_TEXT + formatter.format(startDate) +
                 ConsoleOptions.SET_BOLD_TEXT +"\t\t\t End Date: "+ ConsoleOptions.SET_PLAIN_TEXT + formatter.format(endDate) +
-                ConsoleOptions.SET_BOLD_TEXT +"\n Description: "+ ConsoleOptions.SET_PLAIN_TEXT + description + "\n" +
-                ConsoleOptions.ANSI_BLUE + "--------------------------------------------------------------------------\n" + ConsoleOptions.ANSI_RESET;
+                ConsoleOptions.SET_BOLD_TEXT +"\n Description: "+ ConsoleOptions.SET_PLAIN_TEXT + description;
+
+                if(isFavorite)
+                    result += ConsoleOptions.SET_BOLD_TEXT +"\n Favorite"+ ConsoleOptions.SET_PLAIN_TEXT;
+                result += ConsoleOptions.ANSI_BLUE + "\n-------------------------------------------------------------------------\n" + ConsoleOptions.ANSI_RESET;
+                return result;
     }
 }
