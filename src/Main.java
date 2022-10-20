@@ -337,8 +337,7 @@ public class Main {
         boolean titleAlreadyExists=(currentUser.getItemByTitle(title)!=-1 && !oldTitle.equalsIgnoreCase(title));
         while(title .matches(" +")|| title .isEmpty() || titleAlreadyExists){// used to make sure that user input(string) is not empty or not only just ' ' character and title doesn't exist
                if(titleAlreadyExists)
-                   System.out.println(" title already exists "+oldTitle
-                    + " " + title);
+                   System.out.println(" title already exists re-enter title");
                else if(title .matches(" +")|| title .isEmpty())
                    System.out.println("invalid title");
                title=data.nextLine();
