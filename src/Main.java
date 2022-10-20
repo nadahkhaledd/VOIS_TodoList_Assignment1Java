@@ -61,7 +61,8 @@ public class Main {
                     break;
 
                 case 2:
-                    updateItemFromUser();
+                   // updateItemFromUser();
+                    takeUpdateItemFromUser();
                     saveFile();
                     break;
 
@@ -140,7 +141,7 @@ public class Main {
 
                 case 8:
                     System.out.println("Enter title of item to be added to favorite:");
-                    String title = validateGetTitle();
+                    String title = HelperMethods.validateGetStringInput("invalid title");
                     currentUser.addItemToFavorite(title);
                     saveFile();
                     break;
@@ -158,12 +159,28 @@ public class Main {
         }
 
     }
+    private static boolean updateIsConfirmed(String itemToBeUpdated){
+        Scanner data = new Scanner(System.in);
+        System.out.println("choose 1 if you want to update the "+itemToBeUpdated+" and 2 if you don't want to update it");
+        String userInput=data.next();
+        while(!userInput.equals("1") && !userInput.equals("2") ){
+            System.out.println("invalid choice");
+            userInput=data.next();
+        }
+        switch(userInput){
+            case "1":return true;
+            default: return false;
+        }
+
+    }
     private static TodoItem takeUpdateItemFromUser(){
         System.out.println("Enter new data...");
         Scanner data = new Scanner(System.in);
-        System.out.println("Enter title:");
 
-        String title = validateGetTitle();//data.nextLine();
+        System.out.println("Enter title:");
+       // String oldtitle="";//miand change it
+        //if(updateIsConfirmed("title"))
+     String  title = validateGetTitle("");//data.nextLine();
 
         System.out.println("Enter description:");
         String description = HelperMethods.validateGetStringInput("enter a valid description");//data.nextLine();
@@ -202,7 +219,7 @@ public class Main {
         System.out.println("Enter new data...");
         Scanner data = new Scanner(System.in);
         System.out.println("Enter title:");
-        String title = validateGetTitle();//data.nextLine();
+        String title = validateGetTitle("");//data.nextLine();
 
         System.out.println("Enter description:");
         String description = HelperMethods.validateGetStringInput("enter a valid description");//data.nextLine();
@@ -239,39 +256,39 @@ public class Main {
         return new TodoItem(title, description, priority, category, startDate, endDate);
     }
 
-    private static void updateItemFromUser(){
+  /*  private static void updateItemFromUser(){
         System.out.println("Enter title of item to be updated:");
         String oldTitle = HelperMethods.validateGetStringInput("Enter a valid title");
         TodoItem newItem = takeCreateItemFromUser();
         while (!currentUser.updateTodoItem(newItem, oldTitle)){
             System.out.println("Enter title of item to be updated:");
             oldTitle = HelperMethods.validateGetStringInput("invalid title");
-            newItem = takeCreateItemFromUser();
+            newItem = takeUpdateItemFromUser(oldTitle);
         }
-    }
-    public static String validateGetTitle(){// used to make sure that user input(string) is not empty or not only just ' ' character
+    }*/
+    public static String validateGetTitle(String oldTitle){// used to make sure that user input(string) is not empty or not only just ' ' character
         Scanner data = new Scanner(System.in);
         String title = data.nextLine();
-        boolean titleAlreadyExists=(currentUser.getItemByTitle(title)==-1);
+        boolean titleAlreadyExists=(currentUser.getItemByTitle(title)==-1 && !oldTitle.equalsIgnoreCase(title));
         while(title .matches(" +")|| title .isEmpty() || titleAlreadyExists){// used to make sure that user input(string) is not empty or not only just ' ' character and title doesn't exist
                if(titleAlreadyExists)
                    System.out.println(" title already exists ");
                else if(title .matches(" +")|| title .isEmpty())
                    System.out.println("invalid title");
                title=data.nextLine();
-               titleAlreadyExists=(currentUser.getItemByTitle(title)==-1);
+               titleAlreadyExists=(currentUser.getItemByTitle(title)==-1 && oldTitle!=title);
         }
         return title;
     }
     private static void deleteItemByUser(){
         System.out.println("Enter title of item to be deleted:");
-        String title = validateGetTitle();
+        String title = HelperMethods.validateGetStringInput("invalid title");
         currentUser.deleteTodoItem(title);
     }
 
     private static void addItemToCategoryFromUser(){
         System.out.println("Enter title of item to be added to Category");
-        String title = validateGetTitle();
+        String title = HelperMethods.validateGetStringInput("invalid title");
 
         System.out.println("Choose category for the item " +
                 "(1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)");

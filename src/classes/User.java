@@ -89,22 +89,11 @@ public class User implements Serializable {
         }
     }
 
-    public boolean updateTodoItem(TodoItem item, String oldTitle){
+    public void updateTodoItem(TodoItem item, String oldTitle){
         int oldItemIndex = getItemByTitle(oldTitle);
-        boolean newTitleExists = getItemByTitle(item.getTitle()) != -1;
-        if(oldItemIndex != -1){
-            if(!newTitleExists || item.getTitle().equalsIgnoreCase(oldTitle)){
-                this.items.set(oldItemIndex, item);
-                System.out.println("item updated successfully");
-                return true;
-            }
-            else {
-                System.out.println("title already exists, choose a new one.");
-                return false;
-            }
-        }
-        System.out.println("the item you want to change doesn't exist.");
-        return false;
+        this.items.set(oldItemIndex, item);
+        System.out.println("item updated successfully");
+
     }
 
     public boolean deleteTodoItem(String title){
