@@ -3,6 +3,7 @@ package classes;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -13,11 +14,11 @@ public class HelperMethods {
             date.setLenient(false);
             date.parse(dateValue);
             Date dateAfterParsing = convertStringToDate(dateValue);
-            Date now = date.parse(date.format(new Date()));
-            if(dateAfterParsing.compareTo(now)!= -1)
+            Date startDateLimit = convertStringToDate("1-1-2000");
+            if(dateAfterParsing.compareTo(startDateLimit)!= -1)
                 return true;
             else {
-                System.out.println("The start date already passed");
+                System.out.println("Enter date starting from 1/1/2000");
                 return false;
             }
         }
@@ -25,6 +26,13 @@ public class HelperMethods {
             System.out.println("invalid date format");
             return false;
         }
+    }
+
+
+    private static Date getPreviousDate(int days) {
+        final Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -days);
+        return cal.getTime();
     }
 
     public static boolean isValidEndDate(Date startDate, String dateString){
