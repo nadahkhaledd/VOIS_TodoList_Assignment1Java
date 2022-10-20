@@ -19,6 +19,10 @@ public class User implements Serializable {
         this.items = new ArrayList<>();
     }
 
+    public ArrayList<TodoItem> getItems() {
+        return items;
+    }
+
     public String getName() {
         return name;
     }

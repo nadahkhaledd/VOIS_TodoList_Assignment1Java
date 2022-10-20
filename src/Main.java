@@ -1,3 +1,4 @@
+import classes.ConsoleOptions;
 import classes.HelperMethods;
 import classes.TodoItem;
 import classes.User;
@@ -51,6 +52,7 @@ public class Main {
             System.out.println(ConsoleOptions.ANSI_YELLOW + "\nWelcome " + currentUser.getName() + ConsoleOptions.ANSI_RESET);
             for(String option : menuOptions)
                 System.out.println(option);
+
             int option = HelperMethods.validateGetIntegerInput("Invalid input", 1, 10);
             switch (option){
                 case 1:
@@ -189,50 +191,95 @@ public class Main {
         }
 
     }
-    private static TodoItem takeUpdateItemFromUser(){
+    private static void takeUpdateItemFromUser() {
         System.out.println("Enter new data...");
         Scanner data = new Scanner(System.in);
         String oldTile = getOldTitleFromUser();
+        int itemIndex = currentUser.getItemByTitle(oldTile);
+        TodoItem item = currentUser.getItems().get(itemIndex);
 
         System.out.println("Enter new data...");
 
-        System.out.println("Enter title:");
 
-        String title = validateGetTitle();//data.nextLine();
-
-        System.out.println("Enter description:");
-        String description = HelperMethods.validateGetStringInput("enter a valid description");//data.nextLine();
-
-        System.out.println("Choose priority for the item (1.Low, 2.Medium, 3.High):");
-        int userPriorityChoice = HelperMethods.validateGetIntegerInput(
-                "invalid choice.\nChoose priority for the item (1.Low, 2.Medium, 3.High):", 1, 3
-        );
-        Priority priority = (userPriorityChoice == 1)? Priority.Low :
-                ((userPriorityChoice == 2)?Priority.Medium : Priority.High);
-
-        System.out.println("Choose category for the item " +
-                "(1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)");
-        int userCategoryChoice = HelperMethods.validateGetIntegerInput("invalid input.\nChoose category for the item " +
-                "(1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)", 1, 6);
-        Category category = categories.get(userCategoryChoice-1);
-
-        System.out.println("Enter start date of the item (e.g. dd-MM-yyyy)");
-        String startDateString = data.nextLine();
-        while(!HelperMethods.isValidDate(startDateString)){
-            System.out.println("Enter start date of the item (e.g. dd-mm-yyyy)");
-            startDateString = data.nextLine();
+        if (updateIsConfirmed("title")) {
+            System.out.println("Enter title:");
+            String title = validateGetTitle(oldTile);//data.nextLine();
+            item.setTitle(title);
         }
-        Date startDate = HelperMethods.convertStringToDate(startDateString);
-
-        System.out.println("Enter end date of the item (e.g. dd-MM-yyyy)");
-        String endDateString = data.nextLine();
-        while(!HelperMethods.isValidEndDate(startDate, endDateString)){
-            System.out.println("Enter end date of the item (e.g. dd-mm-yyyy)");
-            endDateString = data.nextLine();
+        if (updateIsConfirmed("description")) {
+            System.out.println("Enter description:");
+            String description = HelperMethods.validateGetStringInput("enter a valid description");//data.nextLine();
+            item.setDescription(description);
         }
-        Date endDate = HelperMethods.convertStringToDate(endDateString);
 
-        return new TodoItem(title, description, priority, category, startDate, endDate);}
+        if (updateIsConfirmed("priority")) {
+            System.out.println("Choose priority for the item (1.Low, 2.Medium, 3.High):");
+            int userPriorityChoice = HelperMethods.validateGetIntegerInput(
+                    "invalid choice.\nChoose priority for the item (1.Low, 2.Medium, 3.High):", 1, 3
+            );
+            Priority priority = (userPriorityChoice == 1) ? Priority.Low :
+                    ((userPriorityChoice == 2) ? Priority.Medium : Priority.High);
+            item.setPriority(priority);
+        }
+
+        if (updateIsConfirmed("category")) {
+            System.out.println("Choose category for the item " +
+                    "(1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)");
+            int userCategoryChoice = HelperMethods.validateGetIntegerInput("invalid input.\nChoose category for the item " +
+                    "(1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)", 1, 6);
+            Category category = categories.get(userCategoryChoice - 1);
+            item.setCategory(category);
+        }
+        boolean startDatePassedEndDate = false;
+        if (updateIsConfirmed("start date")) {
+            System.out.println("Enter start date of the item (e.g. dd-MM-yyyy)");
+            String startDateString = data.nextLine();
+            while (!HelperMethods.isValidDate(startDateString)) {
+                System.out.println("Enter start date of the item (e.g. dd-mm-yyyy)");
+                startDateString = data.nextLine();
+            }
+            Date startDate = HelperMethods.convertStringToDate(startDateString);
+            //item.setStartDate(startDate);
+
+            startDatePassedEndDate = startDate.compareTo(item.getEndDate())==1;
+            if(startDatePassedEndDate) {
+                System.out.println("The start date entered passes the end date," +
+                        " are you sure you want to change it?  (1-Yes , 2-No)");
+                int choice = HelperMethods.validateGetIntegerInput("Enter a valid choice",1,2);
+                if(choice==1){
+                    item.setStartDate(startDate);
+                }
+                else{
+                    startDatePassedEndDate = false;
+                }
+            }
+        }
+        if (startDatePassedEndDate || updateIsConfirmed("end date")) {
+            System.out.println("Enter end date of the item (e.g. dd-MM-yyyy)");
+            String endDateString = data.nextLine();
+            while (!HelperMethods.isValidEndDate(item.getStartDate(), endDateString)) {
+                System.out.println("Enter end date of the item (e.g. dd-mm-yyyy)");
+                endDateString = data.nextLine();
+            }
+            Date endDate = HelperMethods.convertStringToDate(endDateString);
+            item.setEndDate(endDate);
+
+
+        }
+        System.out.println("Item updated:\n" + item.toString());
+
+    }
+
+
+
+
+
+
+
+
+
+
+
     private static TodoItem takeCreateItemFromUser(){
         System.out.println("Enter new data...");
         Scanner data = new Scanner(System.in);
@@ -287,14 +334,15 @@ public class Main {
     public static String validateGetTitle(String oldTitle){// used to make sure that user input(string) is not empty or not only just ' ' character
         Scanner data = new Scanner(System.in);
         String title = data.nextLine();
-        boolean titleAlreadyExists=(currentUser.getItemByTitle(title)==-1 && !oldTitle.equalsIgnoreCase(title));
+        boolean titleAlreadyExists=(currentUser.getItemByTitle(title)!=-1 && !oldTitle.equalsIgnoreCase(title));
         while(title .matches(" +")|| title .isEmpty() || titleAlreadyExists){// used to make sure that user input(string) is not empty or not only just ' ' character and title doesn't exist
                if(titleAlreadyExists)
-                   System.out.println(" title already exists ");
+                   System.out.println(" title already exists "+oldTitle
+                    + " " + title);
                else if(title .matches(" +")|| title .isEmpty())
                    System.out.println("invalid title");
                title=data.nextLine();
-               titleAlreadyExists=(currentUser.getItemByTitle(title)==-1 && oldTitle!=title);
+               titleAlreadyExists=(currentUser.getItemByTitle(title)!=-1 && oldTitle!=title);
         }
         return title;
     }
