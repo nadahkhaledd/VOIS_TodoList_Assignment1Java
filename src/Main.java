@@ -61,7 +61,7 @@ public class Main {
                     break;
 
                 case 2:
-                    updateItemFromUser();
+                    takeUpdateItemFromUser();
                     saveFile();
                     break;
 
@@ -158,9 +158,29 @@ public class Main {
         }
 
     }
-    private static TodoItem takeUpdateItemFromUser(){
-        System.out.println("Enter new data...");
+    private static String getOldTitleFromUser(){
         Scanner data = new Scanner(System.in);
+        while(true){
+            System.out.println("Enter title of item to be updated:");
+            String oldTitle = data.nextLine();
+            if(currentUser.itemExists(oldTitle)){
+                return oldTitle;
+            }
+            if(oldTitle .matches(" +")|| oldTitle .isEmpty()){
+                System.out.println("Please enter a valid title");
+            }
+            else {
+                System.out.println("Title entered doesn't exist");
+            }
+        }
+    }
+    private static TodoItem takeUpdateItemFromUser(){
+
+        Scanner data = new Scanner(System.in);
+        String oldTile = getOldTitleFromUser();
+
+        System.out.println("Enter new data...");
+
         System.out.println("Enter title:");
 
         String title = validateGetTitle();//data.nextLine();
@@ -252,14 +272,14 @@ public class Main {
     public static String validateGetTitle(){// used to make sure that user input(string) is not empty or not only just ' ' character
         Scanner data = new Scanner(System.in);
         String title = data.nextLine();
-        boolean titleAlreadyExists=(currentUser.getItemByTitle(title)==-1);
+        boolean titleAlreadyExists=currentUser.itemExists(title);
         while(title .matches(" +")|| title .isEmpty() || titleAlreadyExists){// used to make sure that user input(string) is not empty or not only just ' ' character and title doesn't exist
                if(titleAlreadyExists)
                    System.out.println(" title already exists ");
                else if(title .matches(" +")|| title .isEmpty())
                    System.out.println("invalid title");
                title=data.nextLine();
-               titleAlreadyExists=(currentUser.getItemByTitle(title)==-1);
+               titleAlreadyExists= currentUser.itemExists(title);
         }
         return title;
     }

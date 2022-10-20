@@ -35,6 +35,9 @@ public class User implements Serializable {
         }
         return -1;
     }
+    public boolean itemExists(String title){
+        return getItemByTitle(title)!=-1;
+    }
 
     private ArrayList<TodoItem> getItemsByPriority(Priority priority){
         ArrayList<TodoItem> result = new ArrayList<>();
