@@ -13,7 +13,7 @@ public class HelperMethods {
             date.setLenient(false);
             date.parse(dateValue);
             Date dateAfterParsing = convertStringToDate(dateValue);
-            Date now = new java.util.Date();
+            Date now = date.parse(date.format(new Date()));
             if(dateAfterParsing.compareTo(now)!= -1)
                 return true;
             else {
@@ -57,5 +57,17 @@ public class HelperMethods {
             userInput=data.nextLine();
         }
         return userInput;
+    }
+
+    public static int validateGetIntegerInput(String message, int startLimit, int endLimit) {
+        Scanner data = new Scanner(System.in);
+        String userInput = data.nextLine();
+        while(!userInput.matches("\\d+")
+                || Integer.parseInt(userInput) < startLimit
+                || Integer.parseInt(userInput) > endLimit) {
+            System.out.println(message);
+            userInput = data.nextLine();
+        }
+        return Integer.parseInt(userInput);
     }
 }
