@@ -310,16 +310,16 @@ public class Main {
         boolean isSearchKeyValid = false;
         while (!isSearchKeyValid){
             System.out.println("choose filter for search (1.title, 2.start date, 3.end date, 4.priority)");
-            int searchOption = input.nextInt();
+            String searchOption = input.nextLine();
             switch (searchOption){
-                case 1:
+                case "1":
                     System.out.print("Enter title of an item: ");
                     String searchTitle = HelperMethods.validateGetStringInput("invalid title");
                     currentUser.searchShowItemsBySearchKey(SearchKey.Title, searchTitle);
                     isSearchKeyValid = true;
                     break;
 
-                case 2:
+                case "2":
                     System.out.print("Enter start date of an item: ");
                     String searchStartDate = input.next();
                     while(!HelperMethods.isValidDate(searchStartDate)){
@@ -330,7 +330,7 @@ public class Main {
                     isSearchKeyValid = true;
                     break;
 
-                case 3:
+                case "3":
                     System.out.print("Enter end date of an item: ");
                     String searchEndDate = input.next();
                     while(!HelperMethods.isValidDate(searchEndDate)){
@@ -341,7 +341,7 @@ public class Main {
                     isSearchKeyValid = true;
                     break;
 
-                case 4:
+                case "4":
                     System.out.print("Choose priority of an item (1.Low, 2.Medium, 3.High): ");
                     int searchPriority = input.nextInt();
                     if(searchPriority < 1 || searchPriority > 3){
