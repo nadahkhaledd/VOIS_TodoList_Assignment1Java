@@ -343,12 +343,8 @@ public class Main {
 
                 case "4":
                     System.out.print("Choose priority of an item (1.Low, 2.Medium, 3.High): ");
-                    int searchPriority = input.nextInt();
-                    if(searchPriority < 1 || searchPriority > 3){
-                        System.out.println(ConsoleOptions.ANSI_RED +"Invalid option, try again."+ConsoleOptions.ANSI_RESET);
-                        System.out.print("Choose priority of an item (1.Low, 2.Medium, 3.High): ");
-                        searchPriority = input.nextInt();
-                    }
+                    int searchPriority = HelperMethods.validateGetIntegerInput("Invalid option, try again."
+                            +ConsoleOptions.ANSI_RESET + "\nChoose priority of an item (1.Low, 2.Medium, 3.High): ", 1, 3);
                     String priorityValue = (searchPriority == 1) ? "Low" : ((searchPriority == 2) ? "Medium" : "High");
                     currentUser.searchShowItemsBySearchKey(SearchKey.Priority, priorityValue);
                     isSearchKeyValid = true;
