@@ -48,7 +48,6 @@ public class HelperMethods {
             throw new RuntimeException(e);
         }
     }
-    //while(currentUser.getItemByTitle()){}
 
     public static String validateGetStringInput(String message){// used to make sure that user input(string) is not empty or not only just ' ' character
         Scanner data = new Scanner(System.in);
