@@ -10,6 +10,11 @@ import java.util.Scanner;
 public class HelperMethods {
     public static boolean isValidDate(String dateValue){
         try{
+            long dashesCount=dateValue.chars().filter(ch -> ch =='-').count();
+            //System.out.println("in valid date "+dashesCount);
+            if(dashesCount>=3){
+                throw new ParseException("invalid date format",15);
+            }
             DateFormat date = new SimpleDateFormat("dd-MM-yyyy");
             date.setLenient(false);
             date.parse(dateValue);
@@ -53,6 +58,8 @@ public class HelperMethods {
         Scanner data = new Scanner(System.in);
         // System.out.println("Hello, what is your name?");
         String userInput = data.nextLine();
+        userInput=userInput.trim();
+       // System.out.println("in validation :: "+userInput);
         while(userInput.matches(" +")|| userInput.isEmpty()){
             System.out.println(ConsoleOptions.ANSI_RED + message + ConsoleOptions.ANSI_RESET);
             userInput=data.nextLine();
@@ -63,6 +70,7 @@ public class HelperMethods {
     public static int validateGetIntegerInput(String message, int startLimit, int endLimit) {
         Scanner data = new Scanner(System.in);
         String userInput = data.nextLine();
+        userInput=userInput.trim();
         while(!userInput.matches("\\d+")
                 || Integer.parseInt(userInput) < startLimit
                 || Integer.parseInt(userInput) > endLimit) {
