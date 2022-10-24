@@ -8,7 +8,18 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
+import static console.ConsoleOptions.ANSI_RESET;
+
 public class HelperMethods {
+
+    public static void PrintColoredMessage(String color, String message){
+        System.out.println(color + message + ANSI_RESET);
+    }
+
+    public static void print(String message){
+        System.out.println(message);
+    }
+
     public static boolean isValidDate(String dateValue){
         try{
             long dashesCount=dateValue.chars().filter(ch -> ch =='-').count();
@@ -24,12 +35,12 @@ public class HelperMethods {
             if(dateAfterParsing.compareTo(startDateLimit)!= -1)
                 return true;
             else {
-                System.out.println(ConsoleOptions.ANSI_RED + "Enter date starting from 1/1/2000" + ConsoleOptions.ANSI_RESET);
+                System.out.println(ConsoleOptions.ANSI_RED + "Enter date starting from 1/1/2000" + ANSI_RESET);
                 return false;
             }
         }
         catch (ParseException e){
-            System.out.println(ConsoleOptions.ANSI_RED +"invalid date format"+ConsoleOptions.ANSI_RESET);
+            System.out.println(ConsoleOptions.ANSI_RED +"invalid date format"+ ANSI_RESET);
             return false;
         }
     }
@@ -40,13 +51,13 @@ public class HelperMethods {
             if(endDate.compareTo(startDate) != -1)
                 return true;
             else{
-                System.out.println(ConsoleOptions.ANSI_RED +"End date must be after start date."+ConsoleOptions.ANSI_RESET);
+                System.out.println(ConsoleOptions.ANSI_RED +"End date must be after start date."+ ANSI_RESET);
                 return false;
             }
         }
         return false;
     }
-    
+
     public static Date convertStringToDate(String dateString){
         try {
             return new SimpleDateFormat("dd-MM-yyyy").parse(dateString);
@@ -62,7 +73,7 @@ public class HelperMethods {
         userInput=userInput.trim();
        // System.out.println("in validation :: "+userInput);
         while(userInput.matches(" +")|| userInput.isEmpty()){
-            System.out.println(ConsoleOptions.ANSI_RED + message + ConsoleOptions.ANSI_RESET);
+            System.out.println(ConsoleOptions.ANSI_RED + message + ANSI_RESET);
             userInput=data.nextLine();
         }
         return userInput;
@@ -75,7 +86,7 @@ public class HelperMethods {
         while(!userInput.matches("\\d+")
                 || Integer.parseInt(userInput) < startLimit
                 || Integer.parseInt(userInput) > endLimit) {
-            System.out.println(ConsoleOptions.ANSI_RED +message+ConsoleOptions.ANSI_RESET);
+            System.out.println(ConsoleOptions.ANSI_RED +message+ ANSI_RESET);
             userInput = data.nextLine();
         }
         return Integer.parseInt(userInput);
