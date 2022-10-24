@@ -1,7 +1,8 @@
-import classes.ConsoleOptions;
+import console.ConsoleOptions;
 import classes.HelperMethods;
 import classes.TodoItem;
 import classes.User;
+import console.OutputMessages;
 import enums.Category;
 import enums.Priority;
 import enums.SearchKey;
@@ -15,12 +16,6 @@ import java.util.Scanner;
 public class Main {
     static User currentUser;
     static FileStorage fileStorage = new FileStorage();
-    static ArrayList<String> menuOptions = new ArrayList<>(
-            Arrays.asList("1- Add item ", "2- Update item ", "3- Delete item", "4- Show All items",
-                    "5- Show top 5 nearest by date", "6- Search by title, date (start & End), or priority",
-                    "7- Add item to a category", "8- Add item to a favorite", "9- show favorites","10- Exit"));
-    static ArrayList<Category> categories = new ArrayList<>(Arrays.asList(Category.Work, Category.Chores,
-            Category.People, Category.Learning, Category.Other, Category.None));
 
     public static void main(String[] args) {
         if(!doesUserExist())
@@ -50,7 +45,7 @@ public class Main {
         while(true)
         {
             System.out.println(ConsoleOptions.ANSI_YELLOW + "\nWelcome " + currentUser.getName() + ConsoleOptions.ANSI_RESET);
-            for(String option : menuOptions)
+            for(String option : OutputMessages.menuOptions)
                 System.out.println(option);
 
             int option = HelperMethods.validateGetIntegerInput("Invalid input", 1, 10);
@@ -130,7 +125,7 @@ public class Main {
                 "(1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)");
         int userCategoryChoice = HelperMethods.validateGetIntegerInput("invalid input.\nChoose category for the item " +
                 "(1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)", 1, 6);
-        Category category = categories.get(userCategoryChoice-1);
+        Category category = OutputMessages.categories.get(userCategoryChoice-1);
 
         System.out.println("Enter start date of the item (e.g. dd-MM-yyyy)");
         String startDateString = data.nextLine();
@@ -245,7 +240,7 @@ public class Main {
                     "(1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)");
             int userCategoryChoice = HelperMethods.validateGetIntegerInput("invalid input.\nChoose category for the item " +
                     "(1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)", 1, 6);
-            Category category = categories.get(userCategoryChoice - 1);
+            Category category = OutputMessages.categories.get(userCategoryChoice - 1);
             item.setCategory(category);
         }
         boolean startDatePassedEndDate = false;
@@ -293,17 +288,6 @@ public class Main {
         String title = HelperMethods.validateGetStringInput("invalid title");
         currentUser.deleteTodoItem(title);
     }
-
-  /*  private static void updateItemFromUser(){
-        System.out.println("Enter title of item to be updated:");
-        String oldTitle = HelperMethods.validateGetStringInput("Enter a valid title");
-        TodoItem newItem = takeCreateItemFromUser();
-        while (!currentUser.updateTodoItem(newItem, oldTitle)){
-            System.out.println("Enter title of item to be updated:");
-            oldTitle = HelperMethods.validateGetStringInput("invalid title");
-            newItem = takeUpdateItemFromUser(oldTitle);
-        }
-    }*/
 
     private static void search(){
         Scanner input = new Scanner(System.in);
@@ -364,7 +348,7 @@ public class Main {
                 "(1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)");
         int userCategoryChoice = HelperMethods.validateGetIntegerInput("invalid input.\nChoose category for the item " +
                 "(1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)", 1, 6);
-        Category category = categories.get(userCategoryChoice-1);
+        Category category = OutputMessages.categories.get(userCategoryChoice-1);
 
         currentUser.addItemToCategory(title,category);
     }

@@ -1,4 +1,4 @@
-package classes;
+package console;
 
 public class ConsoleOptions {
     public static final String SET_PLAIN_TEXT = "\033[0;0m";

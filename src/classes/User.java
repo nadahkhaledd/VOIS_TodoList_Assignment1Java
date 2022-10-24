@@ -1,5 +1,6 @@
 package classes;
 
+import console.ConsoleOptions;
 import enums.Category;
 import enums.Priority;
 import enums.SearchKey;
@@ -209,7 +210,6 @@ public class User implements Serializable {
     public void printFavorites(){
         searchShowItemsBySearchKey(SearchKey.Favorite, "true");
     }
-
 
     public void addItemToCategory(String title, Category category){
         int itemIndex = getItemByTitle(title);
