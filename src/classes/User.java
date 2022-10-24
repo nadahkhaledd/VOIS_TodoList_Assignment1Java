@@ -119,9 +119,10 @@ public class User implements Serializable {
     }
 
     private void sortTodoItemsByDate(){
+        System.out.println("sorting.....");
         for(int i=0; i<items.size(); i++){
             for(int j=i+1; j<items.size(); j++){
-                if(items.get(j).getStartDate().compareTo(items.get(i).getStartDate()) == -1){
+                if(items.get(j).getEndDate().compareTo(items.get(i).getEndDate()) == 1){
                     TodoItem temp = items.get(i);
                     items.set(i, items.get(j));
                     items.set(j, temp);
