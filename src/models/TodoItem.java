@@ -1,6 +1,6 @@
 package models;
 
-import ui.ConsoleOptions;
+import ui.Font;
 import enums.Category;
 import enums.Priority;
 
@@ -86,20 +86,21 @@ public class TodoItem implements Serializable {
     @Override
     public String toString()
     {
+        Font font = new Font();
         SimpleDateFormat formatter=new SimpleDateFormat("dd-MM-yyyy");
         String result =
-        ConsoleOptions.ANSI_BLUE + "--------------------------------------------------------------------------\n" + ConsoleOptions.ANSI_RESET;
+        font.ANSI_BLUE + "--------------------------------------------------------------------------\n" + font.ANSI_RESET;
         if(isFavorite)
-            result += ConsoleOptions.SET_BOLD_TEXT +ConsoleOptions.ANSI_YELLOW+"                                                         Favorite" +"\uD83E\uDD29"+ ConsoleOptions.SET_PLAIN_TEXT+"\n";
-            result+=    ConsoleOptions.SET_BOLD_TEXT +ConsoleOptions.ANSI_BLUE + title + ConsoleOptions.SET_PLAIN_TEXT +  ConsoleOptions.ANSI_RESET +
-                ConsoleOptions.SET_BOLD_TEXT +"\t\tPriority: " + ConsoleOptions.SET_PLAIN_TEXT + priority+
-                ConsoleOptions.SET_BOLD_TEXT + "\t\tCategory: " + ConsoleOptions.SET_PLAIN_TEXT + category+
-                ConsoleOptions.SET_BOLD_TEXT +" \n Start Date: " + ConsoleOptions.SET_PLAIN_TEXT + formatter.format(startDate) +
-                ConsoleOptions.SET_BOLD_TEXT +"\t\t\t End Date: "+ ConsoleOptions.SET_PLAIN_TEXT + formatter.format(endDate) +
-                ConsoleOptions.SET_BOLD_TEXT +"\n Description: "+ ConsoleOptions.SET_PLAIN_TEXT + description;
+            result += font.SET_BOLD_TEXT + font.ANSI_YELLOW+"                                                         Favorite" +"\uD83E\uDD29"+ font.SET_PLAIN_TEXT+"\n";
+            result+=    font.SET_BOLD_TEXT + font.ANSI_BLUE + title + font.SET_PLAIN_TEXT +  font.ANSI_RESET +
+                font.SET_BOLD_TEXT +"\t\tPriority: " + font.SET_PLAIN_TEXT + priority+
+                font.SET_BOLD_TEXT + "\t\tCategory: " + font.SET_PLAIN_TEXT + category+
+                font.SET_BOLD_TEXT +" \n Start Date: " + font.SET_PLAIN_TEXT + formatter.format(startDate) +
+                font.SET_BOLD_TEXT +"\t\t\t End Date: "+ font.SET_PLAIN_TEXT + formatter.format(endDate) +
+                font.SET_BOLD_TEXT +"\n Description: "+ font.SET_PLAIN_TEXT + description;
 
 
-                result += ConsoleOptions.ANSI_BLUE + "\n-------------------------------------------------------------------------\n" + ConsoleOptions.ANSI_RESET;
+                result += font.ANSI_BLUE + "\n-------------------------------------------------------------------------\n" + font.ANSI_RESET;
                 return result;
     }
 }

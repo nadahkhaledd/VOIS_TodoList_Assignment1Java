@@ -1,6 +1,6 @@
 package models;
 
-import ui.ConsoleOptions;
+import ui.Font;
 import enums.Category;
 import enums.Priority;
 import enums.SearchKey;
@@ -14,9 +14,11 @@ import java.util.Date;
 public class User implements Serializable {
     private String name;
     ArrayList<TodoItem> items;
+    private Font font;
 
     public User(String name) {
         this.name = name;
+        this.font = new Font();
         this.items = new ArrayList<>();
     }
 
@@ -92,7 +94,7 @@ public class User implements Serializable {
             return true;
         }
         else {
-            System.out.println(ConsoleOptions.ANSI_RED + "items with this title already exists." + ConsoleOptions.ANSI_RESET);
+            System.out.println(font.ANSI_RED + "items with this title already exists." + font.ANSI_RESET);
             return false;
         }
     }
@@ -111,7 +113,7 @@ public class User implements Serializable {
             System.out.println("Item deleted successfully.");
             return true;
         }
-        System.out.println(ConsoleOptions.ANSI_RED + "Item couldn't be deleted" + ConsoleOptions.ANSI_RESET);
+        System.out.println(font.ANSI_RED + "Item couldn't be deleted" + font.ANSI_RESET);
         return false;
     }
 
@@ -140,7 +142,7 @@ public class User implements Serializable {
 
     public void showTop5ItemsByDate(){
         if(items.isEmpty())
-            System.out.println( ConsoleOptions.ANSI_RED + "sorry, no items available." + ConsoleOptions.ANSI_RESET);
+            System.out.println( font.ANSI_RED + "sorry, no items available." + font.ANSI_RESET);
         else{
             int lastIndex = (items.size() >= 5) ? 5: items.size();
             sortTodoItemsByDate();
@@ -167,7 +169,7 @@ public class User implements Serializable {
                     returnedItems = getItemsByStartDate(startDate);
                 }
                 catch (ParseException e){
-                    System.out.println(ConsoleOptions.ANSI_RED + "invalid date format" + ConsoleOptions.ANSI_RESET);
+                    System.out.println(font.ANSI_RED + "invalid date format" + font.ANSI_RESET);
                 }
                 break;
 
@@ -177,7 +179,7 @@ public class User implements Serializable {
                     returnedItems = getItemsByEndDate(endDate);
                 }
                 catch (ParseException e){
-                    System.out.println(ConsoleOptions.ANSI_RED + "invalid date format" + ConsoleOptions.ANSI_RESET);
+                    System.out.println(font.ANSI_RED + "invalid date format" + font.ANSI_RESET);
                 }
                 break;
 
@@ -187,7 +189,7 @@ public class User implements Serializable {
         }
 
         if (returnedItems.isEmpty()) {
-            System.out.println(ConsoleOptions.ANSI_RED + "No results found." + ConsoleOptions.ANSI_RESET);
+            System.out.println(font.ANSI_RED + "No results found." + font.ANSI_RESET);
         }
         else {
             for(TodoItem item: returnedItems){
@@ -198,13 +200,7 @@ public class User implements Serializable {
 
     public void addItemToFavorite(String title){
         int itemIndex = getItemByTitle(title);
-      //  if(itemIndex != -1){
             items.get(itemIndex).setFavorite(true);
-        //    System.out.println("Item added to favorites.");
-          //  return true;
-        //}
-        //System.out.println(ConsoleOptions.ANSI_RED + "Item couldn't be found." + ConsoleOptions.ANSI_RESET);
-        //return false;
     }
 
     public void printFavorites(){
