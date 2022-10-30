@@ -1,4 +1,4 @@
-package console;
+package ui;
 
 import enums.Category;
 

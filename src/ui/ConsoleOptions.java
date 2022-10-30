@@ -1,8 +1,4 @@
-package console;
-
-import enums.Colors;
-
-import java.util.HashMap;
+package ui;
 
 public class ConsoleOptions {
     public static final String SET_PLAIN_TEXT = "\033[0;0m";

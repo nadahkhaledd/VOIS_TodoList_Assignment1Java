@@ -1,6 +1,6 @@
-package classes;
+package utility;
 
-import console.ConsoleOptions;
+import ui.ConsoleOptions;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -8,9 +8,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
-import static console.ConsoleOptions.ANSI_RESET;
+import static ui.ConsoleOptions.ANSI_RESET;
 
-public class HelperMethods {
+public class Utils {
 
     public static void PrintColoredMessage(String color, String message){
         System.out.println(color + message + ANSI_RESET);

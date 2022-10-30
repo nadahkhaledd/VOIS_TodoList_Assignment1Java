@@ -1,6 +1,6 @@
 package storage;
 
-import classes.User;
+import models.User;
 
 import java.io.*;
 

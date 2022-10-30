@@ -1,6 +1,6 @@
-package classes;
+package models;
 
-import console.ConsoleOptions;
+import ui.ConsoleOptions;
 import enums.Category;
 import enums.Priority;
 

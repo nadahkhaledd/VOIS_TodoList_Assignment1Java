@@ -1,8 +1,8 @@
-import console.ConsoleOptions;
-import classes.HelperMethods;
-import classes.TodoItem;
-import classes.User;
-import console.OutputMessages;
+import ui.ConsoleOptions;
+import utility.Utils;
+import models.TodoItem;
+import models.User;
+import ui.OutputMessages;
 import enums.Category;
 import enums.Priority;
 import enums.SearchKey;
@@ -10,9 +10,6 @@ import storage.FileStorage;
 
 import java.util.Date;
 import java.util.Scanner;
-
-import static classes.HelperMethods.PrintColoredMessage;
-import static classes.HelperMethods.print;
 
 public class Main {
     static User currentUser;
@@ -35,9 +32,9 @@ public class Main {
     public static void getUserName() {
         Scanner input = new Scanner(System.in);
 
-        print("Hello, what is your name?");
+        Utils.print("Hello, what is your name?");
 
-        String name = HelperMethods.validateGetStringInput("write a valid name");
+        String name = Utils.validateGetStringInput("write a valid name");
         currentUser = new User(name);
     }
 
@@ -45,11 +42,11 @@ public class Main {
         Scanner input = new Scanner(System.in);
         while(true)
         {
-            PrintColoredMessage(ConsoleOptions.ANSI_YELLOW, "\nWelcome " + currentUser.getName());
+            Utils.PrintColoredMessage(ConsoleOptions.ANSI_YELLOW, "\nWelcome " + currentUser.getName());
             for(String option : OutputMessages.menuOptions)
                 System.out.println(option);
 
-            int option = HelperMethods.validateGetIntegerInput("Invalid input", 1, 10);
+            int option = Utils.validateGetIntegerInput("Invalid input", 1, 10);
             switch (option){
                 case 1:
                     TodoItem item = takeCreateItemFromUser();
@@ -106,41 +103,41 @@ public class Main {
     }
 
     private static TodoItem takeCreateItemFromUser(){
-        print("Enter new data...");
+        Utils.print("Enter new data...");
         Scanner data = new Scanner(System.in);
-        print("Enter title:");
+        Utils.print("Enter title:");
         String title = validateGetTitle("");//data.nextLine();
 
-        print("Enter description:");
-        String description = HelperMethods.validateGetStringInput("enter a valid description");//data.nextLine();
+        Utils.print("Enter description:");
+        String description = Utils.validateGetStringInput("enter a valid description");//data.nextLine();
 
-        print(OutputMessages.choosePriority);
-        int userPriorityChoice = HelperMethods.validateGetIntegerInput(
+        Utils.print(OutputMessages.choosePriority);
+        int userPriorityChoice = Utils.validateGetIntegerInput(
                 "invalid choice.\n" + OutputMessages.choosePriority, 1, 3
         );
         Priority priority = (userPriorityChoice == 1)? Priority.Low :
                 ((userPriorityChoice == 2)?Priority.Medium : Priority.High);
 
-        print(OutputMessages.chooseCategory);
-        int userCategoryChoice = HelperMethods.validateGetIntegerInput("invalid input.\n" +
+        Utils.print(OutputMessages.chooseCategory);
+        int userCategoryChoice = Utils.validateGetIntegerInput("invalid input.\n" +
                 OutputMessages.chooseCategory, 1, 6);
         Category category = OutputMessages.categories.get(userCategoryChoice-1);
 
-        print(OutputMessages.enterStartDate);
+        Utils.print(OutputMessages.enterStartDate);
         String startDateString = data.nextLine();
-        while(!HelperMethods.isValidDate(startDateString)){
-            print(OutputMessages.enterStartDate);
+        while(!Utils.isValidDate(startDateString)){
+            Utils.print(OutputMessages.enterStartDate);
             startDateString = data.nextLine();
         }
-        Date startDate = HelperMethods.convertStringToDate(startDateString);
+        Date startDate = Utils.convertStringToDate(startDateString);
 
-        print(OutputMessages.enterEndDate);
+        Utils.print(OutputMessages.enterEndDate);
         String endDateString = data.nextLine();
-        while(!HelperMethods.isValidEndDate(startDate, endDateString)){
-            print(OutputMessages.enterEndDate);
+        while(!Utils.isValidEndDate(startDate, endDateString)){
+            Utils.print(OutputMessages.enterEndDate);
             endDateString = data.nextLine();
         }
-        Date endDate = HelperMethods.convertStringToDate(endDateString);
+        Date endDate = Utils.convertStringToDate(endDateString);
 
         return new TodoItem(title, description, priority, category, startDate, endDate);
     }
@@ -166,9 +163,9 @@ public class Main {
         boolean titleAlreadyExists=(currentUser.getItemByTitle(title.trim())!=-1 && !oldTitle.equalsIgnoreCase(title.trim()));
         while(title .matches(" +")|| title .isEmpty() || titleAlreadyExists){// used to make sure that user input(string) is not empty or not only just ' ' character and title doesn't exist
             if(titleAlreadyExists)
-                print("title already exists re-enter title");
+                Utils.print("title already exists re-enter title");
             else if(title .matches(" +")|| title .isEmpty())
-                print("invalid title");
+                Utils.print("invalid title");
             title=data.nextLine();
             titleAlreadyExists=(currentUser.getItemByTitle(title.trim())!=-1 && !oldTitle.equalsIgnoreCase(title.trim()));
         }
@@ -179,7 +176,7 @@ public class Main {
         String title = "";
         while(true) {
             System.out.println("Enter title of item to be added to "+messageSpecifier);
-            title = HelperMethods.validateGetStringInput("invalid title");
+            title = Utils.validateGetStringInput("invalid title");
             if(currentUser.itemExists(title)) break;
             System.err.println("Item doesn't exist");
         }
@@ -189,7 +186,7 @@ public class Main {
     private static String getOldTitleFromUser(){
         Scanner data = new Scanner(System.in);
         while(true){
-            print("Enter title of item to be updated:");
+            Utils.print("Enter title of item to be updated:");
             String oldTitle = data.nextLine();
             if(currentUser.itemExists(oldTitle)){
                 return oldTitle;
@@ -211,19 +208,19 @@ public class Main {
 
         System.out.println("Enter new data...");
         if (updateIsConfirmed("title")) {
-            print("Enter title:");
+            Utils.print("Enter title:");
             String title = validateGetTitle(oldTile);//data.nextLine();
             item.setTitle(title);
         }
         if (updateIsConfirmed("description")) {
-            print("Enter description:");
-            String description = HelperMethods.validateGetStringInput("enter a valid description");//data.nextLine();
+            Utils.print("Enter description:");
+            String description = Utils.validateGetStringInput("enter a valid description");//data.nextLine();
             item.setDescription(description);
         }
 
         if (updateIsConfirmed("priority")) {
-            print(OutputMessages.choosePriority);
-            int userPriorityChoice = HelperMethods.validateGetIntegerInput(
+            Utils.print(OutputMessages.choosePriority);
+            int userPriorityChoice = Utils.validateGetIntegerInput(
                     "invalid choice.\n"+OutputMessages.choosePriority, 1, 3
             );
             Priority priority = (userPriorityChoice == 1) ? Priority.Low :
@@ -232,28 +229,28 @@ public class Main {
         }
 
         if (updateIsConfirmed("category")) {
-            print(OutputMessages.chooseCategory);
-            int userCategoryChoice = HelperMethods.validateGetIntegerInput("invalid input.\n" +
+            Utils.print(OutputMessages.chooseCategory);
+            int userCategoryChoice = Utils.validateGetIntegerInput("invalid input.\n" +
                     OutputMessages.chooseCategory, 1, 6);
             Category category = OutputMessages.categories.get(userCategoryChoice - 1);
             item.setCategory(category);
         }
         boolean startDatePassedEndDate = false;
         if (updateIsConfirmed("start date")) {
-            print(OutputMessages.enterStartDate);
+            Utils.print(OutputMessages.enterStartDate);
             String startDateString = data.nextLine();
-            while (!HelperMethods.isValidDate(startDateString)) {
-                print(OutputMessages.enterStartDate);
+            while (!Utils.isValidDate(startDateString)) {
+                Utils.print(OutputMessages.enterStartDate);
                 startDateString = data.nextLine();
             }
-            Date startDate = HelperMethods.convertStringToDate(startDateString);
+            Date startDate = Utils.convertStringToDate(startDateString);
             //item.setStartDate(startDate);
 
             startDatePassedEndDate = startDate.compareTo(item.getEndDate())==1;
             if(startDatePassedEndDate) {
                 System.out.println("The start date entered passes the end date," +
                         " are you sure you want to change it?  (1-Yes , 2-No)");
-                int choice = HelperMethods.validateGetIntegerInput("Enter a valid choice",1,2);
+                int choice = Utils.validateGetIntegerInput("Enter a valid choice",1,2);
                 if(choice==1){
                     item.setStartDate(startDate);
                 }
@@ -263,13 +260,13 @@ public class Main {
             }
         }
         if (startDatePassedEndDate || updateIsConfirmed("end date")) {
-            print(OutputMessages.enterEndDate);
+            Utils.print(OutputMessages.enterEndDate);
             String endDateString = data.nextLine();
-            while (!HelperMethods.isValidEndDate(item.getStartDate(), endDateString)) {
-                print(OutputMessages.enterEndDate);
+            while (!Utils.isValidEndDate(item.getStartDate(), endDateString)) {
+                Utils.print(OutputMessages.enterEndDate);
                 endDateString = data.nextLine();
             }
-            Date endDate = HelperMethods.convertStringToDate(endDateString);
+            Date endDate = Utils.convertStringToDate(endDateString);
             item.setEndDate(endDate);
 
 
@@ -279,8 +276,8 @@ public class Main {
     }
 
     private static void deleteItemByUser(){
-        print("Enter title of item to be deleted:");
-        String title = HelperMethods.validateGetStringInput("invalid title");
+        Utils.print("Enter title of item to be deleted:");
+        String title = Utils.validateGetStringInput("invalid title");
         currentUser.deleteTodoItem(title);
     }
 
@@ -288,21 +285,21 @@ public class Main {
         Scanner input = new Scanner(System.in);
         boolean isSearchKeyValid = false;
         while (!isSearchKeyValid){
-            print(OutputMessages.chooseSearchFilter);
+            Utils.print(OutputMessages.chooseSearchFilter);
             String searchOption = input.nextLine();
             switch (searchOption){
                 case "1":
-                    print("Enter title of an item: ");
-                    String searchTitle = HelperMethods.validateGetStringInput("invalid title");
+                    Utils.print("Enter title of an item: ");
+                    String searchTitle = Utils.validateGetStringInput("invalid title");
                     currentUser.searchShowItemsBySearchKey(SearchKey.Title, searchTitle);
                     isSearchKeyValid = true;
                     break;
 
                 case "2":
-                    print(OutputMessages.enterStartDate);
+                    Utils.print(OutputMessages.enterStartDate);
                     String searchStartDate = input.next();
-                    while(!HelperMethods.isValidDate(searchStartDate)){
-                        print(OutputMessages.enterStartDate);
+                    while(!Utils.isValidDate(searchStartDate)){
+                        Utils.print(OutputMessages.enterStartDate);
                         searchStartDate = input.next();
                     }
                     currentUser.searchShowItemsBySearchKey(SearchKey.StartDate, searchStartDate);
@@ -310,10 +307,10 @@ public class Main {
                     break;
 
                 case "3":
-                    print(OutputMessages.enterEndDate);
+                    Utils.print(OutputMessages.enterEndDate);
                     String searchEndDate = input.next();
-                    while(!HelperMethods.isValidDate(searchEndDate)){
-                        print(OutputMessages.enterEndDate);
+                    while(!Utils.isValidDate(searchEndDate)){
+                        Utils.print(OutputMessages.enterEndDate);
                         searchEndDate = input.next();
                     }
                     currentUser.searchShowItemsBySearchKey(SearchKey.EndDate, searchEndDate);
@@ -321,8 +318,8 @@ public class Main {
                     break;
 
                 case "4":
-                    print(OutputMessages.choosePriority);
-                    int searchPriority = HelperMethods.validateGetIntegerInput("Invalid option, try again."
+                    Utils.print(OutputMessages.choosePriority);
+                    int searchPriority = Utils.validateGetIntegerInput("Invalid option, try again."
                             +ConsoleOptions.ANSI_RESET + "\n" + OutputMessages.choosePriority, 1, 3);
                     String priorityValue = (searchPriority == 1) ? "Low" : ((searchPriority == 2) ? "Medium" : "High");
                     currentUser.searchShowItemsBySearchKey(SearchKey.Priority, priorityValue);
@@ -339,8 +336,8 @@ public class Main {
     private static void addItemToCategoryFromUser(){
         String title = getExistingTitle("Category");
 
-        print(OutputMessages.chooseCategory);
-        int userCategoryChoice = HelperMethods.validateGetIntegerInput("invalid input.\n" +
+        Utils.print(OutputMessages.chooseCategory);
+        int userCategoryChoice = Utils.validateGetIntegerInput("invalid input.\n" +
                 OutputMessages.chooseCategory, 1, 6);
         Category category = OutputMessages.categories.get(userCategoryChoice-1);
 
