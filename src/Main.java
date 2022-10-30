@@ -1,4 +1,5 @@
 import ui.Font;
+import utility.DateUtils;
 import utility.Utils;
 import models.TodoItem;
 import models.User;
@@ -15,12 +16,13 @@ public class Main {
     static User currentUser;
     static FileStorage fileStorage = new FileStorage();
     static Utils utils = new Utils();
+    static DateUtils dateUtils = new DateUtils();
     static Font font = new Font();
     static Text text = new Text();
 
     public static void main(String[] args) {
         if(!isThereUser())
-            getUserName();
+            setUserName();
         showMenu();
     }
 
@@ -32,7 +34,7 @@ public class Main {
         return false;
     }
 
-    private static void getUserName() {
+    private static void setUserName() {
         Scanner input = new Scanner(System.in);
 
         utils.print("Hello, what is your name?");
@@ -128,19 +130,19 @@ public class Main {
 
         utils.print(text.enterStartDate);
         String startDateString = data.nextLine();
-        while(!utils.isValidDate(startDateString)){
+        while(!dateUtils.isValidDate(startDateString)){
             utils.print(text.enterStartDate);
             startDateString = data.nextLine();
         }
-        Date startDate = utils.convertStringToDate(startDateString);
+        Date startDate = dateUtils.convertStringToDate(startDateString);
 
         utils.print(text.enterEndDate);
         String endDateString = data.nextLine();
-        while(!utils.isValidEndDate(startDate, endDateString)){
+        while(!dateUtils.isValidEndDate(startDate, endDateString)){
             utils.print(text.enterEndDate);
             endDateString = data.nextLine();
         }
-        Date endDate = utils.convertStringToDate(endDateString);
+        Date endDate = dateUtils.convertStringToDate(endDateString);
 
         return new TodoItem(title, description, priority, category, startDate, endDate);
     }
@@ -242,11 +244,11 @@ public class Main {
         if (updateIsConfirmed("start date")) {
             utils.print(text.enterStartDate);
             String startDateString = data.nextLine();
-            while (!utils.isValidDate(startDateString)) {
+            while (!dateUtils.isValidDate(startDateString)) {
                 utils.print(text.enterStartDate);
                 startDateString = data.nextLine();
             }
-            Date startDate = utils.convertStringToDate(startDateString);
+            Date startDate = dateUtils.convertStringToDate(startDateString);
             //item.setStartDate(startDate);
 
             startDatePassedEndDate = startDate.compareTo(item.getEndDate())==1;
@@ -265,11 +267,11 @@ public class Main {
         if (startDatePassedEndDate || updateIsConfirmed("end date")) {
             utils.print(text.enterEndDate);
             String endDateString = data.nextLine();
-            while (!utils.isValidEndDate(item.getStartDate(), endDateString)) {
+            while (!dateUtils.isValidEndDate(item.getStartDate(), endDateString)) {
                 utils.print(text.enterEndDate);
                 endDateString = data.nextLine();
             }
-            Date endDate = utils.convertStringToDate(endDateString);
+            Date endDate = dateUtils.convertStringToDate(endDateString);
             item.setEndDate(endDate);
 
 
@@ -301,7 +303,7 @@ public class Main {
                 case "2":
                     utils.print(text.enterStartDate);
                     String searchStartDate = input.next();
-                    while(!utils.isValidDate(searchStartDate)){
+                    while(!dateUtils.isValidDate(searchStartDate)){
                         utils.print(text.enterStartDate);
                         searchStartDate = input.next();
                     }
@@ -312,7 +314,7 @@ public class Main {
                 case "3":
                     utils.print(text.enterEndDate);
                     String searchEndDate = input.next();
-                    while(!utils.isValidDate(searchEndDate)){
+                    while(!dateUtils.isValidDate(searchEndDate)){
                         utils.print(text.enterEndDate);
                         searchEndDate = input.next();
                     }
