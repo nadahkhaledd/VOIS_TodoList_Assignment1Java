@@ -5,9 +5,10 @@
 - [x] fix access modifiers
 - [x] update naming convention
 - [ ] divide Main methods into other utils class/es
+- [ ] finish class diagram
 
 ## UML Class Diagram of Program
-![TODO-List](https://user-images.githubusercontent.com/63652516/197547073-69fc0bee-8070-47f5-848a-51bd523cfe9b.png)
+![TODO-List](https://user-images.githubusercontent.com/63652516/198886043-d6bf8850-8c6c-4622-bab2-2190788ff56f.png)
 
 
 ## 1. Go to directory you want to save project in
