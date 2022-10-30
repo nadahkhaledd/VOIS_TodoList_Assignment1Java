@@ -1,5 +1,11 @@
 # VOIS_TodoList_Assignment1Java
 
+### Modifications left to do
+- [x] remove static from methods
+- [x] fix access modifiers
+- [x] update naming convention
+- [ ] divide Main methods into other utils class/es
+
 ## UML Class Diagram of Program
 ![TODO-List](https://user-images.githubusercontent.com/63652516/197547073-69fc0bee-8070-47f5-848a-51bd523cfe9b.png)
 
