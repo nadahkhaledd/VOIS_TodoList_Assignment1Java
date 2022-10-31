@@ -11,6 +11,7 @@ import ui.Text;
 import utility.DateUtils;
 import utility.Utils;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -49,7 +50,7 @@ public class TodoList {
             for(String option : text.menuOptions)
                 System.out.println(option);
 
-            int option = utils.getInput("Invalid input", 1, 10);
+            int option = utils.getInput("Invalid input", 1, 12);
             switch (option){
                 case 1:
                     TodoItem item = takeCreateItemFromUser();
@@ -95,7 +96,14 @@ public class TodoList {
                 case 9:
                     currentUser.printFavorites();
                     break;
+
                 case 10:
+                    for (int i = 0; i < 50; ++i) System.out.println();
+                    break;
+                case 11:
+                    updateName();
+                    break;
+                case 12:
                     saveFile();
                     System.exit(0);
                     break;
@@ -363,7 +371,15 @@ public class TodoList {
         currentUser.addItemToFavorite(title);
     }
 
+    private void updateName(){
+        System.out.println("Please type in your new name");
+        String name = utils.getInput("Please enter a valid name");
+        currentUser.setName(name);
+
+    }
+
     private void saveFile() {
         fileStorage.saveData(currentUser);
     }
+
 }
