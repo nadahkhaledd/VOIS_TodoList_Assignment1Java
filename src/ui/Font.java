@@ -1,6 +1,8 @@
 package ui;
 
-public class Font {
+import java.io.Serializable;
+
+public class Font implements Serializable {
     public final String SET_PLAIN_TEXT = "\033[0;0m";
     public final String SET_BOLD_TEXT = "\033[0;1m";
 
