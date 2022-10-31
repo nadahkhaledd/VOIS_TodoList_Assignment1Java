@@ -4,6 +4,8 @@
 - [x] remove static from methods
 - [x] fix access modifiers
 - [x] update naming convention
+- [ ] create back to menu option
+- [ ] add clear console option
 - [ ] divide Main methods into other utils class/es
 - [ ] finish class diagram
 
