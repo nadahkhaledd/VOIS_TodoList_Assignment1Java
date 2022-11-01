@@ -139,8 +139,7 @@ public class Simulator {
                 signInUser();
             }
             utils.PrintColoredMessage(font.ANSI_YELLOW, "\nWelcome " + currentUser.getName());
-            for(String option : text.menuOptions)
-                System.out.println(option);
+            text.menuOptions.forEach(System.out::println);
 
             int option = utils.getInput("Invalid input", 1, 13);
             switch (option){
