@@ -3,25 +3,26 @@ package storage;
 import models.User;
 
 import java.io.*;
+import java.util.ArrayList;
 
 public class FileStorage implements Storage {
     @Override
-    public User loadData() {
-        User user;
+    public ArrayList<User> loadData() {
+        ArrayList<User> users;
         try (FileInputStream fis = new FileInputStream("data.ser");
              ObjectInputStream ois = new ObjectInputStream(fis)){
-                user = (User) ois.readObject();
+                users = (ArrayList<User>) ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
             return null;
         }
-        return user;
+        return users;
     }
 
     @Override
-    public void saveData(User user) {
+    public void saveData(ArrayList<User> users) {
         try (FileOutputStream fos = new FileOutputStream("data.ser");
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-                oos.writeObject(user);
+                oos.writeObject(users);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {

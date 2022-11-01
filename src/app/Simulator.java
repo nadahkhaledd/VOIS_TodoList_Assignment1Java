@@ -11,13 +11,15 @@ import ui.Text;
 import utility.DateUtils;
 import utility.Utils;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
-public class TodoList {
+public class Simulator {
     private Scanner scanner = new Scanner(System.in);
-    private User currentUser;
+
+    private ArrayList<User> users = new ArrayList<>();
+    private User currentUser = null;
     private FileStorage fileStorage = new FileStorage();
     private Utils utils = new Utils();
     private DateUtils dateUtils = new DateUtils();
@@ -25,17 +27,102 @@ public class TodoList {
     private Text text = new Text();
 
     public void start() {
-        if(!isThereUser())
-            setUserName();
+
+        signInUser();
         showMenu();
     }
 
+    private void signInUser() {
+        if(isThereUser()){
+            User user = null;
+
+            while (user==null) {
+                System.out.println("Welcome!\n1- Sign up as a new User\n2- Sign in as an already existing user");
+                int inputChoice = utils.getInput("Please enter either 1 or 2", 1, 2);
+
+                if (inputChoice == 1) {
+                    user = addNewUser(false);
+                } else {
+                    user = authenticateUser();
+                }
+                if(user==null){
+                    clearScreen();
+                }
+            }
+            currentUser = user;
+        }
+        else{
+            System.out.println("Welcome to our To-do List app, what is your name?");
+            currentUser = addNewUser(true);
+        }
+
+    }
+    private User authenticateUser(){
+
+        System.out.println("Enter you name to sign in. (Press 0 to return to main page)");
+        String usersName  = "";
+
+        User user = null;
+        while(user==null){
+            usersName  = utils.getInput("Please enter a valid name");
+            if(usersName.trim().equals("0"))
+                return null;
+            user = getUserByUsername(usersName);
+            if(user==null) {
+                System.err.println("----------------------------ACCESS DENIED---------------------------\nThis name doesn't exist, try again. (Press 0 to return to main page)");
+            }
+
+        }
+        return user;
+
+    }
+    private User addNewUser(boolean isFirstTime){
+        if(!isFirstTime)
+            System.out.println("Enter name of new user. (Press 0 to return to main page)");
+        boolean uniqueUserNameEntered = false;
+
+        //check user name exists
+        //if not display message
+        //else add user
+        String usersName = "";
+        while(!uniqueUserNameEntered){
+           usersName  = utils.getInput("Please enter a valid name");
+           if(usersName.trim().equals("0")){
+               return null;
+           }
+           if(getUserByUsername(usersName)==null)
+               uniqueUserNameEntered = true;
+           else {
+               System.err.println("The name Entered already exists, please enter a new name. (Press 0 to return to main page)");
+           }
+        }
+        User newUser = new User(usersName);
+        users.add(newUser);
+        return newUser;
+        //ask youssef if break functionality must be added here
+
+    }
+    private User getUserByUsername(String name){
+        for(User user:users){
+            if(user.getName().equals(name)){
+                return user;
+            }
+        }
+        return null;
+    }
+
     private boolean isThereUser() {
-        currentUser = fileStorage.loadData();
-        if(currentUser != null) {
+        ArrayList<User> data = fileStorage.loadData();
+        if(data==null)
+            return false;
+
+        if(!data.isEmpty()){
+            users = data;
             return true;
         }
         return false;
+
+
     }
     private void setUserName() {
         utils.print("Hello, what is your name?");
@@ -44,13 +131,18 @@ public class TodoList {
     }
 
     private void showMenu(){
+
         while(true)
         {
+            if(currentUser==null){
+                clearScreen();
+                signInUser();
+            }
             utils.PrintColoredMessage(font.ANSI_YELLOW, "\nWelcome " + currentUser.getName());
             for(String option : text.menuOptions)
                 System.out.println(option);
 
-            int option = utils.getInput("Invalid input", 1, 12);
+            int option = utils.getInput("Invalid input", 1, 13);
             switch (option){
                 case 1:
                     TodoItem item = takeCreateItemFromUser();
@@ -98,12 +190,15 @@ public class TodoList {
                     break;
 
                 case 10:
-                    for (int i = 0; i < 50; ++i) System.out.println();
+                    clearScreen();
                     break;
                 case 11:
                     updateName();
                     break;
                 case 12:
+                    currentUser = null;
+                    break;
+                case 13:
                     saveFile();
                     System.exit(0);
                     break;
@@ -373,13 +468,26 @@ public class TodoList {
 
     private void updateName(){
         System.out.println("Please type in your new name");
-        String name = utils.getInput("Please enter a valid name");
+
+        String name = "";
+        boolean uniqueNameEntered = false;
+        while(!uniqueNameEntered){
+            name = utils.getInput("Please enter a valid name");
+            if(getUserByUsername(name)==null)
+                uniqueNameEntered = true;
+            else{
+                System.err.println("The name entered already exists, please try again");
+            }
+        }
         currentUser.setName(name);
 
     }
+    private void clearScreen(){
+        for (int i = 0; i < 50; ++i) System.out.println();
+    }
 
     private void saveFile() {
-        fileStorage.saveData(currentUser);
+        fileStorage.saveData(users);
     }
 
 }

@@ -1,7 +1,10 @@
 package storage;
 
 import models.User;
+
+import java.util.ArrayList;
+
 public interface Storage {
-    User loadData();
-    void saveData(User user);
+    ArrayList<User> loadData();
+    void saveData(ArrayList<User> users);
 }
