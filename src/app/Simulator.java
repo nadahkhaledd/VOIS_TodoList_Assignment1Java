@@ -251,18 +251,19 @@ public class Simulator {
         return new TodoItem(title, description, priority, category, startDate, endDate);
     }
 
-    private boolean updateIsConfirmed(String itemToBeUpdated){
+    private int updateIsConfirmed(String itemToBeUpdated){
         System.out.println("choose 1 if you want to update the "+itemToBeUpdated+" and 2 if you don't want to update it");
         String userInput=scanner.next();
-        while(!userInput.equals("1") && !userInput.equals("2") ){
+        while(!userInput.equals("1") && !userInput.equals("2") && !userInput.equalsIgnoreCase("/back")){
             System.out.println("invalid choice");
             userInput=scanner.next();
         }
         switch(userInput){
-            case "1":return true;
-            default: return false;
+            case "1": return 1;
+            case "2": return 2;
+            case "/back": return -1;
+            default: return 0;
         }
-
     }
 
     private String validateGetTitle(String oldTitle){// used to make sure that user input(string) is not empty or not only just ' ' character
@@ -311,24 +312,30 @@ public class Simulator {
     }
 
     private void takeUpdateItemFromUser() {
-        String oldTile = getOldTitleFromUser();
-        if(oldTile.equalsIgnoreCase("/back")) return;
-        int itemIndex = currentUser.getItemByTitle(oldTile);
+        String oldTitle = getOldTitleFromUser();
+        if(oldTitle.equalsIgnoreCase("/back")) return;
+        int itemIndex = currentUser.getItemByTitle(oldTitle);
         TodoItem item = currentUser.getItems().get(itemIndex);
 
         System.out.println("Enter new data...");
-        if (updateIsConfirmed("title")) {
+        int confirmUpdate;
+
+        confirmUpdate = updateIsConfirmed("title");
+        if (confirmUpdate == 1) {
             utils.print("Enter title:");
-            String title = validateGetTitle(oldTile);//data.nextLine();
+            String title = validateGetTitle(oldTitle);//data.nextLine();
             item.setTitle(title);
-        }
-        if (updateIsConfirmed("description")) {
+        } else if(confirmUpdate == -1) return;
+
+        confirmUpdate = updateIsConfirmed("description");
+        if(confirmUpdate == 1) {
             utils.print("Enter description:");
             String description = utils.getInput("enter a valid description");//data.nextLine();
             item.setDescription(description);
-        }
+        } else if(confirmUpdate == -1) return;
 
-        if (updateIsConfirmed("priority")) {
+        confirmUpdate = updateIsConfirmed("priority");
+        if (confirmUpdate == 1) {
             utils.print(text.choosePriority);
             int userPriorityChoice = utils.getInput(
                     "invalid choice.\n"+ text.choosePriority, 1, 3
@@ -336,17 +343,20 @@ public class Simulator {
             Priority priority = (userPriorityChoice == 1) ? Priority.Low :
                     ((userPriorityChoice == 2) ? Priority.Medium : Priority.High);
             item.setPriority(priority);
-        }
+        } else if(confirmUpdate == -1) return;
 
-        if (updateIsConfirmed("category")) {
+        confirmUpdate = updateIsConfirmed("category");
+        if (confirmUpdate == 1) {
             utils.print(text.chooseCategory);
             int userCategoryChoice = utils.getInput("invalid input.\n" +
                     text.chooseCategory, 1, 6);
             Category category = text.categories.get(userCategoryChoice - 1);
             item.setCategory(category);
-        }
+        } else if(confirmUpdate == -1) return;
+
         boolean startDatePassedEndDate = false;
-        if (updateIsConfirmed("start date")) {
+        confirmUpdate = updateIsConfirmed("start date");
+        if (confirmUpdate == 1) {
             utils.print(text.enterStartDate);
             String startDateString = scanner.nextLine();
             while (!dateUtils.isValidDate(startDateString)) {
@@ -368,8 +378,10 @@ public class Simulator {
                     startDatePassedEndDate = false;
                 }
             }
-        }
-        if (startDatePassedEndDate || updateIsConfirmed("end date")) {
+        } else if(confirmUpdate == -1) return;
+
+        confirmUpdate = updateIsConfirmed("end date");
+        if (startDatePassedEndDate || confirmUpdate == 1) {
             utils.print(text.enterEndDate);
             String endDateString = scanner.nextLine();
             while (!dateUtils.isValidEndDate(item.getStartDate(), endDateString)) {
@@ -380,7 +392,8 @@ public class Simulator {
             item.setEndDate(endDate);
 
 
-        }
+        } else if(confirmUpdate == -1) return;
+
         System.out.println("Item updated:\n" + item.toString());
     }
 
@@ -400,7 +413,6 @@ public class Simulator {
         while (!isSearchKeyValid){
             utils.print(text.chooseSearchFilter);
             String searchOption = scanner.nextLine();
-            if(searchOption.equalsIgnoreCase("/back")) return;
 
             switch (searchOption){
                 case "1":
@@ -442,13 +454,14 @@ public class Simulator {
                     currentUser.searchShowItemsBySearchKey(SearchKey.Priority, priorityValue);
                     isSearchKeyValid = true;
                     break;
+                case "/back":
+                    return;
 
                 default:
                     System.err.println("Invalid input.");
                     break;
             }
         }
-        scanner.close();
     }
 
     private void addItemToCategoryFromUser(){
@@ -473,7 +486,9 @@ public class Simulator {
         boolean uniqueNameEntered = false;
         while(!uniqueNameEntered){
             name = utils.getInput("Please enter a valid name");
-            if(getUserByUsername(name)==null)
+            if(name.equalsIgnoreCase("/back"))
+                return;
+            else if(getUserByUsername(name)==null)
                 uniqueNameEntered = true;
             else{
                 System.err.println("The name entered already exists, please try again");
