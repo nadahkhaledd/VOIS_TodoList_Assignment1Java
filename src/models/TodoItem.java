@@ -88,20 +88,19 @@ public class TodoItem implements Serializable {
     {
         Font font = new Font();
         SimpleDateFormat formatter=new SimpleDateFormat("dd-MM-yyyy");
-        String result =
-        font.ANSI_BLUE + "--------------------------------------------------------------------------\n" + font.ANSI_RESET;
+        StringBuilder result = new StringBuilder();
+        result.append(font.ANSI_BLUE + "--------------------------------------------------------------------------\n" + font.ANSI_RESET);
         if(isFavorite)
-            result += font.SET_BOLD_TEXT + font.ANSI_YELLOW+"                                                         Favorite" +"\uD83E\uDD29"+ font.SET_PLAIN_TEXT+"\n";
-            result+=    font.SET_BOLD_TEXT + font.ANSI_BLUE + title + font.SET_PLAIN_TEXT +  font.ANSI_RESET +
-                font.SET_BOLD_TEXT +"\t\tPriority: " + font.SET_PLAIN_TEXT + priority+
-                font.SET_BOLD_TEXT + "\t\tCategory: " + font.SET_PLAIN_TEXT + category+
-                font.SET_BOLD_TEXT +" \n Start Date: " + font.SET_PLAIN_TEXT + formatter.format(startDate) +
-                font.SET_BOLD_TEXT +"\t\t\t End Date: "+ font.SET_PLAIN_TEXT + formatter.format(endDate) +
-                font.SET_BOLD_TEXT +"\n Description: "+ font.SET_PLAIN_TEXT + description;
-
-
-                result += font.ANSI_BLUE + "\n-------------------------------------------------------------------------\n" + font.ANSI_RESET;
-                return result;
+            result.append(font.SET_BOLD_TEXT + font.ANSI_YELLOW + "Favorite\"" +"\"\\uD83E\\uDD29\""+ font.SET_PLAIN_TEXT+"\"\\n\"");
+        result.append(font.SET_BOLD_TEXT + font.ANSI_BLUE + title + font.SET_PLAIN_TEXT)
+                .append(font.ANSI_RESET).append(font.SET_BOLD_TEXT).append("\t\tPriority: ")
+                .append(font.SET_PLAIN_TEXT).append(priority).append(font.SET_BOLD_TEXT)
+                .append("\t\tCategory: ").append(font.SET_PLAIN_TEXT).append(category).append(font.SET_BOLD_TEXT)
+                .append(" \nStart Date: ").append(font.SET_PLAIN_TEXT).append(formatter.format(startDate)).append(font.SET_BOLD_TEXT)
+                .append("\t\t\t End Date: ").append(font.SET_PLAIN_TEXT).append(formatter.format(endDate)).append(font.SET_BOLD_TEXT)
+                .append("\n\t" + font.SET_PLAIN_TEXT).append(description)
+                .append(font.ANSI_BLUE + "\n-------------------------------------------------------------------------\n" + font.ANSI_RESET);
+        return result.toString();
     }
 }
 //🤩
