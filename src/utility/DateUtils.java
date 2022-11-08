@@ -14,7 +14,6 @@ public class DateUtils {
     public boolean isValidDate(String dateValue){
         try{
             long dashesCount=dateValue.chars().filter(ch -> ch =='-').count();
-            //System.out.println("in valid date "+dashesCount);
             if(dashesCount>=3){
                 throw new ParseException("invalid date format",15);
             }
@@ -55,5 +54,11 @@ public class DateUtils {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public Date changeFormat(String format, Date date){
+        SimpleDateFormat DateFormat = new SimpleDateFormat(format);
+        Date formattedDate = convertStringToDate(DateFormat.format(date));
+        return formattedDate;
     }
 }

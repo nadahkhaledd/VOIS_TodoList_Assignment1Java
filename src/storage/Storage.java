@@ -1,6 +1,6 @@
 package storage;
 
-import models.User;
+import model.User;
 
 import java.util.ArrayList;
 

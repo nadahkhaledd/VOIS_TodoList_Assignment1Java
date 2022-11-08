@@ -1,4 +1,4 @@
-package models;
+package model;
 
 import ui.Font;
 import enums.Category;

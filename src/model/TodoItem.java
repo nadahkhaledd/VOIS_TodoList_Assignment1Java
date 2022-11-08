@@ -1,4 +1,4 @@
-package models;
+package model;
 
 import ui.Font;
 import enums.Category;
@@ -16,6 +16,8 @@ public class TodoItem implements Serializable {
     private Date startDate;
     private Date endDate;
     private boolean isFavorite;
+
+    public TodoItem(){}
 
     public TodoItem(String title, String description, Priority priority,
                     Category category, Date startDate, Date endDate) {
