@@ -6,6 +6,7 @@ import enums.Priority;
 import model.TodoItem;
 import model.User;
 import utility.DateUtils;
+import utility.Utils;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -18,7 +19,7 @@ public class DBStorage implements Storage{
     Connection connection;
     Statement stmt;
 
-    DBStorage(){
+    public DBStorage(){
         connection = DBConnection.configureConnection();
         try {
             stmt = connection.createStatement();
@@ -32,10 +33,9 @@ public class DBStorage implements Storage{
         ResultSet result = null;
         try {
             result = stmt.executeQuery("SELECT u.name, t.title, t.description, " +
-                    "t.priority, t.category, t.startDate, t.endDate \n" +
+                    "t.priority, t.category, t.startDate, t.endDate, t.isFavorite \n" +
                     "FROM todolist.user as u LEFT OUTER JOIN todolist.todoitem as t\n" +
-                    "ON t.userId = u.iduser " +
-                    "WHERE u.name = " + username);
+                    "ON t.userId = u.iduser ");
         }
         catch (SQLException e){
             System.out.println(e);
@@ -59,6 +59,7 @@ public class DBStorage implements Storage{
     private User setUserData(String username) {
         ResultSet result = getRawData(username);
         DateUtils dateUtils = new DateUtils();
+        Utils utils = new Utils();
         User user = null;
         try {
             TodoItem todo;
@@ -69,12 +70,13 @@ public class DBStorage implements Storage{
                 todo = new TodoItem();
                 todo.setTitle(result.getString("title"));
                 todo.setDescription(result.getString("description"));
-                todo.setPriority(Priority.valueOf(result.getString("priority")));
-                todo.setCategory(Category.valueOf(result.getString("category")));
+                todo.setPriority(Priority.valueOf(utils.capitalizeFirstLetter(result.getString("priority"))));
+                todo.setCategory(Category.valueOf(utils.capitalizeFirstLetter(result.getString("category"))));
                 todo.setFavorite(result.getInt("isFavorite") == 1);
                 todo.setStartDate(dateUtils.changeFormat(currentFormat, result.getDate("startDate")));
                 todo.setEndDate(dateUtils.changeFormat(currentFormat, result.getDate("endDate")));
                 user.addTodoItem(todo);
+                System.out.println(todo);
             }
             while (result.next());
         }

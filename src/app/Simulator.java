@@ -5,7 +5,9 @@ import enums.Priority;
 import enums.SearchKey;
 import model.TodoItem;
 import model.User;
+import storage.DBStorage;
 import storage.FileStorage;
+import storage.Storage;
 import ui.Font;
 import ui.Text;
 import utility.DateUtils;
@@ -20,14 +22,18 @@ public class Simulator {
 
     private ArrayList<User> users = new ArrayList<>();
     private User currentUser = null;
-    private FileStorage fileStorage = new FileStorage();
+    private Storage storage;
     private Utils utils = new Utils();
     private DateUtils dateUtils = new DateUtils();
     private Font font = new Font();
     private Text text = new Text();
 
-    public void start() {
+    public Simulator(){
+        //storage = new FileStorage();
+        storage = new DBStorage();
+    }
 
+    public void start() {
         signInUser();
         showMenu();
     }
@@ -81,7 +87,7 @@ public class Simulator {
             System.out.println("Enter name of new user. (Press 0 to return to main page)");
         boolean uniqueUserNameEntered = false;
 
-        //check user name exists
+        //check username exists
         //if not display message
         //else add user
         String usersName = "";
@@ -112,7 +118,7 @@ public class Simulator {
     }
 
     private boolean isThereUser() {
-        ArrayList<User> data = fileStorage.loadData();
+        ArrayList<User> data = storage.loadData();
         if(data==null)
             return false;
 
@@ -501,7 +507,7 @@ public class Simulator {
     }
 
     private void saveFile() {
-        fileStorage.saveData(users);
+        storage.saveData(users);
     }
 
 }

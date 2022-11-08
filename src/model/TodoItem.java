@@ -93,7 +93,7 @@ public class TodoItem implements Serializable {
         StringBuilder result = new StringBuilder();
         result.append(font.ANSI_BLUE + "--------------------------------------------------------------------------\n" + font.ANSI_RESET);
         if(isFavorite)
-            result.append(font.SET_BOLD_TEXT + font.ANSI_YELLOW + "Favorite\"" +"\"\\uD83E\\uDD29\""+ font.SET_PLAIN_TEXT+"\"\\n\"");
+            result.append(font.SET_BOLD_TEXT + font.ANSI_YELLOW+"\t\t\t\t\t\t\t\tFavorite" +"\uD83E\uDD29"+ font.SET_PLAIN_TEXT+"\n");
         result.append(font.SET_BOLD_TEXT + font.ANSI_BLUE + title + font.SET_PLAIN_TEXT)
                 .append(font.ANSI_RESET).append(font.SET_BOLD_TEXT).append("\t\tPriority: ")
                 .append(font.SET_PLAIN_TEXT).append(priority).append(font.SET_BOLD_TEXT)
