@@ -34,7 +34,8 @@ public class DBStorage implements Storage{
             result = stmt.executeQuery("SELECT u.name, t.title, t.description, " +
                     "t.priority, t.category, t.startDate, t.endDate, t.isFavorite \n" +
                     "FROM todolist.user as u LEFT OUTER JOIN todolist.todoitem as t\n" +
-                    "ON t.userId = u.iduser ");
+                    "ON t.userId = u.iduser \n " +
+                    "WHERE u.name = '" + username + "'");
         }
         catch (SQLException e){
             System.out.println(e);
