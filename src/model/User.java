@@ -165,53 +165,51 @@ public class User implements Serializable {
         }
     }
 
-    public void searchShowItemsBySearchKey(SearchKey searchKey, String searchValue){
-        ArrayList<TodoItem> returnedItems = new ArrayList<>();
-        switch (searchKey){
-            case Title:
-                int returnedIndex = getItemByTitle(searchValue);
-                if(returnedIndex != -1)
-                    returnedItems.add(items.get(returnedIndex));
-                break;
-
-            case Priority:
-                returnedItems = itemsService.getItemsByPriority(Priority.valueOf(searchValue), this.getItems());
-                break;
-
-            case StartDate:
-                try{
-                    Date startDate=new SimpleDateFormat("dd-MM-yyyy").parse(searchValue);
-                    returnedItems = itemsService.getItemsByStartDate(startDate, this.getItems());
-                }
-                catch (ParseException e){
-                    System.out.println(font.ANSI_RED + "invalid date format" + font.ANSI_RESET);
-                }
-                break;
-
-            case EndDate:
-                try{
-                    Date endDate=new SimpleDateFormat("dd-MM-yyyy").parse(searchValue);
-                    returnedItems = itemsService.getItemsByEndDate(endDate, this.getItems());
-                }
-                catch (ParseException e){
-                    System.out.println(font.ANSI_RED + "invalid date format" + font.ANSI_RESET);
-                }
-                break;
-
-            case Favorite:
-                returnedItems = this.itemsService.getItemsByFavorite(this.getItems());
-                break;
-        }
-
-        if (returnedItems.isEmpty()) {
-            System.out.println(font.ANSI_RED + "No results found." + font.ANSI_RESET);
-        }
-        else {
-            for(TodoItem item: returnedItems){
-                System.out.println(item.toString());
-            }
-        }
-    }
+//    public void searchShowItemsBySearchKey(SearchKey searchKey, String searchValue){
+//        ArrayList<TodoItem> returnedItems = new ArrayList<>();
+//        switch (searchKey){
+//            case Title:
+//                int returnedIndex = getItemByTitle(searchValue);
+//                if(returnedIndex != -1)
+//                    returnedItems.add(items.get(returnedIndex));
+//                break;
+//
+//            case Priority:
+//                returnedItems = itemsService.getItemsByPriority(Priority.valueOf(searchValue), this.getItems());
+//                break;
+//
+//            case StartDate:
+//                try{
+//                    Date startDate=new SimpleDateFormat("dd-MM-yyyy").parse(searchValue);
+//                    returnedItems = itemsService.getItemsByStartDate(startDate, this.getItems());
+//                }
+//                catch (ParseException e){
+//                    System.out.println(font.ANSI_RED + "invalid date format" + font.ANSI_RESET);
+//                }
+//                break;
+//
+//            case EndDate:
+//                try{
+//                    Date endDate=new SimpleDateFormat("dd-MM-yyyy").parse(searchValue);
+//                    returnedItems = itemsService.getItemsByEndDate(endDate, this.getItems());
+//                }
+//                catch (ParseException e){
+//                    System.out.println(font.ANSI_RED + "invalid date format" + font.ANSI_RESET);
+//                }
+//                break;
+//
+//            case Favorite:
+//                returnedItems = this.itemsService.getItemsByFavorite(this.getItems());
+//                break;
+//        }
+//
+//        if (returnedItems.isEmpty()) {
+//            System.out.println(font.ANSI_RED + "No results found." + font.ANSI_RESET);
+//        }
+//        else {
+//            returnedItems.forEach(System.out::println);
+//        }
+//    }
 
     public void addItemToFavorite(String title){
         int itemIndex = getItemByTitle(title);
@@ -219,7 +217,7 @@ public class User implements Serializable {
     }
 
     public void printFavorites(){
-        searchShowItemsBySearchKey(SearchKey.Favorite, "true");
+        itemsService.searchShowItemsBySearchKey(SearchKey.Favorite, "true", this.getItems());
     }
 
     public void addItemToCategory(String title, Category category){
