@@ -120,19 +120,28 @@ public class TodoItemsService {
             }
         }
     }
-    public void addItemToFavorite(String id,String title){
-        //repo.add
-        //miand
+    public boolean addItemToFavorite(String name,String title,ArrayList<TodoItem> userTodoItems){
+        boolean updated = todoItemsRepository.addItemToFavorite(name,title);
+        if(updated) {
+            int itemIndex = getItemByTitle(title, userTodoItems);
+            userTodoItems.get(itemIndex).setFavorite(true);
+            System.out.println("ADDED TO FAVORITES SUCCESSFULLY");
+        }
+        return updated;
     }
 
     public void printFavorites(ArrayList<TodoItem> userTodoItems){
         searchShowItemsBySearchKey(SearchKey.Favorite, "true",userTodoItems);
     }
 
-    public void addItemToCategory(String id,String title, Category category){
-        //repo.add
-        //miand
-
+    public boolean addItemToCategory(String name,String title, Category category,ArrayList<TodoItem> userTodoItems){
+        boolean updated = todoItemsRepository.addItemToCategory(name,title,category);
+        if(updated) {
+            int itemIndex = getItemByTitle(title,userTodoItems);
+            userTodoItems.get(itemIndex).setCategory(category);
+            System.out.println("ADDED TO CATEGORY SUCCESSFULLY");
+        }
+        return updated;
     }
 
 

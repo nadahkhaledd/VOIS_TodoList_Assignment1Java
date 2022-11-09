@@ -481,13 +481,15 @@ public class Simulator {
         int userCategoryChoice = utils.getInput("invalid input.\n" +
                 text.chooseCategory, 1, 6);
         Category category = text.categories.get(userCategoryChoice-1);
-        currentUser.addItemToCategory(title,category);
+        //currentUser.addItemToCategory(title,category);
+        todoItemsService.addItemToCategory(currentUser.getName(),title,category,currentUser.getItems());
     }
 
     private void addItemToFavoriteFromUser() {
         String title = getExistingTitle("Favorites");
         if(title.equalsIgnoreCase("/back")) return;
-        currentUser.addItemToFavorite(title);
+        //currentUser.addItemToFavorite(title);
+        todoItemsService.addItemToFavorite(currentUser.getName(),title,currentUser.getItems());
     }
 
     private void updateName(){
