@@ -42,6 +42,7 @@ public class TodoItemsService {
                 .filter(item -> item.getEndDate().equals(endDate)).collect(Collectors.toList());
         return result;
     }
+
     public boolean addTodoItem(String id,TodoItem item,ArrayList<TodoItem> userTodoItems){
         return false;
     }
@@ -54,7 +55,7 @@ public class TodoItemsService {
         return false;
     }
     public void showAllTodoItems(ArrayList<TodoItem> userTodoItems){
-        printListItems(userTodoItems.size(),userTodoItems);
+        userTodoItems.forEach(System.out::println);
     }
     public void showTop5ItemsByDate(){
      //repo.showw
