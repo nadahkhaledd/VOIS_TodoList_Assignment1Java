@@ -4,7 +4,11 @@ import enums.Category;
 import enums.Priority;
 import enums.SearchKey;
 import ui.Font;
+import utility.DateUtils;
+import utility.Utils;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -142,6 +146,36 @@ public class TodoItemsService {
             System.out.println("ADDED TO CATEGORY SUCCESSFULLY");
         }
         return updated;
+    }
+    public ArrayList<TodoItem> getTodosFromDB(ResultSet result){
+        ArrayList<TodoItem> todos = new ArrayList<>();
+
+
+
+        DateUtils dateUtils = new DateUtils();
+        Utils utils = new Utils();
+        try {
+            TodoItem todo;
+            while (result.next()){
+                if(result.getString(1) == null){
+                    break;
+                }
+                String currentFormat = "dd-MM-yyyy";
+                todo = new TodoItem();
+                todo.setTitle(result.getString("title"));
+                todo.setDescription(result.getString("description"));
+                todo.setPriority(Priority.valueOf(utils.capitalizeFirstLetter(result.getString("priority"))));
+                todo.setCategory(Category.valueOf(utils.capitalizeFirstLetter(result.getString("category"))));
+                todo.setFavorite(result.getInt("isFavorite") == 1);
+                todo.setStartDate(dateUtils.changeFormat(currentFormat, result.getDate("startDate")));
+                todo.setEndDate(dateUtils.changeFormat(currentFormat, result.getDate("endDate")));
+                todos.add(todo);
+            }
+        }
+        catch (SQLException e){
+            System.out.println(e);
+        }
+        return todos;
     }
 
 

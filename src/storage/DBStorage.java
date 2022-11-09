@@ -5,6 +5,7 @@ import enums.Priority;
 import todoItems.TodoItem;
 import model.User;
 import todoItems.TodoItemsRepository;
+import todoItems.TodoItemsService;
 import utility.DateUtils;
 import utility.Utils;
 
@@ -14,39 +15,18 @@ import java.util.ArrayList;
 
 public class DBStorage implements Storage{
     TodoItemsRepository repository;
+    TodoItemsService itemsService;
 
     public DBStorage(){
         repository = new TodoItemsRepository();
+        itemsService = new TodoItemsService();
     }
 
 
     private User setUserData(String username) {
         ResultSet result = repository.getUserTodos(username);
-        DateUtils dateUtils = new DateUtils();
-        Utils utils = new Utils();
         User user = new User(username);
-        try {
-            TodoItem todo;
-            while (result.next()){
-                if(result.getString(1) == null){
-                    break;
-                }
-                String currentFormat = "dd-MM-yyyy";
-                todo = new TodoItem();
-                todo.setTitle(result.getString("title"));
-                todo.setDescription(result.getString("description"));
-                todo.setPriority(Priority.valueOf(utils.capitalizeFirstLetter(result.getString("priority"))));
-                todo.setCategory(Category.valueOf(utils.capitalizeFirstLetter(result.getString("category"))));
-                todo.setFavorite(result.getInt("isFavorite") == 1);
-                todo.setStartDate(dateUtils.changeFormat(currentFormat, result.getDate("startDate")));
-                todo.setEndDate(dateUtils.changeFormat(currentFormat, result.getDate("endDate")));
-
-                //System.out.println(todo);
-            }
-        }
-        catch (SQLException e){
-            System.out.println(e);
-        }
+        user.setItems(itemsService.getTodosFromDB(result));
         return user;
     }
 
@@ -54,12 +34,15 @@ public class DBStorage implements Storage{
     public ArrayList<User> loadData() {
         ArrayList<User> users = new ArrayList<>();
         ArrayList<String> userNames = repository.getUserNames();
+        System.out.println("usernames: " + userNames);
         for (String username: userNames){
             User user = setUserData(username);
             users.add(user);
         }
-        for (User user: users)
-            System.out.println(user.getName());
+        for (User user: users) {
+            System.out.println("users");
+            System.out.println(user.getName() + " "+user.getItems());
+        }
         return users;
     }
 

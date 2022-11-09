@@ -44,6 +44,10 @@ public class User implements Serializable {
         this.name = name;
     }
 
+    public void setItems(ArrayList<TodoItem> items) {
+        this.items = items;
+    }
+
     public int getItemByTitle(String title){
         for(int i=0; i<this.items.size(); i++) {
             if(this.items.get(i).getTitle().equalsIgnoreCase(title)){
