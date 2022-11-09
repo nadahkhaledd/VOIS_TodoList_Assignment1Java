@@ -1,6 +1,8 @@
 package model;
 
 import todoItems.TodoItem;
+import todoItems.TodoItemsRepository;
+import todoItems.TodoItemsService;
 import ui.Font;
 import enums.Category;
 import enums.Priority;
@@ -15,12 +17,17 @@ import java.util.Date;
 public class User implements Serializable {
     private String name;
     ArrayList<TodoItem> items;
+
+    TodoItemsRepository repository;
+    TodoItemsService itemsService;
     private Font font;
 
     public User(String name) {
         this.name = name;
         this.font = new Font();
         this.items = new ArrayList<>();
+        this.repository = new TodoItemsRepository();
+        this.itemsService = new TodoItemsService(this.repository);
     }
 
     public ArrayList<TodoItem> getItems() {
@@ -57,15 +64,15 @@ public class User implements Serializable {
         return result;
     }
 
-    private ArrayList<TodoItem> getItemsByFavorite(){
-        ArrayList<TodoItem> result = new ArrayList<>();
-        for(int i=0; i<items.size(); i++) {
-            if(items.get(i).isFavorite()){
-                result.add(items.get(i));
-            }
-        }
-        return result;
-    }
+//    private ArrayList<TodoItem> getItemsByFavorite(){
+//        ArrayList<TodoItem> result = new ArrayList<>();
+//        for(int i=0; i<items.size(); i++) {
+//            if(items.get(i).isFavorite()){
+//                result.add(items.get(i));
+//            }
+//        }
+//        return result;
+//    }
 
     private ArrayList<TodoItem> getItemsByStartDate(Date startDate){
         ArrayList<TodoItem> result = new ArrayList<>();
@@ -161,7 +168,7 @@ public class User implements Serializable {
                 break;
 
             case Priority:
-                returnedItems = getItemsByPriority(Priority.valueOf(searchValue));
+                returnedItems = itemsService.getItemsByPriority(Priority.valueOf(searchValue), this.getItems());
                 break;
 
             case StartDate:
@@ -185,7 +192,7 @@ public class User implements Serializable {
                 break;
 
             case Favorite:
-                returnedItems = getItemsByFavorite();
+                returnedItems = this.itemsService.getItemsByFavorite(this.getItems());
                 break;
         }
 

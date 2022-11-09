@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 public class TodoItemsService {
     private final TodoItemsRepository todoItemsRepository;
@@ -22,17 +23,12 @@ public class TodoItemsService {
     }
 
     public ArrayList<TodoItem> getItemsByPriority(Priority priority,ArrayList<TodoItem> userItems) {
-        ArrayList<TodoItem> result = new ArrayList<>();
-        for(int i=0; i<userItems.size(); i++) {
-            if(userItems.get(i).getPriority().equals(priority)){
-                result.add(userItems.get(i));
-            }
-        }
+        ArrayList<TodoItem> result = (ArrayList<TodoItem>) userItems.stream().filter(item -> item.getPriority() == priority).collect(Collectors.toList());
         return result;
     }
     public ArrayList<TodoItem> getItemsByFavorite(ArrayList<TodoItem> userItems) {
-        //repository.getFavorites(id);
-        return null;
+        ArrayList<TodoItem> favorites = (ArrayList<TodoItem>) userItems.stream().filter(TodoItem::isFavorite).collect(Collectors.toList());
+        return favorites;
     }
     public ArrayList<TodoItem> getItemsByStartDate(Date startDate,ArrayList<TodoItem> userItems) {
 

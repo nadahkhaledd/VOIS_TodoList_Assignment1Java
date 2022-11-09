@@ -19,7 +19,6 @@ public class DBStorage implements Storage{
         repository = new TodoItemsRepository();
     }
 
-
     private User setUserData(String username) {
         ResultSet result = repository.getUserTodos(username);
         DateUtils dateUtils = new DateUtils();
@@ -58,8 +57,8 @@ public class DBStorage implements Storage{
             User user = setUserData(username);
             users.add(user);
         }
-        for (User user: users)
-            System.out.println(user.getName());
+//        for (User user: users)
+//            System.out.println(user.getName());
         return users;
     }
 
