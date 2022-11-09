@@ -17,11 +17,20 @@ public class User implements Serializable {
     ArrayList<TodoItem> items;
     private Font font;
 
-    public User(String name) {
+
+
+
+   public User(String name) {
         this.name = name;
         this.font = new Font();
         this.items = new ArrayList<>();
     }
+    /*public User(String name,String id) {
+        this.id = id;
+        this.name = name;
+        this.font = new Font();
+        this.items = new ArrayList<>();
+    }*/
 
     public ArrayList<TodoItem> getItems() {
         return items;
@@ -214,4 +223,5 @@ public class User implements Serializable {
             System.out.println("Item added to category " + category);
 
     }
+
 }

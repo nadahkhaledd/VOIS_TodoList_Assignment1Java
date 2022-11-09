@@ -15,8 +15,8 @@ public class TodoItemsService {
     private Font font;
 
 
-    public TodoItemsService(TodoItemsRepository todoItemsRepository) {
-        this.todoItemsRepository = todoItemsRepository;
+    public TodoItemsService() {
+        this.todoItemsRepository = new TodoItemsRepository();
         this.font = new Font();
 
     }
@@ -45,9 +45,10 @@ public class TodoItemsService {
     public boolean addTodoItem(String id,TodoItem item,ArrayList<TodoItem> userTodoItems){
         return false;
     }
-    public boolean updateTodoItem(String id,TodoItem item, String oldTitle,ArrayList<TodoItem> userTodoItems){
+    public boolean updateTodoItem(String name,TodoItem item, String oldTitle,ArrayList<TodoItem> userTodoItems){
         //repo.update
-        return false;
+        return todoItemsRepository.updateTodoItem(name,item,oldTitle);
+
     }
     public boolean deleteTodoItem(String id,String title,ArrayList<TodoItem> userTodoItems){
         //repo.delete

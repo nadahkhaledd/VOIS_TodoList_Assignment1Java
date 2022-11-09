@@ -63,4 +63,27 @@ public class TodoItemsRepository {
 //            System.out.println(e);
 //        }
 //    }
+public boolean updateTodoItem(String name,TodoItem item, String oldTitle) {
+    String idSubQuery = "(SELECT iduser FROM todolist.user where name= '"+name+"')";
+    java.sql.Date sqlStartDate = new java.sql.Date(item.getStartDate().getTime());
+    java.sql.Date sqlEndDate = new java.sql.Date(item.getEndDate().getTime());
+        String updateStatement = "UPDATE todolist.todoitem SET title = '" + item.getTitle() +
+            "' ,description= '" + item.getDescription() +
+            "' ,priority= '" + item.getPriority() +
+            "' ,category= '" + item.getCategory() +
+            "' ,startDate= '" + sqlStartDate +
+            "' ,endDate= '" + sqlEndDate+
+            "'\nWHERE userId= " + idSubQuery + " AND title= '" + oldTitle + "';";
+
+    try {
+        int result = stmt.executeUpdate(updateStatement);
+        return result > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+
 }
+
+}
+

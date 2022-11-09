@@ -7,6 +7,7 @@ import todoItems.TodoItem;
 import model.User;
 import storage.DBStorage;
 import storage.Storage;
+import todoItems.TodoItemsService;
 import ui.Font;
 import ui.Text;
 import utility.DateUtils;
@@ -26,6 +27,8 @@ public class Simulator {
     private DateUtils dateUtils = new DateUtils();
     private Font font = new Font();
     private Text text = new Text();
+
+    private TodoItemsService todoItemsService = new TodoItemsService();
 
     public Simulator(){
         //storage = new FileStorage();
@@ -317,7 +320,7 @@ public class Simulator {
         String oldTitle = getOldTitleFromUser();
         if(oldTitle.equalsIgnoreCase("/back")) return;
         int itemIndex = currentUser.getItemByTitle(oldTitle);
-        TodoItem item = currentUser.getItems().get(itemIndex);
+        TodoItem item = currentUser.getItems().get(itemIndex).clone();
 
         System.out.println("Enter new data...");
         int confirmUpdate;
@@ -396,7 +399,13 @@ public class Simulator {
 
         } else if(confirmUpdate == -1) return;
 
-        System.out.println("Item updated:\n" + item.toString());
+        boolean updated = todoItemsService.updateTodoItem(currentUser.getName(),item,oldTitle,currentUser.getItems());
+        if(updated){
+            currentUser.getItems().get(itemIndex).updateNewItem(item);
+            System.out.println("Item updated:\n" + item.toString());
+        }
+
+
     }
 
     private void deleteItemByUser(){

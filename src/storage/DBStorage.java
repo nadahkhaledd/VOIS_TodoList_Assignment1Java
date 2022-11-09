@@ -40,7 +40,7 @@ public class DBStorage implements Storage{
                 todo.setFavorite(result.getInt("isFavorite") == 1);
                 todo.setStartDate(dateUtils.changeFormat(currentFormat, result.getDate("startDate")));
                 todo.setEndDate(dateUtils.changeFormat(currentFormat, result.getDate("endDate")));
-                user.addTodoItem(todo);
+
                 //System.out.println(todo);
             }
         }
