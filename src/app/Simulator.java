@@ -7,6 +7,8 @@ import todoItems.TodoItem;
 import model.User;
 import storage.DBStorage;
 import storage.Storage;
+import todoItems.TodoItemsRepository;
+import todoItems.TodoItemsService;
 import ui.Font;
 import ui.Text;
 import utility.DateUtils;
@@ -19,6 +21,9 @@ import java.util.Scanner;
 public class Simulator {
     private Scanner scanner = new Scanner(System.in);
 
+    TodoItemsRepository repository;
+    TodoItemsService itemsService;
+
     private ArrayList<User> users = new ArrayList<>();
     private User currentUser = null;
     private Storage storage;
@@ -30,6 +35,8 @@ public class Simulator {
     public Simulator(){
         //storage = new FileStorage();
         storage = new DBStorage();
+        repository = new TodoItemsRepository();
+        itemsService = new TodoItemsService(this.repository);
     }
 
     public void start() {
@@ -150,7 +157,7 @@ public class Simulator {
                     TodoItem item = takeCreateItemFromUser();
                     if(item != null) {
                         currentUser.addTodoItem(item);
-                        currentUser.showAllTodoItems();
+                        itemsService.showAllTodoItems(currentUser.getItems());
                         saveFile();
                     }
                     break;
@@ -166,7 +173,7 @@ public class Simulator {
                     break;
 
                 case 4:
-                    currentUser.showAllTodoItems();
+                    itemsService.showAllTodoItems(currentUser.getItems());
                     break;
 
                 case 5:

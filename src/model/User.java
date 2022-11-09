@@ -26,8 +26,8 @@ public class User implements Serializable {
         this.name = name;
         this.font = new Font();
         this.items = new ArrayList<>();
-        this.repository = new TodoItemsRepository();
-        this.itemsService = new TodoItemsService(this.repository);
+        repository = new TodoItemsRepository();
+        itemsService = new TodoItemsService(this.repository);
     }
 
     public ArrayList<TodoItem> getItems() {
@@ -153,6 +153,7 @@ public class User implements Serializable {
         }
     }
 
+    /// Nadah: I think this needs modification
     public void showTop5ItemsByDate(){
         if(items.isEmpty())
             System.out.println( font.ANSI_RED + "sorry, no items available." + font.ANSI_RESET);
