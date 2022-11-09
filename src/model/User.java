@@ -1,5 +1,6 @@
 package model;
 
+import todoItems.TodoItem;
 import ui.Font;
 import enums.Category;
 import enums.Priority;
@@ -209,12 +210,8 @@ public class User implements Serializable {
 
     public void addItemToCategory(String title, Category category){
         int itemIndex = getItemByTitle(title);
-      //  if(itemIndex != -1){
             items.get(itemIndex).setCategory(category);
             System.out.println("Item added to category " + category);
-      //      return true;
-       // }
-       // System.out.println(ConsoleOptions.ANSI_RED + "Item couldn't be found." + ConsoleOptions.ANSI_RESET);
-      //  return false;
+
     }
 }

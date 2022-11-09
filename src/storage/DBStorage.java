@@ -3,7 +3,7 @@ package storage;
 import connection.DBConnection;
 import enums.Category;
 import enums.Priority;
-import model.TodoItem;
+import todoItems.TodoItem;
 import model.User;
 import utility.DateUtils;
 import utility.Utils;
@@ -12,7 +12,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class DBStorage implements Storage{
