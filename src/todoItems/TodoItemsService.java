@@ -153,9 +153,7 @@ public class TodoItemsService {
             System.out.println(font.ANSI_RED + "No results found." + font.ANSI_RESET);
         }
         else {
-            for(TodoItem item: returnedItems){
-                System.out.println(item.toString());
-            }
+            returnedItems.forEach(System.out::println);
         }
     }
     public void addItemToFavorite(String id,String title){
