@@ -7,6 +7,7 @@ import todoItems.TodoItem;
 import model.User;
 import storage.DBStorage;
 import storage.Storage;
+import todoItems.TodoItemsService;
 import ui.Font;
 import ui.Text;
 import utility.DateUtils;
@@ -26,6 +27,7 @@ public class Simulator {
     private DateUtils dateUtils = new DateUtils();
     private Font font = new Font();
     private Text text = new Text();
+    private TodoItemsService todoItemsService = new TodoItemsService();
 
     public Simulator(){
         //storage = new FileStorage();
@@ -150,6 +152,7 @@ public class Simulator {
                     TodoItem item = takeCreateItemFromUser();
                     if(item != null) {
                         currentUser.addTodoItem(item);
+                        todoItemsService.addTodoItem(currentUser.getName(), item);
                         currentUser.showAllTodoItems();
                         saveFile();
                     }

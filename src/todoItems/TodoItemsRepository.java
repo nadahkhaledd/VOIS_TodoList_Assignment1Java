@@ -21,6 +21,27 @@ public class TodoItemsRepository {
             System.out.println(e);
         }
     }
+    public boolean createUserTodo(String name, TodoItem item){
+        java.sql.Date convertedStartDate = new java.sql.Date(item.getStartDate().getTime());
+        java.sql.Date convertedEndDate = new java.sql.Date(item.getEndDate().getTime());
+        String insertQuery = "INSERT INTO `todolist`.`todoitem` (`title`, `description`, `priority`, `category`," +
+                "`startDate`, `endDate`, `isFavorite`, `userId`)" +
+                "VALUES ('"+item.getTitle()+"'," +
+                "'"+item.getDescription()+"'," +
+                "'"+item.getPriority()+"'," +
+                "'"+item.getCategory()+"'," +
+                "'"+convertedStartDate+"'," +
+                "'"+convertedEndDate+"'," +
+                "0, "+
+                "(SELECT iduser FROM `todolist`.`user` WHERE name = '"+name+"'));";
+        try {
+            int result = stmt.executeUpdate(insertQuery);
+            return result > 0;
+        } catch (SQLException e) {
+            System.out.println(e);
+            return false;
+        }
+    }
 
     public ResultSet getUserTodos(String username){
         ResultSet result = null;

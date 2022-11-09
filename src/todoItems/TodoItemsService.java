@@ -15,10 +15,9 @@ public class TodoItemsService {
     private Font font;
 
 
-    public TodoItemsService(TodoItemsRepository todoItemsRepository) {
-        this.todoItemsRepository = todoItemsRepository;
+    public TodoItemsService() {
+        this.todoItemsRepository = new TodoItemsRepository();
         this.font = new Font();
-
     }
 
     public ArrayList<TodoItem> getItemsByPriority(Priority priority,ArrayList<TodoItem> userItems) {
@@ -42,8 +41,8 @@ public class TodoItemsService {
 
         return null;
     }
-    public boolean addTodoItem(String id,TodoItem item,ArrayList<TodoItem> userTodoItems){
-        return false;
+    public boolean addTodoItem(String name,TodoItem item){
+        return todoItemsRepository.createUserTodo(name, item);
     }
     public boolean updateTodoItem(String id,TodoItem item, String oldTitle,ArrayList<TodoItem> userTodoItems){
         //repo.update
