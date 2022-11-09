@@ -34,6 +34,10 @@ public class User implements Serializable {
         return items;
     }
 
+    public void setItems(ArrayList<TodoItem> items) {
+        this.items = items;
+    }
+
     public String getName() {
         return name;
     }
@@ -126,22 +130,22 @@ public class User implements Serializable {
         return false;
     }
 
-    public void showAllTodoItems(){
-        printListItems(items.size());
-    }
+//    public void showAllTodoItems(){
+//        items.forEach(System.out::println);
+//    }
 
-    private void sortTodoItemsByDate(){
-        System.out.println("sorting.....");
-        for(int i=0; i<items.size(); i++){
-            for(int j=i+1; j<items.size(); j++){
-                if(items.get(j).getEndDate().compareTo(items.get(i).getEndDate()) == 1){
-                    TodoItem temp = items.get(i);
-                    items.set(i, items.get(j));
-                    items.set(j, temp);
-                }
-            }
-        }
-    }
+//    private void sortTodoItemsByDate(){
+//        System.out.println("sorting.....");
+//        for(int i=0; i<items.size(); i++){
+//            for(int j=i+1; j<items.size(); j++){
+//                if(items.get(j).getEndDate().compareTo(items.get(i).getEndDate()) == 1){
+//                    TodoItem temp = items.get(i);
+//                    items.set(i, items.get(j));
+//                    items.set(j, temp);
+//                }
+//            }
+//        }
+//    }
 
     private void printListItems(int lastIndex){
         for(int i=0; i<lastIndex; i++){
@@ -153,9 +157,10 @@ public class User implements Serializable {
         if(items.isEmpty())
             System.out.println( font.ANSI_RED + "sorry, no items available." + font.ANSI_RESET);
         else{
-            int lastIndex = (items.size() >= 5) ? 5: items.size();
-            sortTodoItemsByDate();
-            printListItems(lastIndex);
+            itemsService.showTop5ItemsByDate(this.getName());
+//            int lastIndex = (items.size() >= 5) ? 5: items.size();
+//            sortTodoItemsByDate();
+//            printListItems(lastIndex);
         }
     }
 

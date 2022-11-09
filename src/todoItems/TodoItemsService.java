@@ -4,7 +4,11 @@ import enums.Category;
 import enums.Priority;
 import enums.SearchKey;
 import ui.Font;
+import utility.DateUtils;
+import utility.Utils;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,12 +16,12 @@ import java.util.Date;
 import java.util.stream.Collectors;
 
 public class TodoItemsService {
-    private final TodoItemsRepository todoItemsRepository;
+    private final TodoItemsRepository repository;
     private Font font;
 
 
     public TodoItemsService(TodoItemsRepository todoItemsRepository) {
-        this.todoItemsRepository = todoItemsRepository;
+        this.repository = todoItemsRepository;
         this.font = new Font();
 
     }
@@ -57,9 +61,41 @@ public class TodoItemsService {
     public void showAllTodoItems(ArrayList<TodoItem> userTodoItems){
         userTodoItems.forEach(System.out::println);
     }
-    public void showTop5ItemsByDate(){
-     //repo.showw
+
+    public ArrayList<TodoItem> getTodosFromDB(ResultSet result){
+        ArrayList<TodoItem> todos = new ArrayList<>();
+
+        DateUtils dateUtils = new DateUtils();
+        Utils utils = new Utils();
+        try {
+            TodoItem todo;
+            while (result.next()){
+                if(result.getString(1) == null){
+                    break;
+                }
+                String currentFormat = "dd-MM-yyyy";
+                todo = new TodoItem();
+                todo.setTitle(result.getString("title"));
+                todo.setDescription(result.getString("description"));
+                todo.setPriority(Priority.valueOf(utils.capitalizeFirstLetter(result.getString("priority"))));
+                todo.setCategory(Category.valueOf(utils.capitalizeFirstLetter(result.getString("category"))));
+                todo.setFavorite(result.getInt("isFavorite") == 1);
+                todo.setStartDate(dateUtils.changeFormat(currentFormat, result.getDate("startDate")));
+                todo.setEndDate(dateUtils.changeFormat(currentFormat, result.getDate("endDate")));
+                todos.add(todo);
+            }
+        }
+        catch (SQLException e){
+            System.out.println(e);
+        }
+        return todos;
     }
+    public void showTop5ItemsByDate(String username){
+        ResultSet result = repository.getUserLatestTodos(username);
+        ArrayList<TodoItem> items = getTodosFromDB(result);
+        items.forEach(System.out::println);
+    }
+
     private void printListItems(int lastIndex,ArrayList<TodoItem> userTodoItems){
         for(int i=0; i<lastIndex; i++){
             System.out.println(userTodoItems.get(i).toString());

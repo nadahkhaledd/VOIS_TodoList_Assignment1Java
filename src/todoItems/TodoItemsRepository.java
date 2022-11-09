@@ -22,22 +22,6 @@ public class TodoItemsRepository {
         }
     }
 
-    public ResultSet getUserTodos(String username){
-        ResultSet result = null;
-        try {
-            result = stmt.executeQuery("SELECT t.title, t.description, " +
-                    "t.priority, t.category, t.startDate, t.endDate, t.isFavorite \n" +
-                    "FROM todolist.user as u LEFT OUTER JOIN todolist.todoitem as t\n" +
-                    "ON t.userId = u.iduser \n " +
-                    "WHERE u.name = '" + username + "'");
-
-        }
-        catch (SQLException e){
-            System.out.println(e);
-        }
-        return result;
-    }
-
     public ArrayList<String> getUserNames(){
         ResultSet result = null;
         ArrayList<String> usernames = new ArrayList<>();
@@ -54,6 +38,41 @@ public class TodoItemsRepository {
 
         return usernames;
     }
+
+    public ResultSet getUserTodos(String username){
+        ResultSet result = null;
+        try {
+            result = stmt.executeQuery("SELECT t.title, t.description, " +
+                    "t.priority, t.category, t.startDate, t.endDate, t.isFavorite \n" +
+                    "FROM todolist.user as u LEFT OUTER JOIN todolist.todoitem as t\n" +
+                    "ON t.userId = u.iduser \n " +
+                    "WHERE u.name = '" + username + "'");
+
+        }
+        catch (SQLException e){
+            System.out.println(e);
+        }
+        return result;
+    }
+
+    public ResultSet getUserLatestTodos(String username){
+        ResultSet result = null;
+        try {
+            result = stmt.executeQuery("SELECT t.title, t.description, t.priority, t.category, t.startDate, t.endDate, t.isFavorite\n" +
+                    "FROM todolist.user as u LEFT OUTER JOIN todolist.todoitem as t\n" +
+                    "ON t.userId = u.iduser\n" +
+                    "WHERE u.name = '" + username +"'\n" +
+                    "ORDER BY t.endDate\n" +
+                    "LIMIT 5");
+
+        }
+        catch (SQLException e){
+            System.out.println(e);
+        }
+        return result;
+
+    }
+
 
 //    public void closeConnection(){
 //        try {
