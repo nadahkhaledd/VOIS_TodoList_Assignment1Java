@@ -32,7 +32,7 @@ public class Simulator {
     private Font font = new Font();
     private Text text = new Text();
 
-    public Simulator(){
+    public Simulator() {
         //storage = new FileStorage();
         storage = new DBStorage();
         repository = new TodoItemsRepository();
@@ -45,10 +45,10 @@ public class Simulator {
     }
 
     private void signInUser() {
-        if(isThereUser()){
+        if (isThereUser()) {
             User user = null;
 
-            while (user==null) {
+            while (user == null) {
                 System.out.println("Welcome!\n1- Sign up as a new User\n2- Sign in as an already existing user");
                 int inputChoice = utils.getInput("Please enter either 1 or 2", 1, 2);
 
@@ -57,30 +57,30 @@ public class Simulator {
                 } else {
                     user = authenticateUser();
                 }
-                if(user==null){
+                if (user == null) {
                     clearScreen();
                 }
             }
             currentUser = user;
-        }
-        else{
+        } else {
             System.out.println("Welcome to our To-do List app, what is your name?");
             currentUser = addNewUser(true);
         }
 
     }
-    private User authenticateUser(){
+
+    private User authenticateUser() {
 
         System.out.println("Enter you name to sign in. (Press 0 to return to main page)");
-        String usersName  = "";
+        String usersName = "";
 
         User user = null;
-        while(user==null){
-            usersName  = utils.getInput("Please enter a valid name");
-            if(usersName.trim().equals("0"))
+        while (user == null) {
+            usersName = utils.getInput("Please enter a valid name");
+            if (usersName.trim().equals("0"))
                 return null;
             user = getUserByUsername(usersName);
-            if(user==null) {
+            if (user == null) {
                 System.err.println("----------------------------ACCESS DENIED---------------------------\nThis name doesn't exist, try again. (Press 0 to return to main page)");
             }
 
@@ -88,8 +88,9 @@ public class Simulator {
         return user;
 
     }
-    private User addNewUser(boolean isFirstTime){
-        if(!isFirstTime)
+
+    private User addNewUser(boolean isFirstTime) {
+        if (!isFirstTime)
             System.out.println("Enter name of new user. (Press 0 to return to main page)");
         boolean uniqueUserNameEntered = false;
 
@@ -97,16 +98,16 @@ public class Simulator {
         //if not display message
         //else add user
         String usersName = "";
-        while(!uniqueUserNameEntered){
-           usersName  = utils.getInput("Please enter a valid name");
-           if(usersName.trim().equals("0")){
-               return null;
-           }
-           if(getUserByUsername(usersName)==null)
-               uniqueUserNameEntered = true;
-           else {
-               System.err.println("The name Entered already exists, please enter a new name. (Press 0 to return to main page)");
-           }
+        while (!uniqueUserNameEntered) {
+            usersName = utils.getInput("Please enter a valid name");
+            if (usersName.trim().equals("0")) {
+                return null;
+            }
+            if (getUserByUsername(usersName) == null)
+                uniqueUserNameEntered = true;
+            else {
+                System.err.println("The name Entered already exists, please enter a new name. (Press 0 to return to main page)");
+            }
         }
         User newUser = new User(usersName);
         users.add(newUser);
@@ -114,9 +115,10 @@ public class Simulator {
         //ask youssef if break functionality must be added here
 
     }
-    private User getUserByUsername(String name){
-        for(User user:users){
-            if(user.getName().equals(name)){
+
+    private User getUserByUsername(String name) {
+        for (User user : users) {
+            if (user.getName().equals(name)) {
                 return user;
             }
         }
@@ -125,7 +127,7 @@ public class Simulator {
 
     private boolean isThereUser() {
         ArrayList<User> data = storage.loadData();
-        if(data.isEmpty())
+        if (data.isEmpty())
             return false;
         else {
             users = data;
@@ -140,11 +142,10 @@ public class Simulator {
         currentUser = new User(name);
     }
 
-    private void showMenu(){
+    private void showMenu() {
 
-        while(true)
-        {
-            if(currentUser==null){
+        while (true) {
+            if (currentUser == null) {
                 clearScreen();
                 signInUser();
             }
@@ -152,10 +153,10 @@ public class Simulator {
             text.menuOptions.forEach(System.out::println);
 
             int option = utils.getInput("Invalid input", 1, 13);
-            switch (option){
+            switch (option) {
                 case 1:
                     TodoItem item = takeCreateItemFromUser();
-                    if(item != null) {
+                    if (item != null) {
                         currentUser.addTodoItem(item);
                         itemsService.showAllTodoItems(currentUser.getItems());
                         saveFile();
@@ -216,105 +217,108 @@ public class Simulator {
 
     }
 
-    private TodoItem takeCreateItemFromUser(){
+    private TodoItem takeCreateItemFromUser() {
         utils.print("Enter new data...");
 
         utils.print("Enter title:");
         String title = validateGetTitle("");//data.nextLine();
-        if(title.equalsIgnoreCase("/back")) return null;
+        if (title.equalsIgnoreCase("/back")) return null;
 
         utils.print("Enter description:");
         String description = utils.getInput("enter a valid description");//data.nextLine();
-        if(description.equalsIgnoreCase("/back")) return null;
+        if (description.equalsIgnoreCase("/back")) return null;
 
         utils.print(text.choosePriority);
         int userPriorityChoice = utils.getInput(
                 "invalid choice.\n" + text.choosePriority, 1, 3
         );
-        if(userPriorityChoice == -1) return null;
-        Priority priority = (userPriorityChoice == 1)? Priority.Low :
-                ((userPriorityChoice == 2)?Priority.Medium : Priority.High);
+        if (userPriorityChoice == -1) return null;
+        Priority priority = (userPriorityChoice == 1) ? Priority.Low :
+                ((userPriorityChoice == 2) ? Priority.Medium : Priority.High);
 
         utils.print(text.chooseCategory);
         int userCategoryChoice = utils.getInput("invalid input.\n" +
                 text.chooseCategory, 1, 6);
-        if(userCategoryChoice == -1) return null;
-        Category category = text.categories.get(userCategoryChoice-1);
+        if (userCategoryChoice == -1) return null;
+        Category category = text.categories.get(userCategoryChoice - 1);
 
         String startDateString;
         do {
             utils.print(text.enterStartDate);
             startDateString = scanner.nextLine();
-            if(startDateString.equalsIgnoreCase("/back")) return null;
-        } while(!dateUtils.isValidDate(startDateString));
+            if (startDateString.equalsIgnoreCase("/back")) return null;
+        } while (!dateUtils.isValidDate(startDateString));
         Date startDate = dateUtils.convertStringToDate(startDateString);
 
         String endDateString;
         do {
             utils.print(text.enterEndDate);
             endDateString = scanner.nextLine();
-            if(startDateString.equalsIgnoreCase("/back")) return null;
-        } while(!dateUtils.isValidEndDate(startDate, endDateString));
+            if (startDateString.equalsIgnoreCase("/back")) return null;
+        } while (!dateUtils.isValidEndDate(startDate, endDateString));
         Date endDate = dateUtils.convertStringToDate(endDateString);
 
         return new TodoItem(title, description, priority, category, startDate, endDate);
     }
 
-    private int updateIsConfirmed(String itemToBeUpdated){
-        System.out.println("choose 1 if you want to update the "+itemToBeUpdated+" and 2 if you don't want to update it");
-        String userInput=scanner.next();
-        while(!userInput.equals("1") && !userInput.equals("2") && !userInput.equalsIgnoreCase("/back")){
+    private int updateIsConfirmed(String itemToBeUpdated) {
+        System.out.println("choose 1 if you want to update the " + itemToBeUpdated + " and 2 if you don't want to update it");
+        String userInput = scanner.next();
+        while (!userInput.equals("1") && !userInput.equals("2") && !userInput.equalsIgnoreCase("/back")) {
             System.out.println("invalid choice");
-            userInput=scanner.next();
+            userInput = scanner.next();
         }
-        switch(userInput){
-            case "1": return 1;
-            case "2": return 2;
-            case "/back": return -1;
-            default: return 0;
+        switch (userInput) {
+            case "1":
+                return 1;
+            case "2":
+                return 2;
+            case "/back":
+                return -1;
+            default:
+                return 0;
         }
     }
 
-    private String validateGetTitle(String oldTitle){// used to make sure that user input(string) is not empty or not only just ' ' character
+    private String validateGetTitle(String oldTitle) {// used to make sure that user input(string) is not empty or not only just ' ' character
         String title = scanner.nextLine();
-        if(title.equalsIgnoreCase("/back")) return title;
-        boolean titleAlreadyExists=(currentUser.getItemByTitle(title.trim())!=-1 && !oldTitle.equalsIgnoreCase(title.trim()));
+        if (title.equalsIgnoreCase("/back")) return title;
+        boolean titleAlreadyExists = (currentUser.getItemByTitle(title.trim()) != -1 && !oldTitle.equalsIgnoreCase(title.trim()));
 
-        while(title .matches(" +")|| title .isEmpty() || titleAlreadyExists){// used to make sure that user input(string) is not empty or not only just ' ' character and title doesn't exist
-            if(titleAlreadyExists)
+        while (title.matches(" +") || title.isEmpty() || titleAlreadyExists) {// used to make sure that user input(string) is not empty or not only just ' ' character and title doesn't exist
+            if (titleAlreadyExists)
                 utils.print("title already exists re-enter title");
-            else if(title .matches(" +")|| title .isEmpty())
+            else if (title.matches(" +") || title.isEmpty())
                 utils.print("invalid title");
-            title=scanner.nextLine();
-            titleAlreadyExists=(currentUser.getItemByTitle(title.trim())!=-1 && !oldTitle.equalsIgnoreCase(title.trim()));
+            title = scanner.nextLine();
+            titleAlreadyExists = (currentUser.getItemByTitle(title.trim()) != -1 && !oldTitle.equalsIgnoreCase(title.trim()));
         }
         return title;
     }
 
-    private String getExistingTitle(String messageSpecifier){
+    private String getExistingTitle(String messageSpecifier) {
         String title = "";
-        while(true) {
-            System.out.println("Enter title of item to be added to "+messageSpecifier);
+        while (true) {
+            System.out.println("Enter title of item to be added to " + messageSpecifier);
             title = utils.getInput("invalid title");
-            if(title.equalsIgnoreCase("/back")) return title;
-            if(currentUser.itemExists(title)) break;
+            if (title.equalsIgnoreCase("/back")) return title;
+            if (currentUser.itemExists(title)) break;
             System.err.println("Item doesn't exist");
         }
         return title;
     }
 
-    private String getOldTitleFromUser(){
-        while(true){
+    private String getOldTitleFromUser() {
+        while (true) {
             utils.print("Enter title of item to be updated:");
             String oldTitle = scanner.nextLine();
-            if(oldTitle.equalsIgnoreCase("/back")) return oldTitle;
-            if(currentUser.itemExists(oldTitle)){
+            if (oldTitle.equalsIgnoreCase("/back")) return oldTitle;
+            if (currentUser.itemExists(oldTitle)) {
                 return oldTitle;
             }
-            if(oldTitle .matches(" +")|| oldTitle .isEmpty()){
+            if (oldTitle.matches(" +") || oldTitle.isEmpty()) {
                 System.err.println("Please enter a valid title");
-            }
-            else {
+            } else {
                 System.err.println("Title entered doesn't exist");
             }
         }
@@ -322,7 +326,7 @@ public class Simulator {
 
     private void takeUpdateItemFromUser() {
         String oldTitle = getOldTitleFromUser();
-        if(oldTitle.equalsIgnoreCase("/back")) return;
+        if (oldTitle.equalsIgnoreCase("/back")) return;
         int itemIndex = currentUser.getItemByTitle(oldTitle);
         TodoItem item = currentUser.getItems().get(itemIndex);
 
@@ -334,25 +338,25 @@ public class Simulator {
             utils.print("Enter title:");
             String title = validateGetTitle(oldTitle);//data.nextLine();
             item.setTitle(title);
-        } else if(confirmUpdate == -1) return;
+        } else if (confirmUpdate == -1) return;
 
         confirmUpdate = updateIsConfirmed("description");
-        if(confirmUpdate == 1) {
+        if (confirmUpdate == 1) {
             utils.print("Enter description:");
             String description = utils.getInput("enter a valid description");//data.nextLine();
             item.setDescription(description);
-        } else if(confirmUpdate == -1) return;
+        } else if (confirmUpdate == -1) return;
 
         confirmUpdate = updateIsConfirmed("priority");
         if (confirmUpdate == 1) {
             utils.print(text.choosePriority);
             int userPriorityChoice = utils.getInput(
-                    "invalid choice.\n"+ text.choosePriority, 1, 3
+                    "invalid choice.\n" + text.choosePriority, 1, 3
             );
             Priority priority = (userPriorityChoice == 1) ? Priority.Low :
                     ((userPriorityChoice == 2) ? Priority.Medium : Priority.High);
             item.setPriority(priority);
-        } else if(confirmUpdate == -1) return;
+        } else if (confirmUpdate == -1) return;
 
         confirmUpdate = updateIsConfirmed("category");
         if (confirmUpdate == 1) {
@@ -361,7 +365,7 @@ public class Simulator {
                     text.chooseCategory, 1, 6);
             Category category = text.categories.get(userCategoryChoice - 1);
             item.setCategory(category);
-        } else if(confirmUpdate == -1) return;
+        } else if (confirmUpdate == -1) return;
 
         boolean startDatePassedEndDate = false;
         confirmUpdate = updateIsConfirmed("start date");
@@ -375,19 +379,18 @@ public class Simulator {
             Date startDate = dateUtils.convertStringToDate(startDateString);
             //item.setStartDate(startDate);
 
-            startDatePassedEndDate = startDate.compareTo(item.getEndDate())==1;
-            if(startDatePassedEndDate) {
+            startDatePassedEndDate = startDate.compareTo(item.getEndDate()) == 1;
+            if (startDatePassedEndDate) {
                 System.out.println("The start date entered passes the end date," +
                         " are you sure you want to change it?  (1-Yes , 2-No)");
-                int choice = utils.getInput("Enter a valid choice",1,2);
-                if(choice==1){
+                int choice = utils.getInput("Enter a valid choice", 1, 2);
+                if (choice == 1) {
                     item.setStartDate(startDate);
-                }
-                else{
+                } else {
                     startDatePassedEndDate = false;
                 }
             }
-        } else if(confirmUpdate == -1) return;
+        } else if (confirmUpdate == -1) return;
 
         confirmUpdate = updateIsConfirmed("end date");
         if (startDatePassedEndDate || confirmUpdate == 1) {
@@ -401,34 +404,34 @@ public class Simulator {
             item.setEndDate(endDate);
 
 
-        } else if(confirmUpdate == -1) return;
+        } else if (confirmUpdate == -1) return;
 
         System.out.println("Item updated:\n" + item.toString());
     }
 
-    private void deleteItemByUser(){
-        if(currentUser.getItems().isEmpty())
+    private void deleteItemByUser() {
+        if (currentUser.getItems().isEmpty())
             utils.PrintColoredMessage(font.ANSI_RED, "No items available");
         else {
             utils.print("Enter title of item to be deleted:");
             String title = utils.getInput("invalid title");
-            if(title.equalsIgnoreCase("/back")) return;
+            if (title.equalsIgnoreCase("/back")) return;
             currentUser.deleteTodoItem(title);
         }
     }
 
-    private void search(){
+    private void search() {
         boolean isSearchKeyValid = false;
-        while (!isSearchKeyValid){
+        while (!isSearchKeyValid) {
             utils.print(text.chooseSearchFilter);
             String searchOption = scanner.nextLine();
 
-            switch (searchOption){
+            switch (searchOption) {
                 case "1":
                     utils.print("Enter title of an item: ");
                     String searchTitle = utils.getInput("invalid title");
-                    if(searchTitle.equalsIgnoreCase("/back")) return;
-                    currentUser.searchShowItemsBySearchKey(SearchKey.Title, searchTitle);
+                    if (searchTitle.equalsIgnoreCase("/back")) return;
+                    itemsService.searchShowItemsBySearchKey(SearchKey.Title, searchTitle, currentUser.getItems());
                     isSearchKeyValid = true;
                     break;
 
@@ -437,9 +440,9 @@ public class Simulator {
                     do {
                         utils.print(text.enterStartDate);
                         searchStartDate = scanner.next();
-                        if(searchStartDate.equalsIgnoreCase("/back")) return;
-                    } while(!dateUtils.isValidDate(searchStartDate));
-                    currentUser.searchShowItemsBySearchKey(SearchKey.StartDate, searchStartDate);
+                        if (searchStartDate.equalsIgnoreCase("/back")) return;
+                    } while (!dateUtils.isValidDate(searchStartDate));
+                    itemsService.searchShowItemsBySearchKey(SearchKey.StartDate, searchStartDate, currentUser.getItems());
                     isSearchKeyValid = true;
                     break;
 
@@ -448,9 +451,9 @@ public class Simulator {
                     do {
                         utils.print(text.enterEndDate);
                         searchEndDate = scanner.next();
-                        if(searchEndDate.equalsIgnoreCase("/back")) return;
-                    } while(!dateUtils.isValidDate(searchEndDate));
-                    currentUser.searchShowItemsBySearchKey(SearchKey.EndDate, searchEndDate);
+                        if (searchEndDate.equalsIgnoreCase("/back")) return;
+                    } while (!dateUtils.isValidDate(searchEndDate));
+                    itemsService.searchShowItemsBySearchKey(SearchKey.EndDate, searchEndDate, currentUser.getItems());
                     isSearchKeyValid = true;
                     break;
 
@@ -458,9 +461,9 @@ public class Simulator {
                     utils.print(text.choosePriority);
                     int searchPriority = utils.getInput("Invalid option, try again."
                             + font.ANSI_RESET + "\n" + text.choosePriority, 1, 3);
-                    if(searchPriority == -1) return;
+                    if (searchPriority == -1) return;
                     String priorityValue = (searchPriority == 1) ? "Low" : ((searchPriority == 2) ? "Medium" : "High");
-                    currentUser.searchShowItemsBySearchKey(SearchKey.Priority, priorityValue);
+                    itemsService.searchShowItemsBySearchKey(SearchKey.Priority, priorityValue, currentUser.getItems());
                     isSearchKeyValid = true;
                     break;
                 case "/back":
@@ -473,40 +476,41 @@ public class Simulator {
         }
     }
 
-    private void addItemToCategoryFromUser(){
+    private void addItemToCategoryFromUser() {
         String title = getExistingTitle("Category");
         utils.print(text.chooseCategory);
         int userCategoryChoice = utils.getInput("invalid input.\n" +
                 text.chooseCategory, 1, 6);
-        Category category = text.categories.get(userCategoryChoice-1);
-        currentUser.addItemToCategory(title,category);
+        Category category = text.categories.get(userCategoryChoice - 1);
+        currentUser.addItemToCategory(title, category);
     }
 
     private void addItemToFavoriteFromUser() {
         String title = getExistingTitle("Favorites");
-        if(title.equalsIgnoreCase("/back")) return;
+        if (title.equalsIgnoreCase("/back")) return;
         currentUser.addItemToFavorite(title);
     }
 
-    private void updateName(){
+    private void updateName() {
         System.out.println("Please type in your new name");
 
         String name = "";
         boolean uniqueNameEntered = false;
-        while(!uniqueNameEntered){
+        while (!uniqueNameEntered) {
             name = utils.getInput("Please enter a valid name");
-            if(name.equalsIgnoreCase("/back"))
+            if (name.equalsIgnoreCase("/back"))
                 return;
-            else if(getUserByUsername(name)==null)
+            else if (getUserByUsername(name) == null)
                 uniqueNameEntered = true;
-            else{
+            else {
                 System.err.println("The name entered already exists, please try again");
             }
         }
         currentUser.setName(name);
 
     }
-    private void clearScreen(){
+
+    private void clearScreen() {
         for (int i = 0; i < 50; ++i) System.out.println();
     }
 

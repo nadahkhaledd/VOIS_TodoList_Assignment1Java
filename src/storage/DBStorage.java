@@ -37,8 +37,7 @@ public class DBStorage implements Storage{
             User user = setUserData(username);
             users.add(user);
         }
-//        for (User user: users)
-//            System.out.println(user.getName());
+
         return users;
     }
 
