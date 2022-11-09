@@ -54,15 +54,15 @@ public class User implements Serializable {
         return getItemByTitle(title)!=-1;
     }
 
-    private ArrayList<TodoItem> getItemsByPriority(Priority priority){
-        ArrayList<TodoItem> result = new ArrayList<>();
-        for(int i=0; i<items.size(); i++) {
-            if(items.get(i).getPriority().equals(priority)){
-                result.add(items.get(i));
-            }
-        }
-        return result;
-    }
+//    private ArrayList<TodoItem> getItemsByPriority(Priority priority){
+//        ArrayList<TodoItem> result = new ArrayList<>();
+//        for(int i=0; i<items.size(); i++) {
+//            if(items.get(i).getPriority().equals(priority)){
+//                result.add(items.get(i));
+//            }
+//        }
+//        return result;
+//    }
 
 //    private ArrayList<TodoItem> getItemsByFavorite(){
 //        ArrayList<TodoItem> result = new ArrayList<>();
@@ -74,25 +74,26 @@ public class User implements Serializable {
 //        return result;
 //    }
 
-    private ArrayList<TodoItem> getItemsByStartDate(Date startDate){
-        ArrayList<TodoItem> result = new ArrayList<>();
-        for(int i=0; i<items.size(); i++) {
-            if(items.get(i).getStartDate().equals(startDate)){
-                result.add(items.get(i));
-            }
-        }
-        return result;
-    }
 
-    private ArrayList<TodoItem> getItemsByEndDate(Date endDate){
-        ArrayList<TodoItem> result = new ArrayList<>();
-        for(int i=0; i<items.size(); i++) {
-            if(items.get(i).getEndDate().equals(endDate)){
-                result.add(items.get(i));
-            }
-        }
-        return result;
-    }
+//    private ArrayList<TodoItem> getItemsByStartDate(Date startDate){
+//        ArrayList<TodoItem> result = new ArrayList<>();
+//        for(int i=0; i<items.size(); i++) {
+//            if(items.get(i).getStartDate().equals(startDate)){
+//                result.add(items.get(i));
+//            }
+//        }
+//        return result;
+//    }
+
+//    private ArrayList<TodoItem> getItemsByEndDate(Date endDate){
+//        ArrayList<TodoItem> result = new ArrayList<>();
+//        for(int i=0; i<items.size(); i++) {
+//            if(items.get(i).getEndDate().equals(endDate)){
+//                result.add(items.get(i));
+//            }
+//        }
+//        return result;
+//    }
 
     public boolean addTodoItem(TodoItem item){
         int itemIndex = getItemByTitle(item.getTitle());
@@ -174,7 +175,7 @@ public class User implements Serializable {
             case StartDate:
                 try{
                     Date startDate=new SimpleDateFormat("dd-MM-yyyy").parse(searchValue);
-                    returnedItems = getItemsByStartDate(startDate);
+                    returnedItems = itemsService.getItemsByStartDate(startDate, this.getItems());
                 }
                 catch (ParseException e){
                     System.out.println(font.ANSI_RED + "invalid date format" + font.ANSI_RESET);
@@ -184,7 +185,7 @@ public class User implements Serializable {
             case EndDate:
                 try{
                     Date endDate=new SimpleDateFormat("dd-MM-yyyy").parse(searchValue);
-                    returnedItems = getItemsByEndDate(endDate);
+                    returnedItems = itemsService.getItemsByEndDate(endDate, this.getItems());
                 }
                 catch (ParseException e){
                     System.out.println(font.ANSI_RED + "invalid date format" + font.ANSI_RESET);

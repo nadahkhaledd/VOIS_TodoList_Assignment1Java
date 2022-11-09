@@ -23,20 +23,24 @@ public class TodoItemsService {
     }
 
     public ArrayList<TodoItem> getItemsByPriority(Priority priority,ArrayList<TodoItem> userItems) {
-        ArrayList<TodoItem> result = (ArrayList<TodoItem>) userItems.stream().filter(item -> item.getPriority() == priority).collect(Collectors.toList());
+        ArrayList<TodoItem> result = (ArrayList<TodoItem>) userItems.stream()
+                .filter(item -> item.getPriority() == priority).collect(Collectors.toList());
         return result;
     }
     public ArrayList<TodoItem> getItemsByFavorite(ArrayList<TodoItem> userItems) {
-        ArrayList<TodoItem> favorites = (ArrayList<TodoItem>) userItems.stream().filter(TodoItem::isFavorite).collect(Collectors.toList());
+        ArrayList<TodoItem> favorites = (ArrayList<TodoItem>) userItems.stream()
+                .filter(TodoItem::isFavorite).collect(Collectors.toList());
         return favorites;
     }
     public ArrayList<TodoItem> getItemsByStartDate(Date startDate,ArrayList<TodoItem> userItems) {
-
-        return null;
+        ArrayList<TodoItem> result = (ArrayList<TodoItem>) userItems.stream()
+                .filter(item -> item.getStartDate().equals(startDate)).collect(Collectors.toList());
+        return result;
     }
     public ArrayList<TodoItem> getItemsByEndDate(Date endDate,ArrayList<TodoItem> userItems){
-
-        return null;
+        ArrayList<TodoItem> result = (ArrayList<TodoItem>) userItems.stream()
+                .filter(item -> item.getEndDate().equals(endDate)).collect(Collectors.toList());
+        return result;
     }
     public boolean addTodoItem(String id,TodoItem item,ArrayList<TodoItem> userTodoItems){
         return false;
