@@ -24,11 +24,13 @@ public class DBStorage implements Storage{
         ResultSet result = repository.getUserTodos(username);
         DateUtils dateUtils = new DateUtils();
         Utils utils = new Utils();
-        User user = null;
+        User user = new User(username);
         try {
             TodoItem todo;
-            user = new User(username);
             while (result.next()){
+                if(result.getString(1) == null){
+                    break;
+                }
                 String currentFormat = "dd-MM-yyyy";
                 todo = new TodoItem();
                 todo.setTitle(result.getString("title"));
@@ -51,16 +53,13 @@ public class DBStorage implements Storage{
     @Override
     public ArrayList<User> loadData() {
         ArrayList<User> users = new ArrayList<>();
-        ResultSet userNames = repository.getUserNames();
-        try {
-            while (userNames.next()){
-                User user = setUserData(userNames.getString("name"));
-                users.add(user);
-            }
+        ArrayList<String> userNames = repository.getUserNames();
+        for (String username: userNames){
+            User user = setUserData(username);
+            users.add(user);
         }
-        catch (SQLException e){
-            System.out.println(e);
-        }
+        for (User user: users)
+            System.out.println(user.getName());
         return users;
     }
 
