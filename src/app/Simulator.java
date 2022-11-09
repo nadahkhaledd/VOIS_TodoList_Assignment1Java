@@ -118,17 +118,15 @@ public class Simulator {
 
     private boolean isThereUser() {
         ArrayList<User> data = storage.loadData();
-        if(data==null)
+        if(data.isEmpty())
             return false;
-
-        if(!data.isEmpty()){
+        else {
             users = data;
             return true;
         }
-        return false;
-
-
+        //return false;
     }
+
     private void setUserName() {
         utils.print("Hello, what is your name?");
         String name = utils.getInput("write a valid name");
