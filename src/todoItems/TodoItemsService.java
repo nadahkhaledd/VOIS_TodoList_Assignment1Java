@@ -96,6 +96,7 @@ public class TodoItemsService {
         items.forEach(System.out::println);
     }
 
+    /// Nadah: needs modification
     private void printListItems(int lastIndex,ArrayList<TodoItem> userTodoItems){
         for(int i=0; i<lastIndex; i++){
             System.out.println(userTodoItems.get(i).toString());
@@ -109,6 +110,7 @@ public class TodoItemsService {
         }
         return -1;
     }
+
     public void searchShowItemsBySearchKey(SearchKey searchKey, String searchValue,ArrayList<TodoItem> userTodoItems){
         ArrayList<TodoItem> returnedItems = new ArrayList<>();
         switch (searchKey){
