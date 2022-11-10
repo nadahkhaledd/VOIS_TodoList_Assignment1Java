@@ -46,17 +46,17 @@ public class User implements Serializable {
         this.name = name;
     }
 
-    public int getItemByTitle(String title) {
-        for (int i = 0; i < this.items.size(); i++) {
-            if (this.items.get(i).getTitle().equalsIgnoreCase(title)) {
-                return i;
-            }
-        }
-        return -1;
-    }
+//    public int getItemByTitle(String title) {
+//        for (int i = 0; i < this.items.size(); i++) {
+//            if (this.items.get(i).getTitle().equalsIgnoreCase(title)) {
+//                return i;
+//            }
+//        }
+//        return -1;
+//    }
 
     public boolean itemExists(String title) {
-        return getItemByTitle(title) != -1;
+        return itemsService.getItemByTitle(title, this.getItems()) != -1;
     }
 
 //    private ArrayList<TodoItem> getItemsByPriority(Priority priority){
@@ -101,7 +101,7 @@ public class User implements Serializable {
 //    }
 
     public boolean addTodoItem(TodoItem item) {
-        int itemIndex = getItemByTitle(item.getTitle());
+        int itemIndex = itemsService.getItemByTitle(item.getTitle(), this.getItems());
         if (itemIndex == -1) {
             this.items.add(item);
             System.out.println("Item added successfully.");
@@ -113,14 +113,14 @@ public class User implements Serializable {
     }
 
     public void updateTodoItem(TodoItem item, String oldTitle) {
-        int oldItemIndex = getItemByTitle(oldTitle);
+        int oldItemIndex = itemsService.getItemByTitle(oldTitle, this.getItems());
         this.items.set(oldItemIndex, item);
         System.out.println("item updated successfully");
 
     }
 
     public boolean deleteTodoItem(String title) {
-        int foundItemIndex = getItemByTitle(title);
+        int foundItemIndex = itemsService.getItemByTitle(title, this.getItems());
         if (foundItemIndex != -1) {
             items.remove(foundItemIndex);
             System.out.println("Item deleted successfully.");
@@ -147,11 +147,11 @@ public class User implements Serializable {
 //        }
 //    }
 
-    private void printListItems(int lastIndex) {
-        for (int i = 0; i < lastIndex; i++) {
-            System.out.println(items.get(i).toString());
-        }
-    }
+//    private void printListItems(int lastIndex) {
+//        for (int i = 0; i < lastIndex; i++) {
+//            System.out.println(items.get(i).toString());
+//        }
+//    }
 
     /// Nadah: I think this needs modification
     public void showTop5ItemsByDate() {
@@ -212,16 +212,16 @@ public class User implements Serializable {
 //    }
 
     public void addItemToFavorite(String title) {
-        int itemIndex = getItemByTitle(title);
+        int itemIndex = itemsService.getItemByTitle(title, this.getItems());
         items.get(itemIndex).setFavorite(true);
     }
 
-    public void printFavorites() {
-        itemsService.searchShowItemsBySearchKey(SearchKey.Favorite, "true", this.getItems());
-    }
+//    public void printFavorites() {
+//        itemsService.searchShowItemsBySearchKey(SearchKey.Favorite, "true", this.getItems());
+//    }
 
     public void addItemToCategory(String title, Category category) {
-        int itemIndex = getItemByTitle(title);
+        int itemIndex = itemsService.getItemByTitle(title, this.getItems());
         items.get(itemIndex).setCategory(category);
         System.out.println("Item added to category " + category);
 

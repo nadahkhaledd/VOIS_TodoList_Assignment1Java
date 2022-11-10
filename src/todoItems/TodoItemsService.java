@@ -105,11 +105,11 @@ public class TodoItemsService {
     /// Nadah: needs modification
     private void printListItems(int lastIndex, ArrayList<TodoItem> userTodoItems) {
         for (int i = 0; i < lastIndex; i++) {
-            System.out.println(userTodoItems.get(i).toString());
+            System.out.println(userTodoItems.get(i));
         }
     }
 
-    private int getItemByTitle(String title, ArrayList<TodoItem> userTodoItems) {
+    public int getItemByTitle(String title, ArrayList<TodoItem> userTodoItems) {
         for (int i = 0; i < userTodoItems.size(); i++) {
             if (userTodoItems.get(i).getTitle().equalsIgnoreCase(title)) {
                 return i;

@@ -196,7 +196,7 @@ public class Simulator {
                     break;
 
                 case 9:
-                    currentUser.printFavorites();
+                    itemsService.printFavorites(currentUser.getItems());
                     break;
 
                 case 10:
