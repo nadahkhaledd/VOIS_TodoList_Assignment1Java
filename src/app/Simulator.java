@@ -283,7 +283,7 @@ public class Simulator {
     private String validateGetTitle(String oldTitle) {// used to make sure that user input(string) is not empty or not only just ' ' character
         String title = scanner.nextLine();
         if (title.equalsIgnoreCase("/back")) return title;
-        boolean titleAlreadyExists = (currentUser.getItemByTitle(title.trim()) != -1 && !oldTitle.equalsIgnoreCase(title.trim()));
+        boolean titleAlreadyExists = (itemsService.getItemByTitle(title.trim(), currentUser.getItems()) != -1 && !oldTitle.equalsIgnoreCase(title.trim()));
 
         while (title.matches(" +") || title.isEmpty() || titleAlreadyExists) {// used to make sure that user input(string) is not empty or not only just ' ' character and title doesn't exist
             if (titleAlreadyExists)
@@ -291,7 +291,7 @@ public class Simulator {
             else if (title.matches(" +") || title.isEmpty())
                 utils.print("invalid title");
             title = scanner.nextLine();
-            titleAlreadyExists = (currentUser.getItemByTitle(title.trim()) != -1 && !oldTitle.equalsIgnoreCase(title.trim()));
+            titleAlreadyExists = (itemsService.getItemByTitle(title.trim(), currentUser.getItems()) != -1 && !oldTitle.equalsIgnoreCase(title.trim()));
         }
         return title;
     }
@@ -327,7 +327,7 @@ public class Simulator {
     private void takeUpdateItemFromUser() {
         String oldTitle = getOldTitleFromUser();
         if (oldTitle.equalsIgnoreCase("/back")) return;
-        int itemIndex = currentUser.getItemByTitle(oldTitle);
+        int itemIndex = itemsService.getItemByTitle(oldTitle, currentUser.getItems());
         TodoItem item = currentUser.getItems().get(itemIndex);
 
         System.out.println("Enter new data...");
