@@ -113,7 +113,7 @@ public class Simulator {
         }
         User newUser = new User(usersName);
         users.add(newUser);
-        userRepository.createUser(newUser.getName());
+        userService.addUser(newUser.getName());
         return newUser;
         //ask youssef if break functionality must be added here
 
@@ -162,7 +162,7 @@ public class Simulator {
                     if (item != null) {
                         currentUser.addTodoItem(item);
                         itemsService.showAllTodoItems(currentUser.getItems());
-                        todoItemsService.addTodoItem(currentUser.getName(), item);
+                        itemsService.addTodoItem(currentUser.getName(), item);
                         saveFile();
                     }
                     break;

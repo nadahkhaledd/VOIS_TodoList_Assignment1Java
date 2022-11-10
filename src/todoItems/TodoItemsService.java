@@ -51,7 +51,7 @@ public class TodoItemsService {
     }
 
     public boolean addTodoItem(String name, TodoItem item) {
-        return todoItemsRepository.createUserTodo(name, item);
+        return repository.createUserTodo(name, item);
     }
 
     public boolean updateTodoItem(String name,TodoItem item, String oldTitle,ArrayList<TodoItem> userTodoItems){
