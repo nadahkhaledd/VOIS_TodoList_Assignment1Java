@@ -62,7 +62,7 @@ public class TodoItemsService {
         int foundItemIndex = getItemByTitle(title,userTodoItems);
         if(foundItemIndex!=-1){
             userTodoItems.remove(foundItemIndex);
-            boolean isItemDeleted=todoItemsRepository.deleteTodoItem(title);
+            boolean isItemDeleted=repository.deleteTodoItem(title);
             System.out.println(isItemDeleted?"Item deleted successfully.": font.ANSI_RED + "Item couldn't be deleted" + font.ANSI_RESET);
             return isItemDeleted;
         }
