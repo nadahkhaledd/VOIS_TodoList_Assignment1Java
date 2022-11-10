@@ -3,6 +3,7 @@ package app;
 import enums.Category;
 import enums.Priority;
 import enums.SearchKey;
+import model.UserRepository;
 import todoItems.TodoItem;
 import model.User;
 import storage.DBStorage;
@@ -28,6 +29,7 @@ public class Simulator {
     private Font font = new Font();
     private Text text = new Text();
     private TodoItemsService todoItemsService = new TodoItemsService();
+    private UserRepository userRepository = new UserRepository();
 
     public Simulator(){
         //storage = new FileStorage();
@@ -105,6 +107,7 @@ public class Simulator {
         }
         User newUser = new User(usersName);
         users.add(newUser);
+        userRepository.createUser(newUser.getName());
         return newUser;
         //ask youssef if break functionality must be added here
 
