@@ -8,6 +8,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import connection.DBConnection;
+
+import java.sql.*;
+
+
 public class TodoItemsRepository {
     Connection connection;
     Statement stmt;
@@ -55,12 +60,23 @@ public class TodoItemsRepository {
         return usernames;
     }
 
-//    public void closeConnection(){
-//        try {
-//            connection.close();
-//        }
-//        catch (SQLException e){
-//            System.out.println(e);
-//        }
-//    }
-}
+
+   // Connection connection;
+  //  Statement stmt;
+
+
+
+    public boolean deleteTodoItem(String title){
+        System.out.println("title = " + title);
+        try{
+            String sqlQuery = "DELETE FROM todolist.todoitem " +
+                    "WHERE title = '"+title+"'";
+            stmt.executeUpdate(sqlQuery);
+          return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    }
+

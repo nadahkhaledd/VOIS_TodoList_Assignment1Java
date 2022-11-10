@@ -49,12 +49,23 @@ public class TodoItemsService {
         //repo.update
         return false;
     }
-    public boolean deleteTodoItem(String id,String title,ArrayList<TodoItem> userTodoItems){
-        //repo.delete
+    public boolean deleteTodoItem(String title,ArrayList<TodoItem> userTodoItems){
+        int foundItemIndex = getItemByTitle(title,userTodoItems);
+        if(foundItemIndex!=-1){
+            userTodoItems.remove(foundItemIndex);
+            boolean isItemDeleted=todoItemsRepository.deleteTodoItem(title);
+            System.out.println(isItemDeleted?"Item deleted successfully.": font.ANSI_RED + "Item couldn't be deleted" + font.ANSI_RESET);
+            return isItemDeleted;
+        }
+        System.out.println(font.ANSI_RED + "Item title is not found" + font.ANSI_RESET);
         return false;
+
     }
     public void showAllTodoItems(ArrayList<TodoItem> userTodoItems){
-        printListItems(userTodoItems.size(),userTodoItems);
+        if(userTodoItems.isEmpty())
+            System.out.println(font.ANSI_RED +"Sorry , no items available "+font.ANSI_RESET);
+        else
+           printListItems(userTodoItems.size(),userTodoItems);
     }
     public void showTop5ItemsByDate(){
      //repo.showw

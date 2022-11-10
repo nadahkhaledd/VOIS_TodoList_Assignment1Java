@@ -7,6 +7,8 @@ import todoItems.TodoItem;
 import model.User;
 import storage.DBStorage;
 import storage.Storage;
+import todoItems.TodoItemsRepository;
+import todoItems.TodoItemsService;
 import ui.Font;
 import ui.Text;
 import utility.DateUtils;
@@ -26,6 +28,7 @@ public class Simulator {
     private DateUtils dateUtils = new DateUtils();
     private Font font = new Font();
     private Text text = new Text();
+    private TodoItemsService todoItemService= new TodoItemsService(new TodoItemsRepository());
 
     public Simulator(){
         //storage = new FileStorage();
@@ -406,7 +409,9 @@ public class Simulator {
             utils.print("Enter title of item to be deleted:");
             String title = utils.getInput("invalid title");
             if(title.equalsIgnoreCase("/back")) return;
-            currentUser.deleteTodoItem(title);
+            todoItemService.deleteTodoItem(title,currentUser.getItems());
+          //  currentUser.deleteTodoItem(title);
+
         }
     }
 
