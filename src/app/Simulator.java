@@ -3,6 +3,8 @@ package app;
 import enums.Category;
 import enums.Priority;
 import enums.SearchKey;
+import model.UserRepository;
+import model.UserService;
 import todoItems.TodoItem;
 import model.User;
 import storage.DBStorage;
@@ -31,9 +33,9 @@ public class Simulator {
     private DateUtils dateUtils = new DateUtils();
     private Font font = new Font();
     private Text text = new Text();
+    private UserService userService= new UserService(new UserRepository());
 
-    public Simulator() {
-        //storage = new FileStorage();
+    public Simulator(){
         storage = new DBStorage();
         repository = new TodoItemsRepository();
         itemsService = new TodoItemsService(this.repository);
@@ -328,7 +330,7 @@ public class Simulator {
         String oldTitle = getOldTitleFromUser();
         if (oldTitle.equalsIgnoreCase("/back")) return;
         int itemIndex = itemsService.getItemByTitle(oldTitle, currentUser.getItems());
-        TodoItem item = currentUser.getItems().get(itemIndex);
+        TodoItem item = currentUser.getItems().get(itemIndex).clone();
 
         System.out.println("Enter new data...");
         int confirmUpdate;
@@ -406,8 +408,11 @@ public class Simulator {
 
         } else if (confirmUpdate == -1) return;
 
-        System.out.println("Item updated:\n" + item.toString());
-    }
+        boolean updated = itemsService.updateTodoItem(currentUser.getName(),item,oldTitle,currentUser.getItems());
+        if(updated){
+            currentUser.getItems().get(itemIndex).updateNewItem(item);
+            System.out.println("Item updated:\n" + item.toString());
+        }
 
     private void deleteItemByUser() {
         if (currentUser.getItems().isEmpty())
@@ -483,14 +488,16 @@ public class Simulator {
         utils.print(text.chooseCategory);
         int userCategoryChoice = utils.getInput("invalid input.\n" +
                 text.chooseCategory, 1, 6);
-        Category category = text.categories.get(userCategoryChoice - 1);
-        currentUser.addItemToCategory(title, category);
+        Category category = text.categories.get(userCategoryChoice-1);
+        //currentUser.addItemToCategory(title,category);
+        itemsService.addItemToCategory(currentUser.getName(),title,category,currentUser.getItems());
     }
 
     private void addItemToFavoriteFromUser() {
         String title = getExistingTitle("Favorites");
-        if (title.equalsIgnoreCase("/back")) return;
-        currentUser.addItemToFavorite(title);
+        if(title.equalsIgnoreCase("/back")) return;
+        //currentUser.addItemToFavorite(title);
+        itemsService.addItemToFavorite(currentUser.getName(),title,currentUser.getItems());
     }
 
     private void updateName() {
@@ -508,7 +515,8 @@ public class Simulator {
                 System.err.println("The name entered already exists, please try again");
             }
         }
-        currentUser.setName(name);
+        userService.updateUsersName(currentUser.getName(),name);
+        //currentUser.setName(name);
 
     }
 

@@ -1,6 +1,8 @@
 package todoItems;
 
 import connection.DBConnection;
+import enums.Category;
+import enums.SearchKey;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -81,5 +83,58 @@ public class TodoItemsRepository {
             return false;
         }
     }
+
+    public boolean updateTodoItem(String name,TodoItem item, String oldTitle) {
+        String idSubQuery = "(SELECT iduser FROM todolist.user where name= '"+name+"')";
+        java.sql.Date sqlStartDate = new java.sql.Date(item.getStartDate().getTime());
+        java.sql.Date sqlEndDate = new java.sql.Date(item.getEndDate().getTime());
+        String updateStatement = "UPDATE todolist.todoitem SET title = '" + item.getTitle() +
+                "' ,description= '" + item.getDescription() +
+                "' ,priority= '" + item.getPriority() +
+                "' ,category= '" + item.getCategory() +
+                "' ,startDate= '" + sqlStartDate +
+                "' ,endDate= '" + sqlEndDate+
+                "'\nWHERE userId= " + idSubQuery + " AND title= '" + oldTitle + "';";
+
+        try {
+            int result = stmt.executeUpdate(updateStatement);
+            return result > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+    public boolean addItemToFavorite(String name,String title){
+        String idSubQuery = "(SELECT iduser FROM todolist.user where name= '"+name+"')";
+        String updateStatement = "UPDATE todolist.todoitem SET `isFavorite` = 1"+
+                "\nWHERE userId= " + idSubQuery + " AND title= '" + title + "';";
+
+        try {
+            int result = stmt.executeUpdate(updateStatement);
+            return result > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean addItemToCategory(String name,String title, Category category){
+        String idSubQuery = "(SELECT iduser FROM todolist.user where name= '"+name+"')";
+
+        String updateStatement = "UPDATE todolist.todoitem SET category= '" + category+
+                "'\nWHERE userId= " + idSubQuery + " AND title= '" + title + "';";
+
+        try {
+            int result = stmt.executeUpdate(updateStatement);
+            return result > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
+
 }
 

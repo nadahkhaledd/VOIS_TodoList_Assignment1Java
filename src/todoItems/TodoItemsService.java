@@ -54,9 +54,10 @@ public class TodoItemsService {
         return false;
     }
 
-    public boolean updateTodoItem(String id, TodoItem item, String oldTitle, ArrayList<TodoItem> userTodoItems) {
+    public boolean updateTodoItem(String name,TodoItem item, String oldTitle,ArrayList<TodoItem> userTodoItems){
         //repo.update
-        return false;
+        return repository.updateTodoItem(name,item,oldTitle);
+
     }
 
     public boolean deleteTodoItem(String title, ArrayList<TodoItem> userTodoItems) {
@@ -171,20 +172,30 @@ public class TodoItemsService {
             returnedItems.forEach(System.out::println);
         }
     }
-
-    public void addItemToFavorite(String id, String title) {
-        //repo.add
+    public boolean addItemToFavorite(String name,String title,ArrayList<TodoItem> userTodoItems){
+        boolean updated = repository.addItemToFavorite(name,title);
+        if(updated) {
+            int itemIndex = getItemByTitle(title, userTodoItems);
+            userTodoItems.get(itemIndex).setFavorite(true);
+            System.out.println("ADDED TO FAVORITES SUCCESSFULLY");
+        }
+        return updated;
     }
 
     public void printFavorites(ArrayList<TodoItem> userTodoItems) {
         searchShowItemsBySearchKey(SearchKey.Favorite, "true", userTodoItems);
     }
 
-    public void addItemToCategory(String id, String title, Category category) {
-        //repo.add
-
-
+    public boolean addItemToCategory(String name,String title, Category category,ArrayList<TodoItem> userTodoItems){
+        boolean updated = repository.addItemToCategory(name,title,category);
+        if(updated) {
+            int itemIndex = getItemByTitle(title,userTodoItems);
+            userTodoItems.get(itemIndex).setCategory(category);
+            System.out.println("ADDED TO CATEGORY SUCCESSFULLY");
+        }
+        return updated;
     }
+
 
 
 }
