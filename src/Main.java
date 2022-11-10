@@ -1,4 +1,6 @@
 import app.Simulator;
+import connection.DBConnection;
+import todoItems.TodoItemsRepository;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,5 +11,6 @@ public class Main {
     public static void main(String[] args) {
         Simulator simulator = new Simulator();
         simulator.start();
+
     }
 }

@@ -14,7 +14,8 @@ public class UserRepository {
         connection = DBConnection.configureConnection();
         try {
             stmt = connection.createStatement();
-        } catch (SQLException e) {
+        }
+        catch (SQLException e){
             System.out.println(e);
         }
     }
@@ -30,4 +31,16 @@ public class UserRepository {
         }
     }
 
+    public boolean updateUsersName(String name, String newName){
+        String updateStatement = "UPDATE todolist.user SET name= '" + newName+
+                "'\nWHERE name= '" + name + "';";
+
+        try {
+            int result = stmt.executeUpdate(updateStatement);
+            return result > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

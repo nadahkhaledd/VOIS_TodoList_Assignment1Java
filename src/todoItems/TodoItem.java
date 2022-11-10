@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat;
 import java.io.Serializable;
 import java.util.Date;
 
-public class TodoItem implements Serializable {
+public class TodoItem implements Serializable,Cloneable {
     private String title;
     private String description;
     private Priority priority;
@@ -103,6 +103,24 @@ public class TodoItem implements Serializable {
                 .append("\n\t" + font.SET_PLAIN_TEXT).append(description)
                 .append(font.ANSI_BLUE + "\n-------------------------------------------------------------------------\n" + font.ANSI_RESET);
         return result.toString();
+    }
+    public TodoItem clone(){
+        try {
+            return (TodoItem) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+    public void updateNewItem(TodoItem newItem){
+
+        this.title = newItem.getTitle();
+        this.description = newItem.getDescription();
+        this.priority = newItem.getPriority();
+        this.category = newItem.getCategory();
+        this.startDate = newItem.getStartDate();
+        this.endDate = newItem.getEndDate();
     }
 }
 //🤩
