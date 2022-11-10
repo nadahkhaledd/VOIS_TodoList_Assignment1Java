@@ -516,8 +516,9 @@ public class Simulator {
                 System.err.println("The name entered already exists, please try again");
             }
         }
-        userService.updateUsersName(currentUser.getName(),name);
-        //currentUser.setName(name);
+        String result = userService.updateUsersName(currentUser.getName(),name);
+        if(result!=null)
+            currentUser.setName(name);
 
     }
 

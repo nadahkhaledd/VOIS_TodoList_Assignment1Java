@@ -6,13 +6,12 @@ public class UserService {
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-    public boolean updateUsersName(String name, String newName){
+    public String updateUsersName(String name, String newName){
         boolean updated = userRepository.updateUsersName(name,newName);
         if(updated){
-            name = newName;
             System.out.println("YOUR NAME WAS UPDATED SUCCESSFULLY "+ newName.toUpperCase());
-            return true;
+            return newName;
         }
-        return false;
+        return null;
     }
 }
