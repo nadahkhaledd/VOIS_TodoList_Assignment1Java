@@ -19,7 +19,7 @@ public class DBStorage implements Storage{
 
     public DBStorage(){
         repository = new TodoItemsRepository();
-        itemsService = new TodoItemsService();
+        itemsService = new TodoItemsService(repository);
     }
 
 
@@ -34,14 +34,14 @@ public class DBStorage implements Storage{
     public ArrayList<User> loadData() {
         ArrayList<User> users = new ArrayList<>();
         ArrayList<String> userNames = repository.getUserNames();
-        System.out.println("usernames: " + userNames);
+
         for (String username: userNames){
             User user = setUserData(username);
             users.add(user);
         }
         for (User user: users) {
             System.out.println("users");
-            System.out.println(user.getName() + " "+user.getItems());
+
         }
         return users;
     }

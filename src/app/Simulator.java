@@ -3,16 +3,20 @@ package app;
 import enums.Category;
 import enums.Priority;
 import enums.SearchKey;
+import model.UserRepository;
+import model.UserService;
 import todoItems.TodoItem;
 import model.User;
 import storage.DBStorage;
 import storage.Storage;
+import todoItems.TodoItemsRepository;
 import todoItems.TodoItemsService;
 import ui.Font;
 import ui.Text;
 import utility.DateUtils;
 import utility.Utils;
 
+import java.nio.file.attribute.UserPrincipal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
@@ -28,7 +32,9 @@ public class Simulator {
     private Font font = new Font();
     private Text text = new Text();
 
-    private TodoItemsService todoItemsService = new TodoItemsService();
+    private TodoItemsService todoItemService= new TodoItemsService(new TodoItemsRepository());
+
+    private UserService userService= new UserService(new UserRepository());
 
     public Simulator(){
         //storage = new FileStorage();
@@ -399,7 +405,7 @@ public class Simulator {
 
         } else if(confirmUpdate == -1) return;
 
-        boolean updated = todoItemsService.updateTodoItem(currentUser.getName(),item,oldTitle,currentUser.getItems());
+        boolean updated = todoItemService.updateTodoItem(currentUser.getName(),item,oldTitle,currentUser.getItems());
         if(updated){
             currentUser.getItems().get(itemIndex).updateNewItem(item);
             System.out.println("Item updated:\n" + item.toString());
@@ -482,14 +488,14 @@ public class Simulator {
                 text.chooseCategory, 1, 6);
         Category category = text.categories.get(userCategoryChoice-1);
         //currentUser.addItemToCategory(title,category);
-        todoItemsService.addItemToCategory(currentUser.getName(),title,category,currentUser.getItems());
+        todoItemService.addItemToCategory(currentUser.getName(),title,category,currentUser.getItems());
     }
 
     private void addItemToFavoriteFromUser() {
         String title = getExistingTitle("Favorites");
         if(title.equalsIgnoreCase("/back")) return;
         //currentUser.addItemToFavorite(title);
-        todoItemsService.addItemToFavorite(currentUser.getName(),title,currentUser.getItems());
+        todoItemService.addItemToFavorite(currentUser.getName(),title,currentUser.getItems());
     }
 
     private void updateName(){
@@ -507,7 +513,8 @@ public class Simulator {
                 System.err.println("The name entered already exists, please try again");
             }
         }
-        currentUser.setName(name);
+        userService.updateUsersName(currentUser.getName(),name);
+        //currentUser.setName(name);
 
     }
     private void clearScreen(){

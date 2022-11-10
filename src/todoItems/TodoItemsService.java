@@ -19,8 +19,8 @@ public class TodoItemsService {
     private Font font;
 
 
-    public TodoItemsService() {
-        this.todoItemsRepository = new TodoItemsRepository();
+    public TodoItemsService(TodoItemsRepository todoItemsRepository) {
+        this.todoItemsRepository = todoItemsRepository;
         this.font = new Font();
 
     }
