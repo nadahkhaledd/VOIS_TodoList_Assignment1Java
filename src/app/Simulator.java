@@ -408,11 +408,12 @@ public class Simulator {
 
         } else if (confirmUpdate == -1) return;
 
-        boolean updated = itemsService.updateTodoItem(currentUser.getName(),item,oldTitle,currentUser.getItems());
-        if(updated){
+        boolean updated = itemsService.updateTodoItem(currentUser.getName(), item, oldTitle, currentUser.getItems());
+        if (updated) {
             currentUser.getItems().get(itemIndex).updateNewItem(item);
             System.out.println("Item updated:\n" + item.toString());
         }
+    }
 
     private void deleteItemByUser() {
         if (currentUser.getItems().isEmpty())
