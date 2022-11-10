@@ -24,6 +24,9 @@ import java.util.Scanner;
 public class Simulator {
     private Scanner scanner = new Scanner(System.in);
 
+    TodoItemsRepository repository;
+    TodoItemsService itemsService;
+
     private ArrayList<User> users = new ArrayList<>();
     private User currentUser = null;
     private Storage storage;
@@ -32,13 +35,14 @@ public class Simulator {
     private Font font = new Font();
     private Text text = new Text();
 
-    private TodoItemsService todoItemService= new TodoItemsService(new TodoItemsRepository());
+
 
     private UserService userService= new UserService(new UserRepository());
 
     public Simulator(){
-        //storage = new FileStorage();
         storage = new DBStorage();
+        repository = new TodoItemsRepository();
+        itemsService = new TodoItemsService(this.repository);
     }
 
     public void start() {
@@ -405,7 +409,7 @@ public class Simulator {
 
         } else if(confirmUpdate == -1) return;
 
-        boolean updated = todoItemService.updateTodoItem(currentUser.getName(),item,oldTitle,currentUser.getItems());
+        boolean updated = itemsService.updateTodoItem(currentUser.getName(),item,oldTitle,currentUser.getItems());
         if(updated){
             currentUser.getItems().get(itemIndex).updateNewItem(item);
             System.out.println("Item updated:\n" + item.toString());
@@ -488,14 +492,14 @@ public class Simulator {
                 text.chooseCategory, 1, 6);
         Category category = text.categories.get(userCategoryChoice-1);
         //currentUser.addItemToCategory(title,category);
-        todoItemService.addItemToCategory(currentUser.getName(),title,category,currentUser.getItems());
+        itemsService.addItemToCategory(currentUser.getName(),title,category,currentUser.getItems());
     }
 
     private void addItemToFavoriteFromUser() {
         String title = getExistingTitle("Favorites");
         if(title.equalsIgnoreCase("/back")) return;
         //currentUser.addItemToFavorite(title);
-        todoItemService.addItemToFavorite(currentUser.getName(),title,currentUser.getItems());
+        itemsService.addItemToFavorite(currentUser.getName(),title,currentUser.getItems());
     }
 
     private void updateName(){
