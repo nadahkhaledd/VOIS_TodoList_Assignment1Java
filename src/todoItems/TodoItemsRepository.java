@@ -37,7 +37,7 @@ public class TodoItemsRepository {
         return usernames;
     }
 
-    public ResultSet getUserTodos(String username){
+    public ResultSet getUserTodos(String username) {
         ResultSet result = null;
         try {
             result = stmt.executeQuery("SELECT t.title, t.description, " +
@@ -46,8 +46,7 @@ public class TodoItemsRepository {
                     "ON t.userId = u.iduser \n " +
                     "WHERE u.name = '" + username + "'");
 
-        }
-        catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e);
         }
         return result;
@@ -70,21 +69,17 @@ public class TodoItemsRepository {
 
     }
 
-
-
-
-
-    public boolean deleteTodoItem(String title){
+    public boolean deleteTodoItem(String title) {
         System.out.println("title = " + title);
-        try{
+        try {
             String sqlQuery = "DELETE FROM todolist.todoitem " +
-                    "WHERE title = '"+title+"'";
+                    "WHERE title = '" + title + "'";
             stmt.executeUpdate(sqlQuery);
-          return true;
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
-    }
+}
 

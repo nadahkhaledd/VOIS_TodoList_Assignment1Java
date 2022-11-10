@@ -6,18 +6,15 @@ import todoItems.TodoItem;
 import model.User;
 import todoItems.TodoItemsRepository;
 import todoItems.TodoItemsService;
-import utility.DateUtils;
-import utility.Utils;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class DBStorage implements Storage{
+public class DBStorage implements Storage {
     TodoItemsRepository repository;
     TodoItemsService itemsService;
 
-    public DBStorage(){
+    public DBStorage() {
         repository = new TodoItemsRepository();
         itemsService = new TodoItemsService(repository);
     }
@@ -33,7 +30,7 @@ public class DBStorage implements Storage{
     public ArrayList<User> loadData() {
         ArrayList<User> users = new ArrayList<>();
         ArrayList<String> userNames = repository.getUserNames();
-        for (String username: userNames){
+        for (String username : userNames) {
             User user = setUserData(username);
             users.add(user);
         }
