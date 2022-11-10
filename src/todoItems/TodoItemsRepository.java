@@ -8,11 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import connection.DBConnection;
-
-import java.sql.*;
-
-
 public class TodoItemsRepository {
     Connection connection;
     Statement stmt;
@@ -21,10 +16,25 @@ public class TodoItemsRepository {
         connection = DBConnection.configureConnection();
         try {
             stmt = connection.createStatement();
-        }
-        catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e);
         }
+    }
+
+    public ArrayList<String> getUserNames() {
+        ResultSet result = null;
+        ArrayList<String> usernames = new ArrayList<>();
+        try {
+            result = stmt.executeQuery(" SELECT name \n" +
+                    "FROM todolist.user");
+
+            while (result.next())
+                usernames.add(result.getString(1));
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return usernames;
     }
 
     public ResultSet getUserTodos(String username){
@@ -43,26 +53,24 @@ public class TodoItemsRepository {
         return result;
     }
 
-    public ArrayList<String> getUserNames(){
+    public ResultSet getUserLatestTodos(String username) {
         ResultSet result = null;
-        ArrayList<String> usernames = new ArrayList<>();
         try {
-            result = stmt.executeQuery(" SELECT name \n" +
-                    "FROM todolist.user");
+            result = stmt.executeQuery("SELECT t.title, t.description, t.priority, t.category, t.startDate, t.endDate, t.isFavorite\n" +
+                    "FROM todolist.user as u LEFT OUTER JOIN todolist.todoitem as t\n" +
+                    "ON t.userId = u.iduser\n" +
+                    "WHERE u.name = '" + username + "'\n" +
+                    "ORDER BY t.endDate\n" +
+                    "LIMIT 5");
 
-            while (result.next())
-                usernames.add(result.getString(1));
-        }
-        catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e);
         }
+        return result;
 
-        return usernames;
     }
 
 
-   // Connection connection;
-  //  Statement stmt;
 
 
 
